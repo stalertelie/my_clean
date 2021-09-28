@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_clean/providers/app_provider.dart';
+import 'package:my_clean/providers/list_provider.dart';
+import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/splash.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _messangerKey = GlobalKey<ScaffoldMessengerState>();
+  final getIt = GetIt.instance;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    setupGetIt();
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ListProvider>(create: (_) => ListProvider(context)),
+        ChangeNotifierProvider<AppProvider>(create: (_) => AppProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(primarySwatch: Colors.blue, fontFamily: GoogleFonts.workSans().fontFamily),
+        scaffoldMessengerKey: _messangerKey,
+        home: SplashScreenPage(),
+      ),
+    );
+  }
+
+  void setupGetIt() async {
+    try {
+      getIt.registerSingleton<AppServices>(AppServices());
+      Future.delayed(const Duration(milliseconds: 300),
+          () {
+        print(_messangerKey);
+        getIt<AppServices>().setMessengerGlobalKey(_messangerKey);
+      });
+    } catch (exeption) {
+      print(exeption);
+    }
+  }
+}
