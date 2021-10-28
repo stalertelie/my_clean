@@ -231,7 +231,7 @@ class UtilsFonction extends Object {
   }
 
   static CachedNetworkImage CachedImage(String url, {BlendMode blendmod=BlendMode.color, Color c = Colors.transparent}) {
-    return CachedNetworkImage(imageUrl: url,placeholder: (context, url) => SizedBox(child: Center(child: new CircularProgressIndicator(),),height: 10,width: 10,),fit: BoxFit.cover, colorBlendMode: blendmod,color: c,);
+    return CachedNetworkImage(imageUrl: url,placeholder: (context, url) => SizedBox(child: Center(child: new CircularProgressIndicator(),),height: 10,width: 10,),fit: BoxFit.fill, colorBlendMode: blendmod,color: c,);
   }
 
 

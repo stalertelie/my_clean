@@ -1,32 +1,34 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:my_clean/models/GoogleSearch/google_search_result.dart';
 import 'package:my_clean/models/base_bloc.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SearchBloc extends BaseBloc{
-  Stream<List<Feature>> get featuresStream => _featuresSubject.stream;
-  final _featuresSubject = BehaviorSubject<List<Feature>>();
+  Stream<GoogleSearchResult> get featuresStream => _featuresSubject.stream;
+  final _featuresSubject = BehaviorSubject<GoogleSearchResult>();
 
-  BehaviorSubject<List<Feature>> get featuresSubject => _featuresSubject;
+  BehaviorSubject<GoogleSearchResult> get featuresSubject => _featuresSubject;
 
   getProposition(String q) async {
     loadingSubject.add(Loading(loading: true));
     final response = await http.get(
       Uri.parse(
-          "https://api.openrouteservice.org/geocode/search?api_key=5b3ce3597851110001cf6248371779f82bd7423b8a465db17732a74a&text=$q&boundary.country=CIV"),
+          "https://maps.googleapis.com/maps/api/place/textsearch/json?query=$q&region=ci&key=AIzaSyBReoABBePSKUMOgUOl_pqay4kfBmTpU7o"),
       headers: {"Content-Type": "application/json; charset=utf-8"},
     );
     try {
       loadingSubject.add(Loading(loading: false));
       if (response.statusCode == 200) {
-        List<Feature> features =
-        (jsonDecode(response.body.toString())['features'] as List)
-            .map<Feature>((i) {
-          return Feature.fromJson(i);
-        }).toList();
-        _featuresSubject.add(features);
+        GoogleSearchResult features = GoogleSearchResult.fromJson(jsonDecode(response.body.toString()));
+        if(features.status == "OK"){
+          _featuresSubject.add(features);
+        } else {
+
+        }
+
       }
     } catch(ex){
       loadingSubject.add(Loading(loading: false));

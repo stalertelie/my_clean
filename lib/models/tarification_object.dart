@@ -1,4 +1,4 @@
-import 'package:my_clean/models/tarification.dart';
+import 'package:my_clean/models/price.dart';
 
 class TarificationObject {
   TarificationObject({
@@ -6,11 +6,11 @@ class TarificationObject {
     this.quantity,
   });
 
-  Tarification? tarifications;
+  Price? tarifications;
   int? quantity;
 
   factory TarificationObject.fromJson(Map<String, dynamic> json) => TarificationObject(
-    tarifications: json["tarifications"] == null ? null : Tarification.fromJson(json["tarifications"]),
+    tarifications: json["tarifications"] == null ? null : Price.fromJson(json["tarifications"]),
     quantity: json["quantity"] == null ? null : json["quantity"],
   );
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_clean/providers/app_provider.dart';
@@ -36,7 +37,15 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<AppProvider>(create: (_) => AppProvider()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'MyClean',
+        debugShowCheckedModeBanner: false,
+        supportedLocales: const [Locale('fr', 'FR')],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          //app-specific localization
+        ],
+        locale: const Locale('fr','FR'),
         theme: ThemeData(primarySwatch: Colors.blue, fontFamily: GoogleFonts.workSans().fontFamily),
         scaffoldMessengerKey: _messangerKey,
         home: SplashScreenPage(),

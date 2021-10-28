@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_clean/models/GoogleSearch/google_result.dart';
+import 'package:my_clean/models/GoogleSearch/google_search_result.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/pages/booking/search_bloc.dart';
 
 class SearchPage extends StatefulWidget {
-  final Function(Feature feature) callBack;
+  final Function(GoogleResult feature) callBack;
 
   SearchPage({required this.callBack});
 
@@ -46,23 +48,23 @@ class _SearchPageState extends State<SearchPage> {
                 stream: _bloc.loading,
                 builder: (context, snapshot) {
                   return snapshot.hasData && snapshot.data!.loading! == false
-                      ? StreamBuilder<List<Feature>>(
+                      ? StreamBuilder<GoogleSearchResult>(
                           stream: _bloc.featuresStream,
                           builder: (context, snapshot2) {
                             return snapshot2.hasData
                                 ? ListView.separated(
                                     itemBuilder: (context, index) => ListTile(
-                                          title: Text(snapshot2.data![index]
-                                                  .properties!.name ??
+                                          title: Text(snapshot2.data!.results![index]
+                                                  .name ??
                                               ""),
                                           onTap: () {
                                             widget
-                                              .callBack(snapshot2.data![index]);
+                                              .callBack(snapshot2.data!.results![index]);
                                           },
                                         ),
                                     separatorBuilder: (context, index) =>
                                         Divider(),
-                                    itemCount: snapshot2.data!.length)
+                                    itemCount: snapshot2.data!.results!.length)
                                 : Container();
                           })
                       : snapshot.hasData

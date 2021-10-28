@@ -23,7 +23,7 @@ class HomeBloc extends BaseBloc {
     loadingSubject.add(Loading(loading: true));
     RequestExtension<Services> _requestExtension = RequestExtension();
     Future<dynamic> response =
-    _requestExtension.get(UrlConstant.url_servies + "?isPrincipal=false");
+    _requestExtension.get(UrlConstant.url_servies + "?isPrincipal=true");
     //GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
     response.then((resp) {
       print("result services");

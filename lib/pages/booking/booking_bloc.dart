@@ -7,8 +7,11 @@ import 'package:my_clean/models/base_bloc.dart';
 import 'package:my_clean/models/booking.dart';
 import 'package:my_clean/models/booking_tarification.dart';
 import 'package:my_clean/models/loading.dart';
-import 'package:my_clean/models/tarification.dart';
+import 'package:my_clean/models/price.dart';
+import 'package:my_clean/models/price_booking.dart';
+import 'package:my_clean/models/services.dart';
 import 'package:my_clean/models/tarification_object.dart';
+import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/services/app_service.dart';
 import 'package:my_clean/utils/request_extension.dart';
@@ -23,26 +26,59 @@ class BookingBloc extends BaseBloc {
   BehaviorSubject<List<TarificationObject>> get tarificationsSubject =>
       _tarificationsSubject;
 
+  Stream<List<TarificationObjectRoot>> get tarificationRootStream =>
+      _tarificationRootSubject.stream;
+  final _tarificationRootSubject =
+      BehaviorSubject<List<TarificationObjectRoot>>();
+
+  BehaviorSubject<List<TarificationObjectRoot>> get tarificationRootSubject =>
+      _tarificationRootSubject;
+
+  Stream<DateTime> get bookingDateStream => _bookingDateSubject.stream;
+  final _bookingDateSubject = BehaviorSubject<DateTime>();
+
+  BehaviorSubject<DateTime> get bookingDateSubject => _bookingDateSubject;
+
+  Stream<List<DayObject>> get daysStream => _daysSubject.stream;
+  final _daysSubject = BehaviorSubject<List<DayObject>>();
+
+  BehaviorSubject<List<DayObject>> get daysSubject => _daysSubject;
+
+  Stream<int> get totalStream => _totalSubject.stream;
+  final _totalSubject = BehaviorSubject<int>();
+
+  BehaviorSubject<int> get totalSubject => _totalSubject;
 
   BookingBloc() {
     _tarificationsSubject.add([]);
+    _daysSubject.add([]);
   }
 
+  setTarificationRoot(List<TarificationObjectRoot> list) {
+    _tarificationRootSubject.add(list);
+  }
 
-  addTarification(Tarification tarification, int quantity) {
-    int index = _tarificationsSubject.value.indexWhere((element) =>
-    element.tarifications!.id == tarification.id);
+  setDateBooking(DateTime dateTime) {
+    _bookingDateSubject.add(dateTime);
+  }
+
+  addTarification(Price tarification, int quantity, {required int rootId}) {
+    int index = _tarificationRootSubject.value
+        .elementAt(rootId)
+        .list!
+        .indexWhere((element) => element.tarifications!.id == tarification.id);
+
     if (index != -1) {
-      TarificationObject tarificationObject = _tarificationsSubject
-          .value[index];
+      TarificationObject tarificationObject =
+          _tarificationRootSubject.value.elementAt(rootId).list![index];
       if (tarificationObject.quantity == 0 && quantity == -1) {
         return;
       }
       tarificationObject.quantity =
           (tarificationObject.quantity ?? 0) + quantity;
-
-      _tarificationsSubject.add(_tarificationsSubject.value);
-    } else {
+      _tarificationRootSubject.add(_tarificationRootSubject.value);
+      calculateDetail(quantity);
+    } /*else {
       List<TarificationObject> list = _tarificationsSubject.value;
       if (list.isNotEmpty && list != null) {
         list.add(TarificationObject(
@@ -51,41 +87,89 @@ class BookingBloc extends BaseBloc {
         if (quantity < 0) {
           return;
         }
-        list =
-        [TarificationObject(tarifications: tarification, quantity: quantity)];
+        list = [
+          TarificationObject(tarifications: tarification, quantity: quantity)
+        ];
       }
       _tarificationsSubject.add(list);
-    }
+    }*/
   }
 
-  book(String userID, String? frequence, String localisation) {
+  void calculateDetail(int number){
+    int total =0;
+    for (var element in _tarificationRootSubject.value) {
+      for(var item in element.list!){
+        if(item.quantity! > 0){
+          if(item.tarifications!.priceOperator! == "+"){
+            total += item.tarifications!.price! + (item.tarifications!.operatorValue! * (item.quantity! - 1));
+          }
+        }
+      }
+    }
+    _totalSubject.add(total);
+  }
+
+  addDay(String day, String time) {
+    List<DayObject> listDays = _daysSubject.value;
+    listDays.add(DayObject(day: day, time: time));
+    _daysSubject.add(listDays);
+  }
+
+  book(String userID, String localisation, String gps, String note) {
     RequestExtension<Booking> requestExtension = RequestExtension();
+    List<dynamic> frequence = [];
+    for (var element in _daysSubject.value) {
+      frequence.add('{"day": ${element.day}, "time": ${element.time}},');
+    }
+    List<PriceBooking> listPrice = [];
+    for (var element in _tarificationRootSubject.value) {
+      element.list?.where((it) => it.quantity! > 0).forEach((el) {
+        listPrice.add(PriceBooking(quantity: el.quantity, tarification: el.tarifications!.id));
+      });
+    }
 
     Booking booking = Booking(
-       localisation: localisation,
-        bookingTarifications: _tarificationsSubject.value.where((
-            element) => element.quantity != null && element.quantity! > 0)
-            .map((e) => BookingTarification(
-            quantity: e.quantity!, tarification: e.tarifications!.id))
-            .toList(),frequence: [frequence!],user: userID);
+        localisation: localisation,
+        gps: gps,
+        date: _bookingDateSubject.hasValue ? _bookingDateSubject.value : null,
+        prices: listPrice,
+        frequence: frequence,
+        priceTotal: _totalSubject.value,
+        choicesExtra: [],
+        note: note,
+        user: userID);
 
     loadingSubject.add(Loading(loading: true, message: "Réservation en cours"));
     GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
 
-    Future<dynamic> response = requestExtension.post(UrlConstant.url_booking,jsonEncode(booking));
+    Future<dynamic> response =
+        requestExtension.post(UrlConstant.url_booking, jsonEncode(booking));
 
     response.then((value) {
-      loadingSubject.add(Loading(message: MessageConstant.booking_ok,
-          hasError: false,
-          loading: false,
+      loadingSubject.add(Loading(
+        message: MessageConstant.booking_ok,
+        hasError: false,
+        loading: false,
       ));
     }).catchError((error) {
       print(error);
-      loadingSubject.add(Loading(message: error.toString().removeExeptionWord(),
+      loadingSubject.add(Loading(
+          message: error.toString().removeExeptionWord(),
           hasError: true,
           loading: false));
       GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
-
     });
   }
+}
+
+class DayObject {
+  String day;
+  String time;
+
+  DayObject({required this.day, required this.time});
+
+  Map<String, dynamic> toJson() => {
+    "day": day,
+    "time": time,
+  };
 }

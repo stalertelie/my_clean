@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/models/services.dart';
-import 'package:my_clean/pages/booking/booking_page.dart';
+import 'package:my_clean/pages/booking/booking_profondeur_page.dart';
 import 'package:my_clean/pages/home/home_bloc.dart';
 import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
@@ -31,7 +33,16 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          "Services de nettoyage"
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(FontAwesomeIcons.mapMarkerAlt,color: Colors.grey.shade500,size: 15,),
+              SizedBox(width: 10,),
+              "Abidjan".text.gray500.make()
+            ],
+          ),
+          const SizedBox(height: 10,),
+          "Bienvenu, Stephane"
               .text
               .size(25)
               .bold
@@ -42,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               .size(15)
               .color(const Color(colorBlueGray))
               .make(),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Expanded(
@@ -63,12 +74,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                               childAspectRatio: 0.9),
                                       itemBuilder: (context, index) =>
                                           GestureDetector(
-                                              onTap: () =>
+                                              onTap: () {
+                                                if(snapshot
+                                                    .data![index].title!.toLowerCase().contains("profondeur")){
                                                   UtilsFonction.NavigateToRoute(
                                                       context,
-                                                      BookingScreen(
+                                                      BookingProfondeurScreen(
                                                           service: snapshot
-                                                              .data![index])),
+                                                              .data![index]));
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg: "Bientôt disponible",
+                                                      toastLength: Toast.LENGTH_SHORT,
+                                                      gravity: ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 1,
+                                                      //backgroundColor: Colors.red,
+                                                      //textColor: Colors.white,
+                                                      fontSize: 16.0
+                                                  );
+                                                }
+
+                                              }
+                                                  ,
                                               child: ServiceItem(
                                                   service:
                                                       snapshot.data![index])),
@@ -116,7 +143,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             topRight: Radius.circular(10)),
                         child: UtilsFonction.CachedImage(
                             service.contentUrl ?? ""))),
-                Hero(
+                Visibility(
+                  visible: !service.title!.toLowerCase().contains("profondeur"),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    child: Container(
+                      color: Colors.black.withOpacity(0.5),
+                      height: 150,
+                      width: double.maxFinite,
+                    ),
+                  ),
+                )
+                /*Hero(
                   tag: service.id.toString(),
                   child: Center(
                     child: service.title!
@@ -128,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         .bold
                         .make(),
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
