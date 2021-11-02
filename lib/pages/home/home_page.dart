@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const SizedBox(height: 10,),
-          "Bienvenu, Stephane"
+          "Bienvenue, Stephane"
               .text
               .size(25)
               .bold
