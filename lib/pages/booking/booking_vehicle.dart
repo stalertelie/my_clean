@@ -15,6 +15,7 @@ import 'package:my_clean/components/custom_button.dart';
 import 'package:my_clean/constants/app_constant.dart';
 
 import 'package:my_clean/constants/colors_constant.dart';
+import 'package:my_clean/constants/img_urls.dart';
 import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/frequence.dart';
@@ -67,7 +68,6 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
 
   bool isSelected = true;
   int activeCarTypeIndex = 0;
-  bool? isCheckboxSelected = false;
   bool? isMoteurBerlineChecked = false;
   bool? isInterieurBerlineChecked = false;
   bool? isCompletBerlineChecked = false;
@@ -389,6 +389,23 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                             )
                                           : Container());
                                     },
+                                  ),
+                                  const SizedBox(
+                                    height: 25,
+                                  ),
+                                  Text(
+                                    "Avez-vous des photos que vous aimeriez partager ?",
+                                    style:
+                                        TextStyle(color: Colors.grey.shade700),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      print("Its works");
+                                    },
+                                    child: Image.asset(cameraIcon),
                                   ),
                                   const SizedBox(
                                     height: 25,
