@@ -605,6 +605,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
   }
 
   Widget tarificationITem(TarificationObject tarificationObject, int rootId) {
+    print('rootId');
+    print(rootId);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
       child: Row(

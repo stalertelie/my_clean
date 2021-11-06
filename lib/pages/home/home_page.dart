@@ -4,10 +4,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/models/services.dart';
+import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/booking/booking_profondeur_page.dart';
+import 'package:my_clean/pages/booking/booking_vehicle.dart';
 import 'package:my_clean/pages/home/home_bloc.dart';
 import 'package:my_clean/pages/widgets/widget_template.dart';
+import 'package:my_clean/providers/app_provider.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
+import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,15 +23,24 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final HomeBloc _bloc = HomeBloc();
+  late AppProvider _appProvider;
 
   @override
   void initState() {
-    // TODO: implement initState
+    getUser();
     super.initState();
   }
 
+  void getUser() async {
+    final user = await _bloc.getUserInfos();
+    _appProvider.updateConnectedUSer(user);
+  }
+
+  TextStyle welcomeTextStyle = const TextStyle(
+      color: Color(colorBlueGray), fontSize: 25, fontWeight: FontWeight.bold);
   @override
   Widget build(BuildContext context) {
+    _appProvider = Provider.of<AppProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -36,18 +49,26 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(FontAwesomeIcons.mapMarkerAlt,color: Colors.grey.shade500,size: 15,),
-              SizedBox(width: 10,),
+              Icon(
+                FontAwesomeIcons.mapMarkerAlt,
+                color: Colors.grey.shade500,
+                size: 15,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
               "Abidjan".text.gray500.make()
             ],
           ),
-          const SizedBox(height: 10,),
-          "Bienvenue, Stephane"
-              .text
-              .size(25)
-              .bold
-              .color(const Color(colorBlueGray))
-              .make(),
+          const SizedBox(
+            height: 10,
+          ),
+          _appProvider.login != null
+              ? Text(
+                  "Bienvenue, " + _appProvider.login!.prenoms.toString(),
+                  style: welcomeTextStyle,
+                )
+              : Text("Bienvenue", style: welcomeTextStyle),
           "Choisir un service"
               .text
               .size(15)
@@ -75,27 +96,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                       itemBuilder: (context, index) =>
                                           GestureDetector(
                                               onTap: () {
-                                                if(snapshot
-                                                    .data![index].title!.toLowerCase().contains("profondeur")){
+                                                if (snapshot.data![index].title!
+                                                    .toLowerCase()
+                                                    .contains("profondeur")) {
                                                   UtilsFonction.NavigateToRoute(
                                                       context,
                                                       BookingProfondeurScreen(
                                                           service: snapshot
                                                               .data![index]));
+                                                } else if (snapshot
+                                                    .data![index].title!
+                                                    .toLowerCase()
+                                                    .contains("vehicule")) {
+                                                  UtilsFonction.NavigateToRoute(
+                                                      context,
+                                                      BookingVehicleScreen(
+                                                          service: snapshot
+                                                              .data![index]));
                                                 } else {
                                                   Fluttertoast.showToast(
                                                       msg: "Bientôt disponible",
-                                                      toastLength: Toast.LENGTH_SHORT,
-                                                      gravity: ToastGravity.BOTTOM,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
                                                       timeInSecForIosWeb: 1,
                                                       //backgroundColor: Colors.red,
                                                       //textColor: Colors.white,
-                                                      fontSize: 16.0
-                                                  );
+                                                      fontSize: 16.0);
                                                 }
-
-                                              }
-                                                  ,
+                                              },
                                               child: ServiceItem(
                                                   service:
                                                       snapshot.data![index])),
@@ -144,7 +174,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: UtilsFonction.CachedImage(
                             service.contentUrl ?? ""))),
                 Visibility(
-                  visible: !service.title!.toLowerCase().contains("profondeur"),
+                  visible:
+                      !service.title!.toLowerCase().contains("profondeur") &&
+                          !service.title!.toLowerCase().contains("vehicule"),
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),

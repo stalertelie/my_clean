@@ -11,7 +11,7 @@ class AppProvider extends ChangeNotifier {
 
  // String locale;
 
-  updateConnectedUSer(User c){
+  updateConnectedUSer(dynamic c){
     login = c;
     Future.delayed(const Duration(milliseconds: 500),(){
       notifyListeners();

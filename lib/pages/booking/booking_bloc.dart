@@ -63,11 +63,12 @@ class BookingBloc extends BaseBloc {
   }
 
   addTarification(Price tarification, int quantity, {required int rootId}) {
+    print('HERE');
+    print(_tarificationRootSubject.value[0]);
     int index = _tarificationRootSubject.value
         .elementAt(rootId)
         .list!
         .indexWhere((element) => element.tarifications!.id == tarification.id);
-
     if (index != -1) {
       TarificationObject tarificationObject =
           _tarificationRootSubject.value.elementAt(rootId).list![index];
@@ -77,31 +78,37 @@ class BookingBloc extends BaseBloc {
       tarificationObject.quantity =
           (tarificationObject.quantity ?? 0) + quantity;
       _tarificationRootSubject.add(_tarificationRootSubject.value);
+
       calculateDetail(quantity);
-    } /*else {
-      List<TarificationObject> list = _tarificationsSubject.value;
-      if (list.isNotEmpty && list != null) {
-        list.add(TarificationObject(
-            tarifications: tarification, quantity: quantity));
-      } else {
-        if (quantity < 0) {
-          return;
-        }
-        list = [
-          TarificationObject(tarifications: tarification, quantity: quantity)
-        ];
-      }
-      _tarificationsSubject.add(list);
-    }*/
+    }
   }
 
-  void calculateDetail(int number){
-    int total =0;
+  addTarificationSimply(
+    Price tarification,
+    int quantity,
+    int carTypeIndex, {
+    required int cleaningTypeIndex,
+  }) {
+    int total = 0;
+    if (carTypeIndex != -1 && cleaningTypeIndex != -1) {
+      TarificationObject tarificationActive =
+          _tarificationRootSubject.value[carTypeIndex].list![cleaningTypeIndex];
+      tarificationActive.quantity = quantity;
+      total = (totalSubject.hasValue ? totalSubject.value : 0) +
+          tarificationActive.tarifications!.price! *
+              tarificationActive.quantity!;
+    }
+    _totalSubject.add(total);
+  }
+
+  void calculateDetail(int number) {
+    int total = 0;
     for (var element in _tarificationRootSubject.value) {
-      for(var item in element.list!){
-        if(item.quantity! > 0){
-          if(item.tarifications!.priceOperator! == "+"){
-            total += item.tarifications!.price! + (item.tarifications!.operatorValue! * (item.quantity! - 1));
+      for (var item in element.list!) {
+        if (item.quantity! > 0) {
+          if (item.tarifications!.priceOperator! == "+") {
+            total += item.tarifications!.price! +
+                (item.tarifications!.operatorValue! * (item.quantity! - 1));
           }
         }
       }
@@ -124,7 +131,8 @@ class BookingBloc extends BaseBloc {
     List<PriceBooking> listPrice = [];
     for (var element in _tarificationRootSubject.value) {
       element.list?.where((it) => it.quantity! > 0).forEach((el) {
-        listPrice.add(PriceBooking(quantity: el.quantity, tarification: el.tarifications!.id));
+        listPrice.add(PriceBooking(
+            quantity: el.quantity, tarification: el.tarifications!.id));
       });
     }
 
@@ -169,7 +177,7 @@ class DayObject {
   DayObject({required this.day, required this.time});
 
   Map<String, dynamic> toJson() => {
-    "day": day,
-    "time": time,
-  };
+        "day": day,
+        "time": time,
+      };
 }
