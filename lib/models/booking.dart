@@ -14,6 +14,7 @@ class Booking {
     this.priceTotal,
     this.gps,
     this.frequence,
+    this.isMeubler,
   });
 
   List<String>? choicesExtra;
@@ -26,6 +27,7 @@ class Booking {
   int? priceTotal;
   String? gps;
   List<dynamic>? frequence;
+  bool? isMeubler;
 
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
         choicesExtra: json["choicesExtra"] == null
@@ -46,6 +48,7 @@ class Booking {
         priceTotal: json["priceTotal"] == null ? null : json["priceTotal"],
         gps: json["gps"] == null ? null : json["gps"],
         frequence: json["frequence"] == null ? null : json["frequence"],
+        isMeubler: json["isMeubler"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,5 +66,6 @@ class Booking {
         "priceTotal": priceTotal == null ? null : priceTotal,
         "gps": gps == null ? null : gps,
          "frequence": frequence == null ? null : List<dynamic>.from(frequence!.map((x) => x)),
+         "isMeubler" : isMeubler,
       };
 }

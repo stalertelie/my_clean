@@ -22,6 +22,7 @@ import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/frequence.dart';
 import 'package:my_clean/models/loading.dart';
+import 'package:my_clean/models/price.dart';
 import 'package:my_clean/models/services.dart';
 import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
@@ -38,17 +39,16 @@ import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class BookingVehicleScreen extends StatefulWidget {
+class BookingMattressScreen extends StatefulWidget {
   final Services service;
 
-  const BookingVehicleScreen({Key? key, required this.service})
-      : super(key: key);
+  const BookingMattressScreen({Key? key, required this.service}) : super(key: key);
 
   @override
-  BookingVehicleScreenState createState() => BookingVehicleScreenState();
+  BookingMattressScreenState createState() => BookingMattressScreenState();
 }
 
-class BookingVehicleScreenState extends State<BookingVehicleScreen>
+class BookingMattressScreenState extends State<BookingMattressScreen>
     with TickerProviderStateMixin {
   TextEditingController searchCtrl = TextEditingController();
   TextEditingController noteCtrl = TextEditingController();
@@ -68,19 +68,9 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
 
   String frequenceType = "SERVICE PONCTUEL";
 
-  bool isSelected = true;
-  int activeCarTypeIndex = 0;
-  bool? isMoteurBerlineChecked = false;
-  bool? isInterieurBerlineChecked = false;
-  bool? isCompletBerlineChecked = false;
-
-  bool? isMoteur4x4Checked = false;
-  bool? isInterieur4x4Checked = false;
-  bool? isComplet4x4Checked = false;
-
   GoogleResult? _currentFeature;
   final ImagePicker _imagePicker = ImagePicker();
-  dynamic _pickedImage = null;
+  dynamic _pickedImage;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -90,15 +80,17 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
   @override
   void initState() {
     super.initState();
-    if (widget.service.services != null) {
-      _bloc.setTarificationRoot(widget.service.services!
-          .map((e) => TarificationObjectRoot(
-              id: e.id!.toString(),
-              libelle: e.title!,
-              list: e.tarifications
-                  ?.map(
-                      (e) => TarificationObject(quantity: 0, tarifications: e))
-                  .toList()))
+
+    if (widget.service != null) {
+      _bloc.setSimpleTarification(widget.service.tarifications!
+          .map((e) => Price(
+              id: e.id,
+              type: e.type,
+              price: e.price,
+              priceId: e.priceId,
+              label: e.label,
+              initialNumber: e.initialNumber,
+              quantity: 0))
           .toList());
     }
 
@@ -224,7 +216,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     height: 5,
                                   ),
                                   Text(
-                                    "À propos de notre service automobile",
+                                    "À propos de notre service de nettoyage de matelas",
                                     style: TextStyle(
                                         color: Colors.grey.shade600,
                                         fontSize: 14),
@@ -233,14 +225,14 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     height: 20,
                                   ),
                                   Text(
-                                    "Réservez le service automobile et nos professionnels vous aideront à redonner à votre véhicule son lustre d'antan.",
+                                    "Réservez le service de nettoyage de matelas",
                                     style: TextStyle(color: Colors.black),
                                   ),
                                   const SizedBox(
                                     height: 30,
                                   ),
                                   Text(
-                                    "Sélectionnez votre type de véhicule",
+                                    "Sélectionnez votre type de matelas",
                                     style: TextStyle(
                                         color: Colors.grey.shade600,
                                         fontSize: 14),
@@ -248,8 +240,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  StreamBuilder<List<TarificationObjectRoot>>(
-                                    stream: _bloc.tarificationRootStream,
+                                  StreamBuilder<List<Price>>(
+                                    stream: _bloc.simpleTarificationStream,
                                     builder: (context, snapshot) {
                                       return (snapshot.hasData &&
                                               snapshot.data != null
@@ -258,163 +250,108 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                                   MainAxisAlignment.start,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Row(
-                                                  children: snapshot.data!
-                                                      .mapIndexed<Widget>(
-                                                        (carType, idx) =>
-                                                            Container(
-                                                                margin:
-                                                                    EdgeInsets
-                                                                        .only(
-                                                                  right: 8,
-                                                                ),
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    setState(
-                                                                        () {
-                                                                      isSelected =
-                                                                          true;
-                                                                      activeCarTypeIndex =
-                                                                          idx;
-                                                                    });
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    height: 40,
-                                                                    width: 100,
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                            10),
-                                                                    decoration: BoxDecoration(
-                                                                        color: isSelected && activeCarTypeIndex == idx
-                                                                            ? Color(
-                                                                                colorBlueGray)
-                                                                            : Colors
-                                                                                .white,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                20),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Color(colorBlueGray))),
-                                                                    child:
-                                                                        Center(
-                                                                      child:
-                                                                          Text(
-                                                                        carType
-                                                                            .libelle,
+                                              children: snapshot.data!
+                                                  .mapIndexed<Widget>(
+                                                      (e, idx) => Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        8,
+                                                                    vertical:
+                                                                        20),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                idx <= 2
+                                                                    ? Text(
+                                                                        e.initialNumber.toString() +
+                                                                            " " +
+                                                                            e.label.toString() +
+                                                                            "(s)",
                                                                         style: TextStyle(
                                                                             fontSize:
-                                                                                15,
+                                                                                18,
                                                                             fontWeight: FontWeight
                                                                                 .bold,
-                                                                            color: isSelected && activeCarTypeIndex == idx
-                                                                                ? Colors.white
-                                                                                : Color(colorBlueGray)),
+                                                                            fontFamily:
+                                                                                "SFPro",
+                                                                            color:
+                                                                                Color(0XFF01A6DC)),
+                                                                      )
+                                                                    : Text(
+                                                                        e.label
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                18,
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontFamily:
+                                                                                "SFPro",
+                                                                            color:
+                                                                                Color(0XFF01A6DC)),
+                                                                      ),
+                                                                const SizedBox(
+                                                                  width: 20,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    e.quantity!
+                                                                        .text
+                                                                        .size(
+                                                                            18)
+                                                                        .bold
+                                                                        .fontFamily(
+                                                                            "SFPro")
+                                                                        .color(const Color(
+                                                                            0XFF01A6DC))
+                                                                        .make(),
+                                                                    const SizedBox(
+                                                                      width: 50,
+                                                                    ),
+                                                                    InkWell(
+                                                                        onTap: () => _bloc.addSofaTarification(
+                                                                            e,
+                                                                            -1,
+                                                                            idx),
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              40,
+                                                                          width:
+                                                                              40,
+                                                                          child:
+                                                                              Center(child: Icon(Icons.remove)),
+                                                                          decoration:
+                                                                              BoxDecoration(border: Border.all(color: e.quantity! > 0 ? Colors.grey : Colors.grey.shade300)),
+                                                                        )),
+                                                                    InkWell(
+                                                                      onTap: () =>
+                                                                          _bloc.addSofaTarification(
+                                                                              e,
+                                                                              1,
+                                                                              idx),
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            40,
+                                                                        width:
+                                                                            40,
+                                                                        child: Center(
+                                                                            child:
+                                                                                Icon(Icons.add)),
+                                                                        decoration:
+                                                                            BoxDecoration(border: Border.all(color: Colors.grey)),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                )),
-                                                      )
-                                                      .toList(),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Visibility(
-                                                    visible:
-                                                        activeCarTypeIndex == 0,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: snapshot
-                                                          .data![
-                                                              activeCarTypeIndex]
-                                                          .list!
-                                                          .mapIndexed<
-                                                              Widget>((tarif,
-                                                                  idx) =>
-                                                              CheckboxListTile(
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .leading,
-                                                                title: Text(tarif
-                                                                    .tarifications!
-                                                                    .label
-                                                                    .toString()),
-                                                                value: idx == 0
-                                                                    ? isMoteurBerlineChecked
-                                                                    : idx == 1
-                                                                        ? isInterieurBerlineChecked
-                                                                        : isCompletBerlineChecked,
-                                                                onChanged:
-                                                                    (value) {
-                                                                  onChangedBerlineChecked(
-                                                                      idx,
-                                                                      value!,
-                                                                      tarif,
-                                                                      activeCarTypeIndex);
-                                                                },
-                                                                activeColor: Color(
-                                                                    colorBlueGray),
-                                                                checkColor:
-                                                                    Colors
-                                                                        .black,
-                                                              ))
-                                                          .toList(),
-                                                    )),
-                                                Visibility(
-                                                    visible:
-                                                        activeCarTypeIndex == 1,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: snapshot
-                                                          .data![
-                                                              activeCarTypeIndex]
-                                                          .list!
-                                                          .mapIndexed<
-                                                              Widget>((tarif,
-                                                                  idx) =>
-                                                              CheckboxListTile(
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .leading,
-                                                                title: Text(tarif
-                                                                    .tarifications!
-                                                                    .label
-                                                                    .toString()),
-                                                                value: idx == 0
-                                                                    ? isInterieur4x4Checked
-                                                                    : idx == 1
-                                                                        ? isComplet4x4Checked
-                                                                        : isMoteur4x4Checked,
-                                                                onChanged:
-                                                                    (value) {
-                                                                  onChanged4x4Checked(
-                                                                      idx,
-                                                                      value!,
-                                                                      tarif,
-                                                                      activeCarTypeIndex);
-                                                                },
-                                                                activeColor: Color(
-                                                                    colorBlueGray),
-                                                                checkColor:
-                                                                    Colors
-                                                                        .black,
-                                                              ))
-                                                          .toList(),
-                                                    ))
-                                              ],
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ))
+                                                  .toList(),
                                             )
                                           : Container());
                                     },
@@ -571,17 +508,28 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     UtilsFonction.NavigateToRoute(
                                         context, LoginScreen());
                                   } else {
-                                    if (_bloc.tarificationRootSubject.value
-                                        .where((element) =>
-                                            element.list!.indexWhere(
-                                                (item) => item.quantity! > 0) ==
-                                            -1)
-                                        .isEmpty) {
+                                    if (!_bloc.totalSubject.hasValue) {
                                       GetIt.I<AppServices>()
                                           .showSnackbarWithState(Loading(
                                               hasError: true,
                                               message:
-                                                  "Veuillez choisir un seul type de véhicule"));
+                                                  "Veuillez sélectionner au moins un type de matelas"));
+                                      return;
+                                    }
+                                    if (!_bloc.bookingDateSubject.hasValue) {
+                                      GetIt.I<AppServices>()
+                                          .showSnackbarWithState(Loading(
+                                              hasError: true,
+                                              message:
+                                                  "Veuillez choisir une date"));
+                                      return;
+                                    }
+                                    if (searchCtrl.text.isEmpty) {
+                                      GetIt.I<AppServices>()
+                                          .showSnackbarWithState(Loading(
+                                              hasError: true,
+                                              message:
+                                                  "Veuillez entrer votre adresse"));
                                       return;
                                     }
                                     showRecapSheet();
@@ -851,55 +799,5 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
         searchCtrl.text,
         "${_markerPosition.latitude},${_markerPosition.longitude}",
         noteCtrl.text);
-  }
-
-  onChangedBerlineChecked(int cleaningTypeIndex, bool value,
-      TarificationObject tarif, int activeCarTypeIndex) {
-    switch (cleaningTypeIndex) {
-      case 0:
-        setState(() {
-          isMoteurBerlineChecked = value;
-        });
-
-        break;
-      case 1:
-        setState(() {
-          isInterieurBerlineChecked = value;
-        });
-
-        break;
-      default:
-        setState(() {
-          isCompletBerlineChecked = value;
-        });
-    }
-    _bloc.addTarificationSimply(
-        tarif.tarifications!, value == true ? 1 : -1, activeCarTypeIndex,
-        cleaningTypeIndex: cleaningTypeIndex);
-  }
-
-  onChanged4x4Checked(int cleaningTypeIndex, bool value,
-      TarificationObject tarif, int activeCarTypeIndex) {
-    switch (cleaningTypeIndex) {
-      case 0:
-        setState(() {
-          isInterieur4x4Checked = value;
-        });
-
-        break;
-      case 1:
-        setState(() {
-          isComplet4x4Checked = value;
-        });
-
-        break;
-      default:
-        setState(() {
-          isMoteur4x4Checked = value;
-        });
-    }
-    _bloc.addTarificationSimply(
-        tarif.tarifications!, value == true ? 1 : -1, activeCarTypeIndex,
-        cleaningTypeIndex: cleaningTypeIndex);
   }
 }

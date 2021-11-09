@@ -1,7 +1,7 @@
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:rxdart/rxdart.dart';
 
-class RootBLoc {
+class RootBLoc {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
   Stream<int> get pageindexStream => _pageindexSubject.stream;
   final _pageindexSubject = BehaviorSubject<int>();
 

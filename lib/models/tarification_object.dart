@@ -11,7 +11,7 @@ class TarificationObject {
 
   factory TarificationObject.fromJson(Map<String, dynamic> json) => TarificationObject(
     tarifications: json["tarifications"] == null ? null : Price.fromJson(json["tarifications"]),
-    quantity: json["quantity"] == null ? null : json["quantity"],
+    quantity: json["quantity"] == null ? null : json["-"],
   );
 
   Map<String, dynamic> toJson() => {

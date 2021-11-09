@@ -5,7 +5,12 @@ import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/models/services.dart';
 import 'package:my_clean/models/user.dart';
+import 'package:my_clean/pages/booking/booking_carpet.dart';
+import 'package:my_clean/pages/booking/booking_climatiseur.dart';
+import 'package:my_clean/pages/booking/booking_desinfection.dart';
 import 'package:my_clean/pages/booking/booking_profondeur_page.dart';
+import 'package:my_clean/pages/booking/booking_mattress.dart';
+import 'package:my_clean/pages/booking/booking_sofa.dart';
 import 'package:my_clean/pages/booking/booking_vehicle.dart';
 import 'package:my_clean/pages/home/home_bloc.dart';
 import 'package:my_clean/pages/widgets/widget_template.dart';
@@ -113,6 +118,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       BookingVehicleScreen(
                                                           service: snapshot
                                                               .data![index]));
+                                                } else if (snapshot
+                                                    .data![index].title!
+                                                    .toLowerCase()
+                                                    .contains("matelas")) {
+                                                  UtilsFonction.NavigateToRoute(
+                                                      context,
+                                                      BookingMattressScreen(
+                                                          service: snapshot
+                                                              .data![index]));
+                                                } else if (snapshot
+                                                    .data![index].title!
+                                                    .toLowerCase()
+                                                    .contains("tapis")) {
+                                                  UtilsFonction.NavigateToRoute(
+                                                      context,
+                                                      BookingCarpetScreen(
+                                                          service: snapshot
+                                                              .data![index]));
+                                                } else if (snapshot
+                                                    .data![index].title!
+                                                    .toLowerCase()
+                                                    .contains("climatiseur")) {
+                                                  UtilsFonction.NavigateToRoute(
+                                                      context,
+                                                      BookingClimatiseurScreen(
+                                                          service: snapshot
+                                                              .data![index]));
+                                                } else if (snapshot
+                                                    .data![index].title!
+                                                    .toLowerCase()
+                                                    .contains("chaises")) {
+                                                  UtilsFonction.NavigateToRoute(
+                                                      context,
+                                                      BookingSofaScreen(
+                                                          service: snapshot
+                                                              .data![index]));
+                                                } else if (snapshot
+                                                    .data![index].title!
+                                                    .toLowerCase()
+                                                    .contains("desinfection")) {
+                                                  UtilsFonction.NavigateToRoute(
+                                                      context,
+                                                      BookingDesinfectionScreen(
+                                                          service: snapshot
+                                                              .data![index]));
                                                 } else {
                                                   Fluttertoast.showToast(
                                                       msg: "Bientôt disponible",
@@ -174,9 +224,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: UtilsFonction.CachedImage(
                             service.contentUrl ?? ""))),
                 Visibility(
-                  visible:
-                      !service.title!.toLowerCase().contains("profondeur") &&
-                          !service.title!.toLowerCase().contains("vehicule"),
+                  visible: !service.title!
+                          .toLowerCase()
+                          .contains("profondeur") &&
+                      !service.title!.toLowerCase().contains("vehicule") &&
+                      !service.title!.toLowerCase().contains("matelas") &&
+                      !service.title!.toLowerCase().contains("tapis") &&
+                      !service.title!.toLowerCase().contains("climatiseur") &&
+                      !service.title!.toLowerCase().contains("chaises") &&
+                      !service.title!.toLowerCase().contains("desinfection"),
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),

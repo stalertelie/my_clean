@@ -35,7 +35,6 @@ class AuthBloc extends BaseBloc {
     Future<dynamic> response =  requestExtension.post(UrlConstant.url_users, jsonEncode(c));
     response.then((value) {
       User user = value as User;
-      print(user);
       UtilsFonction.saveData(AppConstant.USER_INFO, json.encode(user)).then((value) {
         loadingSubject.add(Loading(message: MessageConstant.signupok,hasError: false, loading: false,data: user));
       });

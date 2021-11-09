@@ -22,6 +22,7 @@ import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/frequence.dart';
 import 'package:my_clean/models/loading.dart';
+import 'package:my_clean/models/price.dart';
 import 'package:my_clean/models/services.dart';
 import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
@@ -38,20 +39,22 @@ import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class BookingVehicleScreen extends StatefulWidget {
+class BookingClimatiseurScreen extends StatefulWidget {
   final Services service;
 
-  const BookingVehicleScreen({Key? key, required this.service})
+  const BookingClimatiseurScreen({Key? key, required this.service})
       : super(key: key);
 
   @override
-  BookingVehicleScreenState createState() => BookingVehicleScreenState();
+  BookingClimatiseurScreenState createState() =>
+      BookingClimatiseurScreenState();
 }
 
-class BookingVehicleScreenState extends State<BookingVehicleScreen>
+class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
     with TickerProviderStateMixin {
   TextEditingController searchCtrl = TextEditingController();
   TextEditingController noteCtrl = TextEditingController();
+  TextEditingController numberCtrl = TextEditingController();
 
   late final Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? mapcontroller;
@@ -67,20 +70,21 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
   String? frequenceValue;
 
   String frequenceType = "SERVICE PONCTUEL";
-
-  bool isSelected = true;
-  int activeCarTypeIndex = 0;
-  bool? isMoteurBerlineChecked = false;
-  bool? isInterieurBerlineChecked = false;
-  bool? isCompletBerlineChecked = false;
-
-  bool? isMoteur4x4Checked = false;
-  bool? isInterieur4x4Checked = false;
-  bool? isComplet4x4Checked = false;
+  String? selectedClimatiseur = "Entretien simple";
 
   GoogleResult? _currentFeature;
   final ImagePicker _imagePicker = ImagePicker();
   dynamic _pickedImage = null;
+  Price tarification = Price(
+      id: '',
+      type: '',
+      priceId: 0,
+      label: '',
+      initialNumber: 0,
+      price: 0,
+      priceOperator: '',
+      quantity: 0);
+  int tarificationId = 0;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -90,16 +94,21 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
   @override
   void initState() {
     super.initState();
-    if (widget.service.services != null) {
-      _bloc.setTarificationRoot(widget.service.services!
-          .map((e) => TarificationObjectRoot(
-              id: e.id!.toString(),
-              libelle: e.title!,
-              list: e.tarifications
-                  ?.map(
-                      (e) => TarificationObject(quantity: 0, tarifications: e))
-                  .toList()))
+
+    if (widget.service != null) {
+      _bloc.setSimpleTarification(widget.service.tarifications!
+          .map((e) => Price(
+              id: e.id,
+              type: e.type,
+              price: e.price,
+              priceId: e.priceId,
+              label: e.label,
+              initialNumber: e.initialNumber,
+              quantity: 0))
           .toList());
+      setState(() {
+        tarification = widget.service.tarifications![0];
+      });
     }
 
     _bloc.loadingSubject.listen((value) {
@@ -112,7 +121,6 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
           UtilsFonction.NavigateAndRemoveRight(context, BookingResultScreen());
         });
       }
-      ;
     });
   }
 
@@ -224,7 +232,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     height: 5,
                                   ),
                                   Text(
-                                    "À propos de notre service automobile",
+                                    "À propos de notre service de nettoyage de Climatiseur",
                                     style: TextStyle(
                                         color: Colors.grey.shade600,
                                         fontSize: 14),
@@ -233,14 +241,14 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     height: 20,
                                   ),
                                   Text(
-                                    "Réservez le service automobile et nos professionnels vous aideront à redonner à votre véhicule son lustre d'antan.",
+                                    "Réservez le service de nettoyage climatiseur.",
                                     style: TextStyle(color: Colors.black),
                                   ),
                                   const SizedBox(
                                     height: 30,
                                   ),
                                   Text(
-                                    "Sélectionnez votre type de véhicule",
+                                    "Sélectionnez votre formule",
                                     style: TextStyle(
                                         color: Colors.grey.shade600,
                                         fontSize: 14),
@@ -248,8 +256,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  StreamBuilder<List<TarificationObjectRoot>>(
-                                    stream: _bloc.tarificationRootStream,
+                                  StreamBuilder<List<Price>>(
+                                    stream: _bloc.simpleTarificationStream,
                                     builder: (context, snapshot) {
                                       return (snapshot.hasData &&
                                               snapshot.data != null
@@ -258,166 +266,90 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                                   MainAxisAlignment.start,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Row(
-                                                  children: snapshot.data!
-                                                      .mapIndexed<Widget>(
-                                                        (carType, idx) =>
-                                                            Container(
-                                                                margin:
-                                                                    EdgeInsets
-                                                                        .only(
-                                                                  right: 8,
-                                                                ),
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    setState(
-                                                                        () {
-                                                                      isSelected =
-                                                                          true;
-                                                                      activeCarTypeIndex =
-                                                                          idx;
-                                                                    });
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    height: 40,
-                                                                    width: 100,
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                            10),
-                                                                    decoration: BoxDecoration(
-                                                                        color: isSelected && activeCarTypeIndex == idx
-                                                                            ? Color(
-                                                                                colorBlueGray)
-                                                                            : Colors
-                                                                                .white,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                20),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Color(colorBlueGray))),
-                                                                    child:
-                                                                        Center(
-                                                                      child:
-                                                                          Text(
-                                                                        carType
-                                                                            .libelle,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            color: isSelected && activeCarTypeIndex == idx
-                                                                                ? Colors.white
-                                                                                : Color(colorBlueGray)),
-                                                                      ),
-                                                                    ),
+                                              children: snapshot.data!
+                                                  .mapIndexed<Widget>(
+                                                      (e, idx) => Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal: 0,
+                                                                  vertical: 0),
+                                                          child: Column(
+                                                            children: <Widget>[
+                                                              Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Radio<String>(
+                                                                    activeColor:
+                                                                        Color(
+                                                                            0XFF01A6DC),
+                                                                    value: e
+                                                                        .label!,
+                                                                    groupValue:
+                                                                        selectedClimatiseur,
+                                                                    onChanged:
+                                                                        (value) {
+                                                                      setState(
+                                                                          () {
+                                                                        selectedClimatiseur =
+                                                                            value;
+                                                                        tarification =
+                                                                            e;
+                                                                        tarificationId =
+                                                                            idx;
+                                                                      });
+                                                                    },
                                                                   ),
-                                                                )),
-                                                      )
-                                                      .toList(),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Visibility(
-                                                    visible:
-                                                        activeCarTypeIndex == 0,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: snapshot
-                                                          .data![
-                                                              activeCarTypeIndex]
-                                                          .list!
-                                                          .mapIndexed<
-                                                              Widget>((tarif,
-                                                                  idx) =>
-                                                              CheckboxListTile(
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .leading,
-                                                                title: Text(tarif
-                                                                    .tarifications!
-                                                                    .label
-                                                                    .toString()),
-                                                                value: idx == 0
-                                                                    ? isMoteurBerlineChecked
-                                                                    : idx == 1
-                                                                        ? isInterieurBerlineChecked
-                                                                        : isCompletBerlineChecked,
-                                                                onChanged:
-                                                                    (value) {
-                                                                  onChangedBerlineChecked(
-                                                                      idx,
-                                                                      value!,
-                                                                      tarif,
-                                                                      activeCarTypeIndex);
-                                                                },
-                                                                activeColor: Color(
-                                                                    colorBlueGray),
-                                                                checkColor:
-                                                                    Colors
-                                                                        .black,
-                                                              ))
-                                                          .toList(),
-                                                    )),
-                                                Visibility(
-                                                    visible:
-                                                        activeCarTypeIndex == 1,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: snapshot
-                                                          .data![
-                                                              activeCarTypeIndex]
-                                                          .list!
-                                                          .mapIndexed<
-                                                              Widget>((tarif,
-                                                                  idx) =>
-                                                              CheckboxListTile(
-                                                                controlAffinity:
-                                                                    ListTileControlAffinity
-                                                                        .leading,
-                                                                title: Text(tarif
-                                                                    .tarifications!
-                                                                    .label
-                                                                    .toString()),
-                                                                value: idx == 0
-                                                                    ? isInterieur4x4Checked
-                                                                    : idx == 1
-                                                                        ? isComplet4x4Checked
-                                                                        : isMoteur4x4Checked,
-                                                                onChanged:
-                                                                    (value) {
-                                                                  onChanged4x4Checked(
-                                                                      idx,
-                                                                      value!,
-                                                                      tarif,
-                                                                      activeCarTypeIndex);
-                                                                },
-                                                                activeColor: Color(
-                                                                    colorBlueGray),
-                                                                checkColor:
-                                                                    Colors
-                                                                        .black,
-                                                              ))
-                                                          .toList(),
-                                                    ))
-                                              ],
+                                                                  Text(
+                                                                      e.label!),
+                                                                ],
+                                                              )
+                                                            ],
+                                                          )))
+                                                  .toList(),
                                             )
                                           : Container());
                                     },
+                                  ),
+                                  const SizedBox(
+                                    height: 25,
+                                  ),
+                                  Text("Combien de climatiseurs avez-vous ?"),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Nombre",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        child: TextField(
+                                          autofocus: false,
+                                          controller: numberCtrl,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.black),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.black),
+                                            ),
+                                            border: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(
                                     height: 25,
@@ -571,19 +503,42 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     UtilsFonction.NavigateToRoute(
                                         context, LoginScreen());
                                   } else {
-                                    if (_bloc.tarificationRootSubject.value
-                                        .where((element) =>
-                                            element.list!.indexWhere(
-                                                (item) => item.quantity! > 0) ==
-                                            -1)
-                                        .isEmpty) {
+                                    if (!_bloc.bookingDateSubject.hasValue) {
                                       GetIt.I<AppServices>()
                                           .showSnackbarWithState(Loading(
                                               hasError: true,
                                               message:
-                                                  "Veuillez choisir un seul type de véhicule"));
+                                                  "Veuillez choisir une date"));
                                       return;
                                     }
+                                    if (searchCtrl.text.isEmpty) {
+                                      GetIt.I<AppServices>()
+                                          .showSnackbarWithState(Loading(
+                                              hasError: true,
+                                              message:
+                                                  "Veuillez entrer votre adresse"));
+                                      return;
+                                    }
+                                    if (!_bloc.bookingDateSubject.hasValue) {
+                                      GetIt.I<AppServices>()
+                                          .showSnackbarWithState(Loading(
+                                              hasError: true,
+                                              message:
+                                                  "Veuillez choisir une date"));
+                                      return;
+                                    }
+                                    if (numberCtrl.text.isEmpty) {
+                                      GetIt.I<AppServices>()
+                                          .showSnackbarWithState(Loading(
+                                              hasError: true,
+                                              message:
+                                                  "Veuillez saisir le nombre de mètres"));
+                                      return;
+                                    }
+                                    _bloc.addCarpetTarification(
+                                        tarification,
+                                        int.parse(numberCtrl.text),
+                                        tarificationId);
                                     showRecapSheet();
                                   }
                                 },
@@ -846,60 +801,10 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
 
   bookNow() {
     Navigator.of(context).pop();
-    _bloc.book(
+    _bloc.bookSofa(
         _appProvider.login!.id!,
         searchCtrl.text,
         "${_markerPosition.latitude},${_markerPosition.longitude}",
         noteCtrl.text);
-  }
-
-  onChangedBerlineChecked(int cleaningTypeIndex, bool value,
-      TarificationObject tarif, int activeCarTypeIndex) {
-    switch (cleaningTypeIndex) {
-      case 0:
-        setState(() {
-          isMoteurBerlineChecked = value;
-        });
-
-        break;
-      case 1:
-        setState(() {
-          isInterieurBerlineChecked = value;
-        });
-
-        break;
-      default:
-        setState(() {
-          isCompletBerlineChecked = value;
-        });
-    }
-    _bloc.addTarificationSimply(
-        tarif.tarifications!, value == true ? 1 : -1, activeCarTypeIndex,
-        cleaningTypeIndex: cleaningTypeIndex);
-  }
-
-  onChanged4x4Checked(int cleaningTypeIndex, bool value,
-      TarificationObject tarif, int activeCarTypeIndex) {
-    switch (cleaningTypeIndex) {
-      case 0:
-        setState(() {
-          isInterieur4x4Checked = value;
-        });
-
-        break;
-      case 1:
-        setState(() {
-          isComplet4x4Checked = value;
-        });
-
-        break;
-      default:
-        setState(() {
-          isMoteur4x4Checked = value;
-        });
-    }
-    _bloc.addTarificationSimply(
-        tarif.tarifications!, value == true ? 1 : -1, activeCarTypeIndex,
-        cleaningTypeIndex: cleaningTypeIndex);
   }
 }

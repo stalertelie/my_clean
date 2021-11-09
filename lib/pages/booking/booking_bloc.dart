@@ -49,6 +49,13 @@ class BookingBloc extends BaseBloc {
 
   BehaviorSubject<int> get totalSubject => _totalSubject;
 
+  Stream<List<Price>> get simpleTarificationStream =>
+      _simpleTarificationSubject.stream;
+  final _simpleTarificationSubject = BehaviorSubject<List<Price>>();
+
+  BehaviorSubject<List<Price>> get simpleTarification =>
+      _simpleTarificationSubject;
+
   BookingBloc() {
     _tarificationsSubject.add([]);
     _daysSubject.add([]);
@@ -58,17 +65,23 @@ class BookingBloc extends BaseBloc {
     _tarificationRootSubject.add(list);
   }
 
+  setSimpleTarification(List<Price> tarifications) {
+    _simpleTarificationSubject.add(tarifications);
+  }
+
   setDateBooking(DateTime dateTime) {
     _bookingDateSubject.add(dateTime);
   }
 
-  addTarification(Price tarification, int quantity, {required int rootId}) {
-    print('HERE');
-    print(_tarificationRootSubject.value[0]);
+  addTarification(Price tarification, int quantity,
+      {required int rootId, bool? isOperatorValueNull = false}) {
+    print(tarification.price);
+
     int index = _tarificationRootSubject.value
         .elementAt(rootId)
         .list!
         .indexWhere((element) => element.tarifications!.id == tarification.id);
+        print(rootId);
     if (index != -1) {
       TarificationObject tarificationObject =
           _tarificationRootSubject.value.elementAt(rootId).list![index];
@@ -78,9 +91,24 @@ class BookingBloc extends BaseBloc {
       tarificationObject.quantity =
           (tarificationObject.quantity ?? 0) + quantity;
       _tarificationRootSubject.add(_tarificationRootSubject.value);
-
+      if (isOperatorValueNull == true) {
+        calculateDetailOperatorValueIsNull(quantity);
+        return;
+      }
       calculateDetail(quantity);
     }
+  }
+
+  void calculateDetailOperatorValueIsNull(int number) {
+    int total = 0;
+    for (var element in _tarificationRootSubject.value) {
+      for (var item in element.list!) {
+        if (item.quantity! > 0) {
+          total += item.tarifications!.price! * item.quantity!;
+        }
+      }
+    }
+    _totalSubject.add(total);
   }
 
   addTarificationSimply(
@@ -98,6 +126,42 @@ class BookingBloc extends BaseBloc {
           tarificationActive.tarifications!.price! *
               tarificationActive.quantity!;
     }
+    _totalSubject.add(total);
+  }
+
+  addSofaTarification(Price tarification, int quantity, int sofaTypeIndex) {
+    int total = 0;
+    if (sofaTypeIndex != -1) {
+      Price tarificationActive =
+          _simpleTarificationSubject.value[sofaTypeIndex];
+      if (tarificationActive.quantity == 0 && quantity == -1) {
+        return;
+      }
+      tarificationActive.quantity =
+          (tarificationActive.quantity ?? 0) + quantity;
+      _simpleTarificationSubject.add(_simpleTarificationSubject.value);
+
+      for (var item in _simpleTarificationSubject.value) {
+        if (item.quantity! > 0) {
+          total += item.price! * (item.quantity!);
+        }
+      }
+    }
+
+    _totalSubject.add(total);
+  }
+
+  addCarpetTarification(Price tarification, int carpetSize, int sofaTypeIndex) {
+    int total = 0;
+    if (sofaTypeIndex != -1) {
+      Price tarificationActive =
+          _simpleTarificationSubject.value[sofaTypeIndex];
+
+      _simpleTarificationSubject.add(_simpleTarificationSubject.value);
+
+      total += tarification.price! * carpetSize;
+    }
+
     _totalSubject.add(total);
   }
 
@@ -122,7 +186,8 @@ class BookingBloc extends BaseBloc {
     _daysSubject.add(listDays);
   }
 
-  book(String userID, String localisation, String gps, String note) {
+  book(String userID, String localisation, String gps, String note,
+      {bool? isMeubler = false}) {
     RequestExtension<Booking> requestExtension = RequestExtension();
     List<dynamic> frequence = [];
     for (var element in _daysSubject.value) {
@@ -145,7 +210,8 @@ class BookingBloc extends BaseBloc {
         priceTotal: _totalSubject.value,
         choicesExtra: [],
         note: note,
-        user: userID);
+        user: userID,
+        isMeubler: isMeubler);
 
     loadingSubject.add(Loading(loading: true, message: "Réservation en cours"));
     GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
@@ -161,6 +227,55 @@ class BookingBloc extends BaseBloc {
       ));
     }).catchError((error) {
       print(error);
+      loadingSubject.add(Loading(
+          message: error.toString().removeExeptionWord(),
+          hasError: true,
+          loading: false));
+      GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
+    });
+  }
+
+  bookSofa(String userID, String localisation, String gps, String note,
+      {bool? isMeubler = false}) {
+    RequestExtension<Booking> requestExtension = RequestExtension();
+    List<dynamic> frequence = [];
+    for (var element in _daysSubject.value) {
+      frequence.add('{"day": ${element.day}, "time": ${element.time}},');
+    }
+    List<PriceBooking> listPrice = [];
+
+    for (var element in _simpleTarificationSubject.value) {
+      if (element.quantity! > 0) {
+        listPrice.add(
+            PriceBooking(quantity: element.quantity, tarification: element.id));
+      }
+    }
+
+    Booking booking = Booking(
+        localisation: localisation,
+        gps: gps,
+        date: _bookingDateSubject.hasValue ? _bookingDateSubject.value : null,
+        prices: listPrice,
+        frequence: frequence,
+        priceTotal: _totalSubject.value,
+        choicesExtra: [],
+        note: note,
+        user: userID,
+        isMeubler: isMeubler);
+
+    loadingSubject.add(Loading(loading: true, message: "Réservation en cours"));
+    GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
+
+    Future<dynamic> response =
+        requestExtension.post(UrlConstant.url_booking, jsonEncode(booking));
+
+    response.then((value) {
+      loadingSubject.add(Loading(
+        message: MessageConstant.booking_ok,
+        hasError: false,
+        loading: false,
+      ));
+    }).catchError((error) {
       loadingSubject.add(Loading(
           message: error.toString().removeExeptionWord(),
           hasError: true,
