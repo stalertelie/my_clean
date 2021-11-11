@@ -13,9 +13,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_clean/components/custom_button.dart';
 import 'package:my_clean/constants/app_constant.dart';
-
-//import 'package:latlong2/latlong.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
@@ -39,17 +38,16 @@ import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class BookingProfondeurScreen extends StatefulWidget {
+class BookingSofaScreen extends StatefulWidget {
   final Services service;
 
-  BookingProfondeurScreen({Key? key, required this.service}) : super(key: key);
+  BookingSofaScreen({Key? key, required this.service}) : super(key: key);
 
   @override
-  _BookingProfondeurScreenState createState() =>
-      _BookingProfondeurScreenState();
+  _BookingSofaScreenState createState() => _BookingSofaScreenState();
 }
 
-class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
+class _BookingSofaScreenState extends State<BookingSofaScreen>
     with TickerProviderStateMixin {
   TextEditingController searchCtrl = TextEditingController();
   TextEditingController noteCtrl = new TextEditingController();
@@ -69,8 +67,6 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
 
   String frequenceType = "SERVICE PONCTUEL";
 
-  bool isFurnish = false;
-
   GoogleResult? _currentFeature;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -78,12 +74,14 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
     zoom: 14.4746,
   );
 
+  int activeCarTypeIndex = 0;
+
+  bool isSelected = true;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.service.services != null) {
-      print('=====DLDLDLDLDLDLDLDLD=====');
       _bloc.setTarificationRoot(widget.service.services!
           .map((e) => TarificationObjectRoot(
               id: e.id!.toString(),
@@ -116,22 +114,6 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
       return SafeArea(
         child: Scaffold(
           key: _scaffoldKey,
-          /*appBar: AppBar(
-              backgroundColor: Color(0XFF02ABDE).withOpacity(0.5),
-              toolbarHeight: 100,
-              leading: Container(),
-              title: Hero(
-                  tag: widget.service.id.toString(),
-                  child: Text(widget.service.title ?? "Service")),
-              actions: [
-                IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: Icon(
-                      Icons.cancel,
-                      color: Colors.white,
-                    ))
-              ],
-            ),*/
           body: Stack(
             children: [
               SingleChildScrollView(
@@ -144,11 +126,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                       height: MediaQuery.of(context).size.height - 270,
                       child: GoogleMap(
                         onMapCreated: (GoogleMapController controller) {
-                          //_controller.complete(controller);
                           setState(() {
                             mapcontroller = controller;
-                            print(controller);
-                            print("====camera set ===");
                             getCurrentLocation();
                           });
                         },
@@ -198,89 +177,41 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  "APPARTEMENT MEUBLE"
-                                      .text
-                                      .black
-                                      .bold
-                                      .size(18)
-                                      .make(),
-                                  "Votre appartement est-il meublé ?"
-                                      .text
-                                      .gray500
-                                      .make(),
-                                  SizedBox(
-                                    height: 10,
+                                children: <Widget>[
+                                  Text(
+                                    "DÉTAILS DU SERVICE",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            isFurnish = true;
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 40,
-                                          width: 100,
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              color: isFurnish
-                                                  ? Color(colorBlueGray)
-                                                  : Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              border: Border.all(
-                                                  color: Color(colorBlueGray))),
-                                          child: Center(
-                                            child: "Oui"
-                                                .text
-                                                .size(20)
-                                                .bold
-                                                .color(isFurnish
-                                                    ? Colors.white
-                                                    : Color(colorBlueGray))
-                                                .make(),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            isFurnish = false;
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 40,
-                                          width: 100,
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              color: !isFurnish
-                                                  ? Color(colorBlueGray)
-                                                  : Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              border: Border.all(
-                                                  color: Color(colorBlueGray))),
-                                          child: Center(
-                                            child: "Non"
-                                                .text
-                                                .size(20)
-                                                .bold
-                                                .color(!isFurnish
-                                                    ? Colors.white
-                                                    : Color(colorBlueGray))
-                                                .make(),
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "À propos de notre service de nettoyage de canapés",
+                                    style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontSize: 14),
                                   ),
                                   const SizedBox(
                                     height: 20,
+                                  ),
+                                  Text(
+                                    "Réservez le service de nettoyage de canapés",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  Text(
+                                    "Sélectionnez la matière",
+                                    style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontSize: 14),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                   StreamBuilder<List<TarificationObjectRoot>>(
                                       stream: _bloc.tarificationRootStream,
@@ -288,34 +219,85 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                         return snapshot.hasData &&
                                                 snapshot.data != null
                                             ? Column(
-                                                children: snapshot.data!
-                                                    .mapIndexed(
-                                                        (e, index) => Container(
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  e.libelle
-                                                                      .toUpperCase()
-                                                                      .text
-                                                                      .black
-                                                                      .bold
-                                                                      .size(20)
-                                                                      .make(),
-                                                                  Column(
-                                                                    children: e.list !=
-                                                                            null
-                                                                        ? e.list!
-                                                                            .map((e) =>
-                                                                                tarificationITem(e, index))
-                                                                            .toList()
-                                                                        : [],
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ))
-                                                    .toList(),
+                                                children: [
+                                                  Row(
+                                                    children: snapshot.data!
+                                                        .mapIndexed<Widget>(
+                                                          (carType, idx) =>
+                                                              Container(
+                                                                  margin:
+                                                                      EdgeInsets
+                                                                          .only(
+                                                                    right: 8,
+                                                                  ),
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap: () {
+                                                                      setState(
+                                                                          () {
+                                                                        isSelected =
+                                                                            true;
+                                                                        activeCarTypeIndex =
+                                                                            idx;
+                                                                      });
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          40,
+                                                                      width:
+                                                                          100,
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              10),
+                                                                      decoration: BoxDecoration(
+                                                                          color: isSelected && activeCarTypeIndex == idx
+                                                                              ? Color(
+                                                                                  colorBlueGray)
+                                                                              : Colors
+                                                                                  .white,
+                                                                          borderRadius: BorderRadius.circular(
+                                                                              20),
+                                                                          border:
+                                                                              Border.all(color: Color(colorBlueGray))),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            Text(
+                                                                          carType
+                                                                              .libelle,
+                                                                          style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              color: isSelected && activeCarTypeIndex == idx ? Colors.white : Color(colorBlueGray)),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                  Column(
+                                                      children: snapshot.data!
+                                                          .mapIndexed(
+                                                              (e, index) =>
+                                                                  Container(
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Column(
+                                                                          children: e.list != null
+                                                                              ? e.list!.map((e) => index == activeCarTypeIndex ? tarificationITem(e, index) : Container()).toList()
+                                                                              : [],
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ))
+                                                          .toList())
+                                                ],
                                               )
                                             : Container();
                                       }),
@@ -519,51 +501,30 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             const SizedBox(
                               height: 30,
                             ),
-                            MaterialButton(
-                              color: const Color(0XFF02ABDE),
-                              onPressed: () {
-                                if (_appProvider.login == null) {
-                                  UtilsFonction.NavigateToRoute(
-                                      context, LoginScreen());
-                                } else {
-                                  if (_bloc.tarificationRootSubject.value
-                                      .where((element) =>
-                                          element.list!.indexWhere(
-                                              (item) => item.quantity! > 0) ==
-                                          -1)
-                                      .isEmpty) {
-                                    GetIt.I<AppServices>()
-                                        .showSnackbarWithState(Loading(
-                                            hasError: true,
-                                            message:
-                                                "Veuillez choisir au moins une option avant de passer votre commande"));
-                                    return;
+                            CustomButton(
+                                contextProp: context,
+                                onPressedProp: () {
+                                  if (_appProvider.login == null) {
+                                    UtilsFonction.NavigateToRoute(
+                                        context, LoginScreen());
+                                  } else {
+                                    if (_bloc.tarificationRootSubject.value
+                                        .where((element) =>
+                                            element.list!.indexWhere(
+                                                (item) => item.quantity! > 0) ==
+                                            -1)
+                                        .isEmpty) {
+                                      GetIt.I<AppServices>()
+                                          .showSnackbarWithState(Loading(
+                                              hasError: true,
+                                              message:
+                                                  "Veuillez choisir au moins une option avant de passer votre commande"));
+                                      return;
+                                    }
+                                    showRecapSheet();
                                   }
-                                  showRecapSheet();
-                                }
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 30),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    "RESERVER"
-                                        .text
-                                        .fontFamily("SFPro")
-                                        .size(18)
-                                        .bold
-                                        .white
-                                        .make(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const Divider(
-                              color: Colors.black,
-                            )
+                                },
+                                textProp: 'Réserver'.toUpperCase()),
                           ],
                         ),
                       ),
@@ -670,7 +631,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
               InkWell(
                   onTap: () => _bloc.addTarification(
                       tarificationObject.tarifications!, -1,
-                      rootId: rootId),
+                      rootId: rootId, isOperatorValueNull: true),
                   child: Container(
                     height: 40,
                     width: 40,
@@ -684,7 +645,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
               InkWell(
                 onTap: () => _bloc.addTarification(
                     tarificationObject.tarifications!, 1,
-                    rootId: rootId),
+                    rootId: rootId, isOperatorValueNull: true),
                 child: Container(
                   height: 40,
                   width: 40,
@@ -732,7 +693,6 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
   }
 
   void _animatedMapMove(LatLng destLocation, double destZoom) {
-    print("===animating");
     print(mapcontroller);
     mapcontroller?.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -748,8 +708,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
 
   void getCurrentLocation() async {
     Position position = await _determinePosition();
-    print(position);
-    print("xxxxxx");
+
     if (position != null) {
       _markerPosition = LatLng(position.latitude, position.longitude);
       Future.delayed(const Duration(milliseconds: 500),
@@ -842,7 +801,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                         SizedBox(
                           width: 50,
                         ),
-                        widget.service.title!.text.make()
+                        Text(widget.service.title!.substring(0, 17) + '...')
                       ],
                     ),
                     SizedBox(
@@ -857,7 +816,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             SizedBox(
                               width: 50,
                             ),
-                            "${_listProvider.frequenceList != null && _listProvider.frequenceList.isNotEmpty && frequenceValue != null ? _listProvider.frequenceList.firstWhere((element) => element.id == frequenceValue).label : ""}, 4 hours"
+                            "${_listProvider.frequenceList != null && _listProvider.frequenceList.isNotEmpty && frequenceValue != null ? _listProvider.frequenceList.firstWhere((element) => element.id == frequenceValue).label : ""}, 4 heures"
                                 .text
                                 .make(),
                           ],
@@ -943,10 +902,10 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
   bookNow() {
     Navigator.of(context).pop();
     _bloc.book(
-        _appProvider.login!.id!,
-        searchCtrl.text,
-        "${_markerPosition.latitude},${_markerPosition.longitude}",
-        noteCtrl.text,
-        isMeubler: isFurnish);
+      _appProvider.login!.id!,
+      searchCtrl.text,
+      "${_markerPosition.latitude},${_markerPosition.longitude}",
+      noteCtrl.text,
+    );
   }
 }

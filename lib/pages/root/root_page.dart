@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_clean/constants/app_constant.dart';
@@ -99,6 +100,22 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
+  _logout(context) {
+    _bLoc.logout();
+    _appProvider.updateConnectedUSer(null);
+    _showMessage('Vous êtes bien déconnecté !');
+    return Navigator.pop(context);
+  }
+
+  _showMessage(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        fontSize: 16.0);
+  }
+
   @override
   Widget build(BuildContext context) {
     _appProvider = Provider.of<AppProvider>(context);
@@ -145,7 +162,7 @@ class _RootPageState extends State<RootPage> {
                               Icons.account_circle_outlined,
                               size: 70,
                             ),
-                            "${_appProvider.login != null ? _appProvider.login!.nom : "Veuillez vous connecter"}"
+                            "${_appProvider.login != null ? _appProvider.login!.prenoms : "Veuillez vous connecter"}"
                                 .text
                                 .bold
                                 .make(),
@@ -153,18 +170,26 @@ class _RootPageState extends State<RootPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 "Location".text.make(),
-                                Row(
-                                  children: [
-                                    "Se deconnecter"
-                                        .text
-                                        .color(const Color(colorPrimary))
-                                        .make(),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    const Icon(Icons.login)
-                                  ],
-                                )
+                                TextButton(
+                                    onPressed: () {
+                                      _logout(context);
+                                    },
+                                    child: Row(
+                                      children: const <Widget>[
+                                        Text(
+                                          "Se déconnecter",
+                                          style: TextStyle(
+                                              color: Color(colorPrimary)),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Icon(
+                                          Icons.logout,
+                                          color: Colors.black,
+                                        )
+                                      ],
+                                    ))
                               ],
                             )
                           ],

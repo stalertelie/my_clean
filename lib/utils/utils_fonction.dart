@@ -69,7 +69,7 @@ class UtilsFonction extends Object {
   }
 
   static String formatDate({String? format,required DateTime dateTime}){
-    final DateFormat formatter = DateFormat(format ?? 'dd/MM/yyyy');
+    final DateFormat formatter = DateFormat(format ?? 'dd/MM/yyyy', 'fr');
     return formatter.format(dateTime );
   }
 
