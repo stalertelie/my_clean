@@ -1,0 +1,38 @@
+[
+    {
+      "alpha_2_code": "CI",
+      "alpha_3_code": "CIV",
+      "en_short_name": "Côte d'Ivoire",
+      "nationality": "Ivorian",
+      "dial_code": "+225",
+      "latitude" : 5.320357,
+      "longitude" : -4.016107
+    },
+    {
+      "alpha_2_code": "RW",
+      "alpha_3_code": "RWA",
+      "en_short_name": "Rwanda",
+      "nationality": "rwandan",
+      "dial_code": "+250",
+      "latitude" : -1.943889,
+      "longitude" : 30.059444
+    },
+    {
+      "alpha_2_code": "SN",
+      "alpha_3_code": "SEN",
+      "en_short_name": "Senegal",
+      "nationality": "Senegalese",
+      "dial_code": "+221",
+      "latitude" : 14.7645042,
+      "longitude" : -17.3660286
+    },
+    {
+      "alpha_2_code": "TD",
+      "alpha_3_code": "TCD",
+      "en_short_name": "Tchad",
+      "nationality": "Chadian",
+      "dial_code": "+235",
+      "latitude" : 12.113056,
+      "longitude" : 15.049167
+    }
+  ]

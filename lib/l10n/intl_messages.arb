@@ -1,0 +1,245 @@
+{
+  "@@last_modified": "2021-07-08T17:27:49.387808",
+  "myOrders": "myOrders",
+  "@myOrders": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noOrders": "noOrders",
+  "@noOrders": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "orderDate": "orderDate",
+  "@orderDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "chooseYourCountry": "chooseYourCountry",
+  "@chooseYourCountry": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "chooseYourLanguage": "chooseYourLanguage",
+  "@chooseYourLanguage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "continue": "continue",
+  "@continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileDetailsLabel": "profileDetailsLabel,
+  "@profileDetailsLabel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logout": "logout",
+  "@logout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myAccount": "myAccount",
+  "@myAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "changeLanguage": "changeLanguage",
+  "@changeLanguage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "comingSoon": "comingSoon",
+  "@comingSoon": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "changePassword": "changePassword",
+  "@changePassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shareApp": "shareApp",
+  "@shareApp": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "appDownloadLink": "appDownloadLink",
+  "@appDownloadLink": {
+    "type": "text",
+    "placeholders": {
+      "downloadLink" : {}
+    }
+  },
+  "account": "account",
+  "@account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "home": "home",
+  "@home": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "youAreNotLogged": "youAreNotLogged",
+  "@youAreNotLogged": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "disconnected": "disconnected",
+  "@disconnected": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "conditionsOfUse": "conditionsOfUse",
+  "@conditionsOfUse": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "firstNameFieldLabel": "firstNameFieldLabel",
+  "@firstNameFieldLabel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lastNameFieldLabel": "lastNameFieldLabel",
+  "@lastNameFieldLabel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "phone": "phone",
+  "@phone": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "commune": "commune",
+  "@commune": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "somethingIsWrongErrorLabel": "somethingIsWrongErrorLabel",
+  "@somethingIsWrongErrorLabel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "welcome": "welcome",
+  "@welcome": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "chooseService": "chooseService",
+  "@chooseService": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order": "order",
+  "@order": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "furnishedHouse": "furnishedHouse",
+  "@furnishedHouse": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "isYourHouseFurnished": "isYourHouseFurnished",
+  "@isYourHouseFurnished": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "yes": "yes",
+  "@yes": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no": "no",
+  "@no": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "isThereAnythingElse": "isThereAnythingElse",
+  "@isThereAnythingElse": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterYourNote": "enterYourNote",
+  "@enterYourNote": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "dateAndHour": "dateAndHour",
+  "@dateAndHour": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "whenDoYouWantTheExecution": "whenDoYouWantTheExecution",
+  "@whenDoYouWantTheExecution": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDate": "selectDate",
+  "@selectDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "addDate": "addDate",
+  "@addDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "each": "each",
+  "@each": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "at": "at",
+  "@at": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "pleaseChooseAtLeastOneOption": "pleaseChooseAtLeastOneOption",
+  "@pleaseChooseAtLeastOneOption": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "book": "book",
+  "@book": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "orderSummary": "orderSummary",
+  "@orderSummary": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "duration": "duration",
+  "@duration": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "address": "address",
+  "@address": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "totalAmountToPay": "totalAmountToPay",
+  "@totalAmountToPay": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "validate": "validate",
+  "@validate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterAnAdress": "enterAnAdress",
+  "@enterAnAdress": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "orderDetails": "orderDetails",
+  "@orderDetails": {
+    "type": "text",
+    "placeholders": {}
+  },
+}

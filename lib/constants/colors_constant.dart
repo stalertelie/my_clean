@@ -1,4 +1,6 @@
 
+import 'package:flutter/material.dart';
+
 const colorPrimary = 0XFF1F83CA;
 const colorFacebook =  0XFF3B5999;
 const colorGmail = 0XFFCD443F;
@@ -13,3 +15,8 @@ const colorBlueGreen = 0XFF34BED5;
 const colorPrimaryDark = 0XFF0081A4;
 
 const authBlue = 0XFF02ABDE;
+
+const Color colorBlueLight = Color(0xFF41ACEF);
+const Color colorGreyShadeLight = Color(0xFFF5F5F5);
+const Color tet = Colors.grey;
+const Color colorOrange = Color(0xFFF5A623);

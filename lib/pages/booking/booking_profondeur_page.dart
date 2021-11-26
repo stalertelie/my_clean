@@ -35,8 +35,10 @@ import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/providers/app_provider.dart';
 import 'package:my_clean/providers/list_provider.dart';
 import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class BookingProfondeurScreen extends StatefulWidget {
@@ -78,10 +80,14 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
     zoom: 14.4746,
   );
 
+  double? latitude;
+  double? longitude;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    getLatLong();
+
     if (widget.service.services != null) {
       print('=====DLDLDLDLDLDLDLDLD=====');
       _bloc.setTarificationRoot(widget.service.services!
@@ -108,30 +114,26 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
     });
   }
 
+  getLatLong() async {
+    final prefs = await SharedPreferences.getInstance();
+    final latPref = prefs.getDouble('latitude');
+    final longPref = prefs.getDouble('longitude');
+
+    setState(() {
+      latitude = latPref;
+      longitude = longPref;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _listProvider = Provider.of<ListProvider>(context);
     _appProvider = Provider.of<AppProvider>(context);
+
     return Builder(builder: (context) {
       return SafeArea(
         child: Scaffold(
           key: _scaffoldKey,
-          /*appBar: AppBar(
-              backgroundColor: Color(0XFF02ABDE).withOpacity(0.5),
-              toolbarHeight: 100,
-              leading: Container(),
-              title: Hero(
-                  tag: widget.service.id.toString(),
-                  child: Text(widget.service.title ?? "Service")),
-              actions: [
-                IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: Icon(
-                      Icons.cancel,
-                      color: Colors.white,
-                    ))
-              ],
-            ),*/
           body: Stack(
             children: [
               SingleChildScrollView(
@@ -143,23 +145,27 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                     Container(
                       height: MediaQuery.of(context).size.height - 270,
                       child: GoogleMap(
-                        onMapCreated: (GoogleMapController controller) {
-                          //_controller.complete(controller);
-                          setState(() {
-                            mapcontroller = controller;
-                            print(controller);
-                            print("====camera set ===");
-                            getCurrentLocation();
-                          });
-                        },
-                        markers: <Marker>{
-                          Marker(
-                            markerId: MarkerId("UserMarker"),
-                            position: _markerPosition,
-                          ),
-                        },
-                        initialCameraPosition: _kGooglePlex,
-                      ),
+                          onMapCreated: (GoogleMapController controller) {
+                            //_controller.complete(controller);
+                            setState(() {
+                              mapcontroller = controller;
+                              print(controller);
+                              print("====camera set ===");
+                              getCurrentLocation();
+                            });
+                          },
+                          markers: <Marker>{
+                            Marker(
+                              markerId: MarkerId("UserMarker"),
+                              position: latitude != null
+                                  ? LatLng(latitude!, longitude!)
+                                  : _markerPosition,
+                            ),
+                          },
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(latitude!, longitude!),
+                            zoom: 14.4746,
+                          )),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 480),
@@ -182,6 +188,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   controller: searchCtrl,
                                   enabled: false,
                                   decoration: InputDecoration(
+                                      hintText: AppLocalizations
+                                          .current.enterAnAdress,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
@@ -199,15 +207,15 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  "APPARTEMENT MEUBLE"
+                                  AppLocalizations.current.furnishedHouse
+                                      .toUpperCase()
                                       .text
                                       .black
                                       .bold
                                       .size(18)
                                       .make(),
-                                  "Votre appartement est-il meublé ?"
-                                      .text
-                                      .gray500
+                                  AppLocalizations
+                                      .current.isYourHouseFurnished.text.gray500
                                       .make(),
                                   SizedBox(
                                     height: 10,
@@ -233,8 +241,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                               border: Border.all(
                                                   color: Color(colorBlueGray))),
                                           child: Center(
-                                            child: "Oui"
-                                                .text
+                                            child: AppLocalizations
+                                                .current.yes.text
                                                 .size(20)
                                                 .bold
                                                 .color(isFurnish
@@ -266,8 +274,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                               border: Border.all(
                                                   color: Color(colorBlueGray))),
                                           child: Center(
-                                            child: "Non"
-                                                .text
+                                            child: AppLocalizations
+                                                .current.no.text
                                                 .size(20)
                                                 .bold
                                                 .color(!isFurnish
@@ -322,9 +330,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  "Y a-t-il autre chose que vous voudriez que nous sachions ?"
-                                      .text
-                                      .gray500
+                                  AppLocalizations
+                                      .current.isThereAnythingElse.text.gray500
                                       .make(),
                                   const SizedBox(
                                     height: 5,
@@ -336,7 +343,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                     controller: noteCtrl,
                                     autofocus: false,
                                     decoration: InputDecoration(
-                                        hintText: "Saisir votre note ici",
+                                        hintText: AppLocalizations
+                                            .current.enterYourNote,
                                         hintStyle: TextStyle(
                                             fontStyle: FontStyle.italic,
                                             fontSize: 10),
@@ -356,14 +364,13 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  "DATE ET HEURE"
-                                      .text
+                                  AppLocalizations.current.dateAndHour.text
                                       .size(18)
                                       .fontFamily("SFPro")
                                       .bold
                                       .make(),
-                                  "Quand voulez vous l'exécution du service"
-                                      .text
+                                  AppLocalizations
+                                      .current.whenDoYouWantTheExecution.text
                                       .size(10)
                                       .fontFamily("SFPro")
                                       .bold
@@ -414,8 +421,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                               currentTime: DateTime.now(),
                                               locale: LocaleType.fr);
                                         },
-                                        child: const Text(
-                                          'Choisir une date',
+                                        child: Text(
+                                          AppLocalizations.current.selectDate,
                                           style: TextStyle(
                                               color: Colors.blue, fontSize: 15),
                                         )),
@@ -437,7 +444,9 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                                       .size
                                                       .width /
                                                   4),
-                                          "Ajouter une date".text.white.make()
+                                          AppLocalizations
+                                              .current.addDate.text.white
+                                              .make()
                                         ],
                                       ),
                                       color: const Color(colorBlueGray),
@@ -478,11 +487,11 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceBetween,
-                                                  children: [
-                                                    "Chaque ${snapshot.data![index].day}"
+                                                  children: <Widget>[
+                                                    "${AppLocalizations.current.each} ${snapshot.data![index].day}"
                                                         .text
                                                         .make(),
-                                                    "à ${snapshot.data![index].time}"
+                                                    "${AppLocalizations.current.at} ${snapshot.data![index].time}"
                                                         .text
                                                         .make()
                                                   ],
@@ -519,51 +528,52 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             const SizedBox(
                               height: 30,
                             ),
-                            MaterialButton(
-                              color: const Color(0XFF02ABDE),
-                              onPressed: () {
-                                if (_appProvider.login == null) {
-                                  UtilsFonction.NavigateToRoute(
-                                      context, LoginScreen());
-                                } else {
-                                  if (_bloc.tarificationRootSubject.value
-                                      .where((element) =>
-                                          element.list!.indexWhere(
-                                              (item) => item.quantity! > 0) ==
-                                          -1)
-                                      .isEmpty) {
-                                    GetIt.I<AppServices>()
-                                        .showSnackbarWithState(Loading(
-                                            hasError: true,
-                                            message:
-                                                "Veuillez choisir au moins une option avant de passer votre commande"));
-                                    return;
-                                  }
-                                  showRecapSheet();
-                                }
-                              },
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 30),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    "RESERVER"
-                                        .text
-                                        .fontFamily("SFPro")
-                                        .size(18)
-                                        .bold
-                                        .white
-                                        .make(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const Divider(
-                              color: Colors.black,
-                            )
+                            Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: MaterialButton(
+                                  color: const Color(0XFF02ABDE),
+                                  onPressed: () {
+                                    if (_appProvider.login == null) {
+                                      UtilsFonction.NavigateToRoute(
+                                          context, LoginScreen());
+                                    } else {
+                                      if (_bloc.tarificationRootSubject.value
+                                          .where((element) =>
+                                              element.list!.indexWhere((item) =>
+                                                  item.quantity! > 0) ==
+                                              -1)
+                                          .isEmpty) {
+                                        GetIt.I<AppServices>()
+                                            .showSnackbarWithState(Loading(
+                                                hasError: true,
+                                                message: AppLocalizations
+                                                    .current
+                                                    .pleaseChooseAtLeastOneOption));
+                                        return;
+                                      }
+                                      showRecapSheet();
+                                    }
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 30),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        AppLocalizations.current.book.text
+                                            .fontFamily("SFPro")
+                                            .size(18)
+                                            .bold
+                                            .white
+                                            .make(),
+                                      ],
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(height: 20)
                           ],
                         ),
                       ),
@@ -799,6 +809,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
     _scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
           callBack: (GoogleResult feature) {
             print("yyyy");
+            print(feature.geometry!.location!.lat!);
+            print(feature.geometry!.location!.lng!);
             Navigator.of(context).pop();
             _currentFeature = feature;
             searchCtrl.text = feature.name!;
@@ -821,8 +833,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    "RESUME DE LA COMMANDE"
-                        .text
+                    AppLocalizations.current.orderSummary.text
                         .color(Colors.black54)
                         .bold
                         .size(20)
@@ -853,11 +864,11 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                       children: [
                         Row(
                           children: [
-                            "Durée".text.bold.make(),
+                            AppLocalizations.current.duration.text.bold.make(),
                             SizedBox(
                               width: 50,
                             ),
-                            "${_listProvider.frequenceList != null && _listProvider.frequenceList.isNotEmpty && frequenceValue != null ? _listProvider.frequenceList.firstWhere((element) => element.id == frequenceValue).label : ""}, 4 hours"
+                            "${_listProvider.frequenceList != null && _listProvider.frequenceList.isNotEmpty && frequenceValue != null ? _listProvider.frequenceList.firstWhere((element) => element.id == frequenceValue).label : ""}, 4 heures"
                                 .text
                                 .make(),
                           ],
@@ -877,7 +888,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                       children: [
                         Row(
                           children: [
-                            "Adresse".text.bold.make(),
+                            AppLocalizations.current.duration.text.bold.make(),
                             SizedBox(
                               width: 50,
                             ),
@@ -903,7 +914,9 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                               return snapshot.hasData && snapshot.data != null
                                   ? Row(
                                       children: [
-                                        "Montant a payer".text.bold.make(),
+                                        AppLocalizations
+                                            .current.totalAmountToPay.text.bold
+                                            .make(),
                                         SizedBox(
                                           width: 50,
                                         ),
@@ -917,7 +930,9 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   : Container();
                             }),
                         IconButton(
-                          onPressed: () => () => Navigator.of(context).pop(),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
                           icon: Icon(Icons.edit),
                           color: Color(colorPrimary),
                         )
@@ -926,11 +941,17 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                     SizedBox(
                       height: 20,
                     ),
+                    // Text("Détails de la commande",
+                    //     style: TextStyle(
+                    //         fontWeight: FontWeight.bold, fontSize: 15)),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
                     WidgetTemplate.getActionButtonWithIcon(
                         callback: () {
                           bookNow();
                         },
-                        title: "VALIDER"),
+                        title: AppLocalizations.current.validate),
                     SizedBox(
                       height: 30,
                     )

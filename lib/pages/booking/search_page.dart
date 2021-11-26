@@ -4,6 +4,7 @@ import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/GoogleSearch/google_search_result.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/pages/booking/search_bloc.dart';
+import 'package:my_clean/services/localization.dart';
 
 class SearchPage extends StatefulWidget {
   final Function(GoogleResult feature) callBack;
@@ -32,6 +33,7 @@ class _SearchPageState extends State<SearchPage> {
           padding: const EdgeInsets.all(16.0),
           child: TextField(
             decoration: InputDecoration(
+                hintText: AppLocalizations.current.enterAnAdress,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -54,12 +56,12 @@ class _SearchPageState extends State<SearchPage> {
                             return snapshot2.hasData
                                 ? ListView.separated(
                                     itemBuilder: (context, index) => ListTile(
-                                          title: Text(snapshot2.data!.results![index]
-                                                  .name ??
+                                          title: Text(snapshot2
+                                                  .data!.results![index].name ??
                                               ""),
                                           onTap: () {
-                                            widget
-                                              .callBack(snapshot2.data!.results![index]);
+                                            widget.callBack(snapshot2
+                                                .data!.results![index]);
                                           },
                                         ),
                                     separatorBuilder: (context, index) =>

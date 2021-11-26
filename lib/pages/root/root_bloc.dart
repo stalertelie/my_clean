@@ -1,7 +1,8 @@
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RootBLoc {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+class RootBLoc {
   Stream<int> get pageindexStream => _pageindexSubject.stream;
   final _pageindexSubject = BehaviorSubject<int>();
 
@@ -24,7 +25,8 @@ class RootBLoc {
   switchDrawerIndex(int index) {
     _drawerIndexSubject.add(index);
   }
-  logout () async {
+
+  logout() async {
     return await UtilsFonction.clearAll();
   }
 }

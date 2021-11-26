@@ -1,19 +1,24 @@
 import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
+import 'package:ioc/ioc.dart';
 import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/constants/url_constant.dart';
 import 'package:my_clean/models/base_bloc.dart';
 import 'package:my_clean/models/booking.dart';
 import 'package:my_clean/models/booking_tarification.dart';
+import 'package:my_clean/models/data_response.dart';
+import 'package:my_clean/models/entities/frequence.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/models/price.dart';
 import 'package:my_clean/models/price_booking.dart';
+import 'package:my_clean/models/responses/get-booking-response/get_booking_response.dart';
 import 'package:my_clean/models/services.dart';
 import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/services/booking_api.dart';
 import 'package:my_clean/utils/request_extension.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:my_clean/extensions/extensions.dart';
@@ -81,7 +86,7 @@ class BookingBloc extends BaseBloc {
         .elementAt(rootId)
         .list!
         .indexWhere((element) => element.tarifications!.id == tarification.id);
-        print(rootId);
+
     if (index != -1) {
       TarificationObject tarificationObject =
           _tarificationRootSubject.value.elementAt(rootId).list![index];
@@ -156,7 +161,8 @@ class BookingBloc extends BaseBloc {
     if (sofaTypeIndex != -1) {
       Price tarificationActive =
           _simpleTarificationSubject.value[sofaTypeIndex];
-
+      tarificationActive.quantity =
+          (tarificationActive.quantity ?? 0) + carpetSize;
       _simpleTarificationSubject.add(_simpleTarificationSubject.value);
 
       total += tarification.price! * carpetSize;
@@ -189,16 +195,32 @@ class BookingBloc extends BaseBloc {
   book(String userID, String localisation, String gps, String note,
       {bool? isMeubler = false}) {
     RequestExtension<Booking> requestExtension = RequestExtension();
-    List<dynamic> frequence = [];
-    for (var element in _daysSubject.value) {
-      frequence.add('{"day": ${element.day}, "time": ${element.time}},');
+    List<Frequence> frequence = [];
+
+    if (_daysSubject.hasValue) {
+      for (var element in _daysSubject.value) {
+        frequence.add(Frequence(day: element.day, time: element.time));
+      }
     }
+
     List<PriceBooking> listPrice = [];
-    for (var element in _tarificationRootSubject.value) {
-      element.list?.where((it) => it.quantity! > 0).forEach((el) {
-        listPrice.add(PriceBooking(
-            quantity: el.quantity, tarification: el.tarifications!.id));
-      });
+
+    if (_tarificationRootSubject.hasValue) {
+      for (var element in _tarificationRootSubject.value) {
+        element.list?.where((it) => it.quantity! > 0).forEach((el) {
+          listPrice.add(PriceBooking(
+              quantity: el.quantity, tarification: el.tarifications!.id));
+        });
+      }
+    }
+
+    if (_simpleTarificationSubject.hasValue) {
+      for (var element in _simpleTarificationSubject.value) {
+        if (element.quantity! > 0) {
+          listPrice.add(PriceBooking(
+              quantity: element.quantity ?? 1, tarification: element.id));
+        }
+      }
     }
 
     Booking booking = Booking(
@@ -214,6 +236,7 @@ class BookingBloc extends BaseBloc {
         isMeubler: isMeubler);
 
     loadingSubject.add(Loading(loading: true, message: "Réservation en cours"));
+    print(loadingSubject.valueOrNull);
     GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
 
     Future<dynamic> response =
@@ -231,23 +254,23 @@ class BookingBloc extends BaseBloc {
           message: error.toString().removeExeptionWord(),
           hasError: true,
           loading: false));
-      GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
+      GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.valueOrNull);
     });
   }
 
   bookSofa(String userID, String localisation, String gps, String note,
       {bool? isMeubler = false}) {
     RequestExtension<Booking> requestExtension = RequestExtension();
-    List<dynamic> frequence = [];
+    List<Frequence>? frequence = [];
     for (var element in _daysSubject.value) {
-      frequence.add('{"day": ${element.day}, "time": ${element.time}},');
+      frequence.add(Frequence(day: element.day, time: element.time));
     }
     List<PriceBooking> listPrice = [];
 
     for (var element in _simpleTarificationSubject.value) {
       if (element.quantity! > 0) {
-        listPrice.add(
-            PriceBooking(quantity: element.quantity, tarification: element.id));
+        listPrice.add(PriceBooking(
+            quantity: element.quantity ?? 1, tarification: element.id));
       }
     }
 

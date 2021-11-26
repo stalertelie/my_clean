@@ -6,6 +6,7 @@ Widget CustomButton({
   required Function onPressedProp,
   required String textProp,
   bool disabledProp = false,
+  double? padding = 30,
 }) {
   return Container(
       child: IgnorePointer(
@@ -18,7 +19,7 @@ Widget CustomButton({
               },
               child: Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 30),
+                   padding:  EdgeInsets.symmetric(vertical: padding!),
                   width: MediaQuery.of(contextProp).size.width,
                   decoration: BoxDecoration(
                       color: const Color(authBlue),
