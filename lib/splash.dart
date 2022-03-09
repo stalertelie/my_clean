@@ -11,15 +11,12 @@ import 'package:my_clean/services/app_service.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
 
-
 class SplashScreenPage extends StatefulWidget {
   @override
   _SplashScreenPageState createState() => _SplashScreenPageState();
 }
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
-
-
   final getIt = GetIt.instance;
 
   late ListProvider _listProvider;
@@ -29,11 +26,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     // TODO: implement initState
     super.initState();
     //setup();
-    Future.delayed(const Duration(seconds: 4),()=> {
-      UtilsFonction.NavigateAndRemoveRight(context, RootPage())
-    });
+    Future.delayed(const Duration(seconds: 5),
+        () => {UtilsFonction.NavigateAndRemoveRight(context, RootPage())});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -42,25 +37,28 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0XFF2387A3), Color(0XFF23AEE3)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter
-          ),
+              colors: [Color(0XFF2387A3), Color(0XFF23AEE3)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
         ),
         child: Center(
-          child: ZoomIn(child: Image.asset("images/icons/logo.png", width: 200,)),
+          child: Pulse(
+              duration: const Duration(seconds: 10),
+              infinite: true,
+              child: SvgPicture.asset(
+                "images/icons/myclean-logo-vectoriser.svg",
+                width: 200,
+              )),
         ),
       ),
     );
   }
 
-
-  void setup() async{
+  void setup() async {
     try {
       getIt.registerSingleton<AppServices>(AppServices());
-    }catch(exeption){
+    } catch (exeption) {
       print(exeption);
     }
   }
-
 }

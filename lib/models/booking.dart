@@ -1,3 +1,4 @@
+import 'package:my_clean/models/entities/frequence.dart';
 import 'package:my_clean/models/price_booking.dart';
 
 import 'booking_tarification.dart';
@@ -26,7 +27,7 @@ class Booking {
   List<PriceBooking>? prices;
   int? priceTotal;
   String? gps;
-  List<dynamic>? frequence;
+  List<Frequence>? frequence;
   bool? isMeubler;
 
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
@@ -47,7 +48,10 @@ class Booking {
                 json["prices"].map((x) => PriceBooking.fromJson(x))),
         priceTotal: json["priceTotal"] == null ? null : json["priceTotal"],
         gps: json["gps"] == null ? null : json["gps"],
-        frequence: json["frequence"] == null ? null : json["frequence"],
+        frequence: json["frequence"] == null
+            ? null
+            : List<Frequence>.from(
+                json['frequence'].map((x) => Frequence.fromJson(x))),
         isMeubler: json["isMeubler"],
       );
 
@@ -65,7 +69,9 @@ class Booking {
             : List<dynamic>.from(prices!.map((x) => x.toJson())),
         "priceTotal": priceTotal == null ? null : priceTotal,
         "gps": gps == null ? null : gps,
-         "frequence": frequence == null ? null : List<dynamic>.from(frequence!.map((x) => x)),
-         "isMeubler" : isMeubler,
+        "frequence": frequence == null
+            ? null
+            : List<dynamic>.from(frequence!.map((x) => x.toJson())),
+        "isMeubler": isMeubler,
       };
 }

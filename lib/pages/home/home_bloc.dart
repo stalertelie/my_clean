@@ -17,19 +17,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HomeBloc extends BaseBloc {
   Stream<List<Services>> get servicesStream => _servicesSubject.stream;
   final _servicesSubject = BehaviorSubject<List<Services>>();
-  
+
   BehaviorSubject<List<Services>> get servicesSubject => _servicesSubject;
 
-  HomeBloc(){
+  HomeBloc() {
     loadServices();
   }
 
 
-  loadServices(){
+  loadServices() {
     loadingSubject.add(Loading(loading: true));
     RequestExtension<Services> _requestExtension = RequestExtension();
     Future<dynamic> response =
-    _requestExtension.get(UrlConstant.url_servies + "?isPrincipal=true");
+        _requestExtension.get(UrlConstant.url_servies + "?isPrincipal=true");
     //GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
     response.then((resp) {
       print("result services");
@@ -38,17 +38,21 @@ class HomeBloc extends BaseBloc {
       //GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
       DataResponse<Services> datas = resp as DataResponse<Services>;
       //Utils.saveData(AppConstant.USER_LINK, jsonEncode(rep));
+      print(datas.hydraMember);
       _servicesSubject.add(datas.hydraMember ?? []);
     }).catchError((error) {
       print(error);
-      loadingSubject.add(Loading(loading: false, hasError: true, message: "Une erreur c'est produite."));
+      loadingSubject.add(Loading(
+          loading: false,
+          hasError: true,
+          message: "Une erreur c'est produite."));
       GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
     });
   }
 
-  Future<User> getUserInfos() async {
+  Future<User?> getUserInfos() async {
     String? data = await UtilsFonction.getData(AppConstant.USER_INFO);
-    final User user = User.fromJson(jsonDecode(data!));
+    final User? user = data != null ? User.fromJson(jsonDecode(data)) : null;
     return user;
   }
 }

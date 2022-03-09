@@ -1,0 +1,245 @@
+{
+  "@@last_modified": "2018-05-25T11:50:40.743319",
+  "myOrders": "My orders",
+  "@myOrders": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noOrders": "No orders",
+  "@noOrders": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "orderDate": "{date}",
+  "@orderDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "chooseYourCountry": "Choose your country",
+  "@chooseYourCountry": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "chooseYourLanguage": "Choose your language",
+  "@chooseYourLanguage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "continue": "Continue",
+  "@continue": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileDetailsLabel": "Profile details",
+  "@profileDetailsLabel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logout": "Logout",
+  "@logout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myAccount": "My account",
+  "@myAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "changeLanguage": "Change the language",
+  "@changeLanguage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "comingSoon": "Coming soon",
+  "@comingSoon": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "changePassword": "Change passowrd",
+  "@changePassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shareApp": "Share the app",
+  "@shareApp": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "appDownloadLink": "Hey! Download the MyClean app now and take advantage of competitive cleaning rates: {downloadLink}",
+  "@appDownloadLink": {
+    "type": "text",
+    "placeholders": {
+      "downloadLink" : {}
+    }
+  },
+   "account": "Account",
+  "@account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "home": "Home",
+  "@home": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "youAreNotLogged": "Whoops! You are not connected",
+  "@youAreNotLogged": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "disconnected": "Disconnected",
+  "@disconnected": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "conditionsOfUse": "Conditions of use",
+  "@conditionsOfUse": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "firstNameFieldLabel": "Firstname",
+  "@firstNameFieldLabel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lastNameFieldLabel": "Lastname",
+  "@lastNameFieldLabel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "phone": "Phone number",
+  "@phone": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "commune": "Town",
+  "@commune": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "somethingIsWrongErrorLabel": "Something went wrong",
+  "@somethingIsWrongErrorLabel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "welcome": "Welcome",
+  "@welcome": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "chooseService": "Choose a service",
+  "@chooseService": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "order": "Order",
+  "@order": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "furnishedHouse": "Furnished house",
+  "@furnishedHouse": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "isYourHouseFurnished": "Is your house furnished?",
+  "@isYourHouseFurnished": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "yes": "Yes",
+  "@yes": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "no": "No",
+  "@no": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "isThereAnythingElse": "Is there anything else you would like us know?",
+  "@isThereAnythingElse": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterYourNote": "Enter your note here",
+  "@enterYourNote": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "dateAndHour": "Date and hour",
+  "@dateAndHour": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "whenDoYouWantTheExecution": "When do you want the execution of the service?",
+  "@whenDoYouWantTheExecution": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDate": "Select a date",
+  "@selectDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "addDate": "Add a date",
+  "@addDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "each": "Each",
+  "@each": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "at": "at",
+  "@at": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "pleaseChooseAtLeastOneOption": "Please choose at least one option before placing your order",
+  "@pleaseChooseAtLeastOneOption": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "book": "Book",
+  "@book": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "orderSummary": "Order summary",
+  "@orderSummary": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "duration": "Duration",
+  "@duration": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "address": "Address",
+  "@address": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "totalAmountToPay": "Total amount to pay",
+  "@totalAmountToPay": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "validate": "Validate",
+  "@validate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterAnAdress": "Enter an address",
+  "@enterAnAdress": {
+    "type": "text",
+    "placeholders": {}
+  },
+   "orderDetails": "Details of the order",
+  "@orderDetails": {
+    "type": "text",
+    "placeholders": {}
+  },
+}

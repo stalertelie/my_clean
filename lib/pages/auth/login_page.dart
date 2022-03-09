@@ -20,9 +20,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
-
-
   TextEditingController _phoneCtrl = TextEditingController();
   TextEditingController _passCtrl = TextEditingController();
 
@@ -41,14 +38,16 @@ class _LoginScreenState extends State<LoginScreen> {
     print("herre");
 
     _bloc.loadingSubject.listen((value) {
-      if(value.message == MessageConstant.loginok){
-        GetIt.I<AppServices>().messengerGlobalKey!.currentState!.clearSnackBars();
+      if (value.message == MessageConstant.loginok) {
+        GetIt.I<AppServices>()
+            .messengerGlobalKey!
+            .currentState!
+            .clearSnackBars();
         _appProvider.updateConnectedUSer(value.data);
         Navigator.of(context).pop();
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Center(
                     child: Container(
                       width: 200,
@@ -77,19 +78,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Image.asset("images/icons/logo.png"),
                     ),
                   ),
-                  SizedBox(height: 20,),
-                  "Login".text.size(25).bold.color(Color(colorBlueGray)).make(),
-                  "Renseigner les champs ci-dessous".text.color(Color(colorBlueGray)).make()
+                  SizedBox(
+                    height: 20,
+                  ),
+                  "Connexion".text.size(25).bold.color(Color(colorBlueGray)).make(),
+                  "Renseigner les champs ci-dessous"
+                      .text
+                      .color(Color(colorBlueGray))
+                      .make()
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               color: Colors.white,
               child: Form(
                 key: _formKey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 40,horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                   child: Column(
                     children: [
                       TextFormField(
@@ -102,104 +111,116 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         },
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       SlideInRight(
                           child: TextFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(2),
-                                    borderSide: BorderSide(color: Colors.grey, width: 1)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(2),
-                                    borderSide: BorderSide(color: Colors.grey, width: 1)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(2),
-                                    borderSide: BorderSide(color: Colors.grey, width: 1)),
-                                suffixIcon: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _showPass = !_showPass;
-                                      });
-                                    },
-                                    child: Icon(
-                                      _showPass
-                                          ? FontAwesomeIcons.eyeSlash
-                                          : FontAwesomeIcons.eye,
-                                      size: 15,
-                                    )),
-                                suffixIconConstraints:
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1)),
+                            suffixIcon: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _showPass = !_showPass;
+                                  });
+                                },
+                                child: Icon(
+                                  _showPass
+                                      ? FontAwesomeIcons.eyeSlash
+                                      : FontAwesomeIcons.eye,
+                                  size: 15,
+                                )),
+                            suffixIconConstraints:
                                 BoxConstraints(maxHeight: 15, minWidth: 40),
-                                labelText: "Mot de passe"),
-                            obscureText: !_showPass,
-                            autofocus: false,
-                            textInputAction: TextInputAction.done,
-                            onFieldSubmitted: (value){
-                              if (_formKey.currentState!.validate()) {
-                                //logCustomer();
-                              }
-                            },
-                            controller: _passCtrl,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Champ réquis";
-                              } else
-                                return null;
-                            },
-                          )),
-                      SizedBox(height: 20,),
-                      MaterialButton(onPressed: ()=>{
-                        if(_formKey.currentState!.validate()){
-                          login()
-                        }
-                      },
-                        padding: EdgeInsets.symmetric(vertical: 20,),
+                            labelText: "Mot de passe"),
+                        obscureText: !_showPass,
+                        autofocus: false,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (value) {
+                          if (_formKey.currentState!.validate()) {
+                            //logCustomer();
+                          }
+                        },
+                        controller: _passCtrl,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Champ réquis";
+                          } else
+                            return null;
+                        },
+                      )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      MaterialButton(
+                        onPressed: () => {
+                          if (_formKey.currentState!.validate()) {login()}
+                        },
+                        padding: EdgeInsets.symmetric(
+                          vertical: 20,
+                        ),
                         color: Color(colorPrimary),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          "LOGIN".text.white.size(18).bold.make()
-                        ],
-                      ),)
+                          children: ["Connexion".text.white.size(18).bold.make()],
+                        ),
+                      )
                     ],
                   ),
                 ),
               ),
             ),
-
-            SizedBox(height: 40,),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  "N'avez-vous pas de compte?".text.color(Color(colorBlueGray)).make(),
+                  "N'avez-vous pas de compte ?"
+                      .text
+                      .color(Color(colorBlueGray))
+                      .make(),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   GestureDetector(
-                    onTap: ()=> {
-                      UtilsFonction.NavigateToRouteAndWait(context, SignupScreen()).then((value){
+                    onTap: () => {
+                      UtilsFonction.NavigateToRouteAndWait(
+                              context, SignupScreen())
+                          .then((value) {
                         print(GetIt.I<AppServices>().userData);
                         print("icicicic");
-                        if(_appProvider.login != null){
+                        if (_appProvider.login != null) {
                           Navigator.of(context).pop();
                         }
                       })
                     },
-                    child: "S'inscrire".text.color(Color(colorPrimary)).bold.make(),
+                    child: "S'inscrire"
+                        .text
+                        .color(Color(colorPrimary))
+                        .bold
+                        .make(),
                   )
                 ],
               ),
-            )
-
+            ),
           ],
         ),
       ),
     );
   }
 
-
-  void login(){
-    User user = User(
-      phone: _phoneCtrl.text,
-      password: _passCtrl.text
-    );
+  void login() {
+    User user = User(phone: _phoneCtrl.text, password: _passCtrl.text);
 
     _bloc.logUser(user);
   }

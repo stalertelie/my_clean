@@ -1,15 +1,15 @@
 class Price {
-  Price({
-    this.id,
-    this.type,
-    this.priceId,
-    this.label,
-    this.initialNumber,
-    this.price,
-    this.priceOperator,
-    this.operatorValue,
-    this.quantity,
-  });
+  Price(
+      {this.id,
+      this.type,
+      this.priceId,
+      this.label,
+      this.initialNumber,
+      this.price,
+      this.priceOperator,
+      this.operatorValue,
+      this.quantity,
+      this.service});
 
   String? id;
   String? type;
@@ -20,6 +20,7 @@ class Price {
   String? priceOperator;
   int? operatorValue;
   int? quantity;
+  String? service; //HERE
 
   factory Price.fromJson(Map<String, dynamic> json) => Price(
         id: json["@id"],

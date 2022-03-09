@@ -35,8 +35,10 @@ import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/providers/app_provider.dart';
 import 'package:my_clean/providers/list_provider.dart';
 import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class BookingClimatiseurScreen extends StatefulWidget {
@@ -91,9 +93,13 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
     zoom: 14.4746,
   );
 
+  double? latitude;
+  double? longitude;
+
   @override
   void initState() {
     super.initState();
+    getLatLong();
 
     if (widget.service != null) {
       _bloc.setSimpleTarification(widget.service.tarifications!
@@ -121,6 +127,17 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
           UtilsFonction.NavigateAndRemoveRight(context, BookingResultScreen());
         });
       }
+    });
+  }
+
+  getLatLong() async {
+    final prefs = await SharedPreferences.getInstance();
+    final latPref = prefs.getDouble('latitude');
+    final longPref = prefs.getDouble('longitude');
+
+    setState(() {
+      latitude = latPref;
+      longitude = longPref;
     });
   }
 
@@ -177,10 +194,15 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                         markers: <Marker>{
                           Marker(
                             markerId: MarkerId("UserMarker"),
-                            position: _markerPosition,
+                            position: latitude != null
+                                ? LatLng(latitude!, longitude!)
+                                : _markerPosition,
                           ),
                         },
-                        initialCameraPosition: _kGooglePlex,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(latitude!, longitude!),
+                          zoom: 14.4746,
+                        ),
                       ),
                     ),
                     Container(
@@ -204,6 +226,8 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                   controller: searchCtrl,
                                   enabled: false,
                                   decoration: InputDecoration(
+                                      hintText: AppLocalizations
+                                          .current.enterAnAdress,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),

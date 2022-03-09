@@ -34,8 +34,10 @@ import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/providers/app_provider.dart';
 import 'package:my_clean/providers/list_provider.dart';
 import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class BookingSofaScreen extends StatefulWidget {
@@ -78,9 +80,14 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
 
   bool isSelected = true;
 
+  double? latitude;
+  double? longitude;
+
   @override
   void initState() {
     super.initState();
+    getLatLong();
+
     if (widget.service.services != null) {
       _bloc.setTarificationRoot(widget.service.services!
           .map((e) => TarificationObjectRoot(
@@ -103,6 +110,17 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
           UtilsFonction.NavigateAndRemoveRight(context, BookingResultScreen());
         });
       }
+    });
+  }
+
+  getLatLong() async {
+    final prefs = await SharedPreferences.getInstance();
+    final latPref = prefs.getDouble('latitude');
+    final longPref = prefs.getDouble('longitude');
+
+    setState(() {
+      latitude = latPref;
+      longitude = longPref;
     });
   }
 
@@ -134,10 +152,15 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                         markers: <Marker>{
                           Marker(
                             markerId: MarkerId("UserMarker"),
-                            position: _markerPosition,
+                            position: latitude != null
+                                ? LatLng(latitude!, longitude!)
+                                : _markerPosition,
                           ),
                         },
-                        initialCameraPosition: _kGooglePlex,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(latitude!, longitude!),
+                          zoom: 14.4746,
+                        ),
                       ),
                     ),
                     Container(
@@ -161,6 +184,8 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                   controller: searchCtrl,
                                   enabled: false,
                                   decoration: InputDecoration(
+                                      hintText: AppLocalizations
+                                          .current.enterAnAdress,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
@@ -552,16 +577,14 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                               ))
                         ],
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Hero(
-                          tag: widget.service.id.toString(),
-                          child: Text(
-                            widget.service.title!.toUpperCase(),
-                            style: GoogleFonts.bebasNeue(
-                                color: Colors.white, fontSize: 25),
-                          ))
+                      Container(
+                        padding: EdgeInsets.only(left: 3),
+                        child: Text(widget.service.title!.toUpperCase(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: "SFPro")),
+                      )
                     ],
                   ),
                 ),

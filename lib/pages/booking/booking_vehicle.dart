@@ -34,8 +34,10 @@ import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/providers/app_provider.dart';
 import 'package:my_clean/providers/list_provider.dart';
 import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class BookingVehicleScreen extends StatefulWidget {
@@ -87,9 +89,14 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
     zoom: 14.4746,
   );
 
+  double? latitude;
+  double? longitude;
+
   @override
   void initState() {
     super.initState();
+    getLatLong();
+
     if (widget.service.services != null) {
       _bloc.setTarificationRoot(widget.service.services!
           .map((e) => TarificationObjectRoot(
@@ -112,7 +119,17 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
           UtilsFonction.NavigateAndRemoveRight(context, BookingResultScreen());
         });
       }
-      ;
+    });
+  }
+
+  getLatLong() async {
+    final prefs = await SharedPreferences.getInstance();
+    final latPref = prefs.getDouble('latitude');
+    final longPref = prefs.getDouble('longitude');
+
+    setState(() {
+      latitude = latPref;
+      longitude = longPref;
     });
   }
 
@@ -169,10 +186,15 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                         markers: <Marker>{
                           Marker(
                             markerId: MarkerId("UserMarker"),
-                            position: _markerPosition,
+                            position: latitude != null
+                                ? LatLng(latitude!, longitude!)
+                                : _markerPosition,
                           ),
                         },
-                        initialCameraPosition: _kGooglePlex,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(latitude!, longitude!),
+                          zoom: 14.4746,
+                        ),
                       ),
                     ),
                     Container(
@@ -196,6 +218,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                   controller: searchCtrl,
                                   enabled: false,
                                   decoration: InputDecoration(
+                                      hintText: AppLocalizations
+                                          .current.enterAnAdress,
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
@@ -449,9 +473,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                   const SizedBox(
                                     height: 25,
                                   ),
-                                  "Y a-t-il autre chose que vous voudriez que nous sachions ?"
-                                      .text
-                                      .gray500
+                                  AppLocalizations
+                                      .current.isThereAnythingElse.text.gray500
                                       .make(),
                                   const SizedBox(
                                     height: 5,
@@ -463,7 +486,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     controller: noteCtrl,
                                     autofocus: false,
                                     decoration: InputDecoration(
-                                        hintText: "Saisir votre note ici",
+                                        hintText: AppLocalizations
+                                            .current.enterYourNote,
                                         hintStyle: TextStyle(
                                             fontStyle: FontStyle.italic,
                                             fontSize: 10),
@@ -483,14 +507,13 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  "DATE ET HEURE"
-                                      .text
+                                  AppLocalizations.current.dateAndHour.text
                                       .size(18)
                                       .fontFamily("SFPro")
                                       .bold
                                       .make(),
-                                  "Quand voulez vous l'exécution du service"
-                                      .text
+                                  AppLocalizations
+                                      .current.whenDoYouWantTheExecution.text
                                       .size(10)
                                       .fontFamily("SFPro")
                                       .bold

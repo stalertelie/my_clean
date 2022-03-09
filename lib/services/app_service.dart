@@ -45,10 +45,10 @@ class AppServices {
     messengerGlobalKey = key;
   }
 
-  void showSnackbarWithState(Loading loading) {
+  void showSnackbarWithState(Loading? loading) {
     print(messengerGlobalKey);
     messengerGlobalKey!.currentState?.clearSnackBars();
-    if (loading.message != null) {
+    if (loading!.message != null) {
       messengerGlobalKey!.currentState?.showSnackBar(SnackBar(
         duration: loading.loading == true
             ? const Duration(minutes: 1)
