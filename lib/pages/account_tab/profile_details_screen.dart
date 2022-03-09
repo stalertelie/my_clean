@@ -105,7 +105,6 @@ class ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
       setState(() {
         _gettingInfo = true;
       });
-      print(widget.user!.id);
       final User user =
           await currentUserApi.getCurrentUser(widget.user!.id!.substring(7));
       setState(() {
