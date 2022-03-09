@@ -28,6 +28,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function>{
         "myOrders": MessageLookupByLibrary.simpleMessage("myOrders"),
         "noOrders": MessageLookupByLibrary.simpleMessage("noOrders"),
+        "myBooking": MessageLookupByLibrary.simpleMessage("myBooking"),
+        "notifications": MessageLookupByLibrary.simpleMessage("notifications"),
         "buyCryptoConfirmationText": m0,
         "orderDate": m1,
         "chooseYourCountry":

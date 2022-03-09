@@ -237,135 +237,137 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     _appProvider = Provider.of<AppProvider>(context);
-    return SafeArea(
-      child: Scaffold(
-        key: _key,
-        // appBar: AppBar(
-        //   title: const Text(''),
-        //   backgroundColor: Colors.white,
-        //   elevation: 0,
-        //   // leading: IconButton(
-        //   //     onPressed: () => _key.currentState!.openDrawer(),
-        //   //     icon: SvgPicture.asset("images/icons/user-profile.svg")),
-        //   // elevation: 0,
-        //   // centerTitle: true,
+    return Scaffold(
+      key: _key,
+      // appBar: AppBar(
+      //   title: const Text(''),
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   // leading: IconButton(
+      //   //     onPressed: () => _key.currentState!.openDrawer(),
+      //   //     icon: SvgPicture.asset("images/icons/user-profile.svg")),
+      //   // elevation: 0,
+      //   // centerTitle: true,
 
-        //   // backgroundColor: Colors.white,
-        //   // actions: [Image.asset("images/icons/balai.png")],
-        // ),
-        body: StreamBuilder<int>(
-            stream: _bLoc.pageindexStream,
-            builder: (context, snapshot) {
-              return _listPage[snapshot.data != null && snapshot.data != 5
-                  ? snapshot.data!.toInt()
-                  : 0];
-            }),
-        // drawer: ClipRRect(
-        //   borderRadius: const BorderRadius.only(
-        //       bottomRight: Radius.circular(50), topRight: Radius.circular(50)),
-        //   child: Drawer(
-        //     child: SingleChildScrollView(
-        //       child: Stack(
-        //         children: [
-        //           Container(
-        //             height: MediaQuery.of(context).size.height - 45,
-        //             width: 200,
-        //           ),
-        //           Column(
-        //             children: [
-        //               Visibility(
-        //                 visible: _appProvider.login != null,
-        //                 child: DrawerHeader(
-        //                     child: Column(
-        //                   crossAxisAlignment: CrossAxisAlignment.start,
-        //                   children: <Widget>[
-        //                     const Icon(
-        //                       Icons.account_circle_outlined,
-        //                       size: 70,
-        //                     ),
-        //                     "${_appProvider.login != null ? _appProvider.login!.prenoms : "Veuillez vous connecter"}"
-        //                         .text
-        //                         .bold
-        //                         .make(),
-        //                     Row(
-        //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //                       children: [
-        //                         "Location".text.make(),
-        //                         TextButton(
-        //                             onPressed: () {
-        //                               _logout(context);
-        //                             },
-        //                             child: Row(
-        //                               children: const <Widget>[
-        //                                 Text(
-        //                                   "Se déconnecter",
-        //                                   style: TextStyle(
-        //                                       color: Color(colorPrimary)),
-        //                                 ),
-        //                                 SizedBox(
-        //                                   width: 10,
-        //                                 ),
-        //                                 Icon(
-        //                                   Icons.logout,
-        //                                   color: Colors.black,
-        //                                 )
-        //                               ],
-        //                             ))
-        //                       ],
-        //                     )
-        //                   ],
-        //                 )),
-        //               ),
-        //               Padding(
-        //                 padding: const EdgeInsets.all(8.0),
-        //                 child: Column(
-        //                   children: (_appProvider.login != null
-        //                           ? _listDrawerConnectedPages
-        //                           : _listDrawerNoConnectedPages)
-        //                       .mapIndexed((e, index) =>
-        //                           drawerItemWidget(drawerItem: e, index: index))
-        //                       .toList(),
-        //                 ),
-        //               )
-        //             ],
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        bottomNavigationBar: _bottomTabNavigatorVisible
-            ? StreamBuilder<int>(
-                stream: _bLoc.pageindexStream,
-                builder: (context, snapshot) {
-                  return BottomNavigationBar(
-                    showSelectedLabels: true,
-                    showUnselectedLabels: false,
-                    selectedItemColor: Color(colorPrimary),
-                    unselectedItemColor: Colors.black,
-                    currentIndex: snapshot.data ?? 0,
-                    onTap: (index) {
-                      _bLoc.switchToPage(index);
-                    },
-                    items: [
-                      BottomNavigationBarItem(
-                          icon: const Icon(Icons.home_filled),
-                          label: AppLocalizations.current.home),
-                      BottomNavigationBarItem(
-                          icon: const Icon(FontAwesomeIcons.shoppingBasket),
-                          label: AppLocalizations.current.myOrders),
-                      BottomNavigationBarItem(
-                          icon: const Icon(FontAwesomeIcons.userCircle),
-                          label: AppLocalizations.current.account),
-                      // const BottomNavigationBarItem(
-                      //   icon: Icon(FontAwesomeIcons.envelope),
-                      //   label: "",
-                      // ),
-                    ],
-                  );
-                })
-            : null,
-      ),
+      //   // backgroundColor: Colors.white,
+      //   // actions: [Image.asset("images/icons/balai.png")],
+      // ),
+      body: StreamBuilder<int>(
+          stream: _bLoc.pageindexStream,
+          builder: (context, snapshot) {
+            return _listPage[snapshot.data != null && snapshot.data != 5
+                ? snapshot.data!.toInt()
+                : 0];
+          }),
+      // drawer: ClipRRect(
+      //   borderRadius: const BorderRadius.only(
+      //       bottomRight: Radius.circular(50), topRight: Radius.circular(50)),
+      //   child: Drawer(
+      //     child: SingleChildScrollView(
+      //       child: Stack(
+      //         children: [
+      //           Container(
+      //             height: MediaQuery.of(context).size.height - 45,
+      //             width: 200,
+      //           ),
+      //           Column(
+      //             children: [
+      //               Visibility(
+      //                 visible: _appProvider.login != null,
+      //                 child: DrawerHeader(
+      //                     child: Column(
+      //                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                   children: <Widget>[
+      //                     const Icon(
+      //                       Icons.account_circle_outlined,
+      //                       size: 70,
+      //                     ),
+      //                     "${_appProvider.login != null ? _appProvider.login!.prenoms : "Veuillez vous connecter"}"
+      //                         .text
+      //                         .bold
+      //                         .make(),
+      //                     Row(
+      //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                       children: [
+      //                         "Location".text.make(),
+      //                         TextButton(
+      //                             onPressed: () {
+      //                               _logout(context);
+      //                             },
+      //                             child: Row(
+      //                               children: const <Widget>[
+      //                                 Text(
+      //                                   "Se déconnecter",
+      //                                   style: TextStyle(
+      //                                       color: Color(colorPrimary)),
+      //                                 ),
+      //                                 SizedBox(
+      //                                   width: 10,
+      //                                 ),
+      //                                 Icon(
+      //                                   Icons.logout,
+      //                                   color: Colors.black,
+      //                                 )
+      //                               ],
+      //                             ))
+      //                       ],
+      //                     )
+      //                   ],
+      //                 )),
+      //               ),
+      //               Padding(
+      //                 padding: const EdgeInsets.all(8.0),
+      //                 child: Column(
+      //                   children: (_appProvider.login != null
+      //                           ? _listDrawerConnectedPages
+      //                           : _listDrawerNoConnectedPages)
+      //                       .mapIndexed((e, index) =>
+      //                           drawerItemWidget(drawerItem: e, index: index))
+      //                       .toList(),
+      //                 ),
+      //               )
+      //             ],
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      bottomNavigationBar: _bottomTabNavigatorVisible
+          ? StreamBuilder<int>(
+              stream: _bLoc.pageindexStream,
+              builder: (context, snapshot) {
+                return BottomNavigationBar(
+                  showSelectedLabels: true,
+                  showUnselectedLabels: true,
+                  selectedItemColor: const Color(colorBottomBarIcon),
+                  unselectedItemColor: Colors.black,
+                  currentIndex: snapshot.data ?? 0,
+                  iconSize: 30,
+                  onTap: (index) {
+                    _bLoc.switchToPage(index);
+                  },
+                  items: [
+                    BottomNavigationBarItem(
+                        icon: const Icon(Icons.home),
+                        label: AppLocalizations.current.home),
+                    BottomNavigationBarItem(
+                        icon: const Icon(FontAwesomeIcons.calendarAlt),
+                        label: AppLocalizations.current.myBooking),
+                    BottomNavigationBarItem(
+                        icon: const Icon(FontAwesomeIcons.bell),
+                        label: AppLocalizations.current.notifications),
+                    BottomNavigationBarItem(
+                        icon: const Icon(FontAwesomeIcons.user),
+                        label: AppLocalizations.current.account),
+                    // const BottomNavigationBarItem(
+                    //   icon: Icon(FontAwesomeIcons.envelope),
+                    //   label: "",
+                    // ),
+                  ],
+                );
+              })
+          : null,
     );
   }
 

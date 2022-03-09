@@ -5,6 +5,16 @@
     "type": "text",
     "placeholders": {}
   },
+  "myBooking": "Bookings",
+      "@myBooking": {
+        "type": "text",
+        "placeholders": {}
+  },
+  "notifications": "Notifications",
+        "@notifications": {
+          "type": "text",
+          "placeholders": {}
+  },
   "noOrders": "No orders",
   "@noOrders": {
     "type": "text",
@@ -172,7 +182,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "whenDoYouWantTheExecution": "When do you want the execution of the service?",
+  "whenDoYouWantTheExecution": "How often do you want the execution of the service?",
   "@whenDoYouWantTheExecution": {
     "type": "text",
     "placeholders": {}

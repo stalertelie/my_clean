@@ -22,13 +22,12 @@ Widget CustomButton({
                    padding:  EdgeInsets.symmetric(vertical: padding!),
                   width: MediaQuery.of(contextProp).size.width,
                   decoration: BoxDecoration(
-                      color: const Color(authBlue),
-                      borderRadius: BorderRadius.circular(50)),
+                      color: const Color(authBlue),),
                   child: Text(textProp,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: "SFPro",
-                        fontSize: 17,
+                        fontSize: 20,
                         color: Colors.white,
                       ))),
             ),

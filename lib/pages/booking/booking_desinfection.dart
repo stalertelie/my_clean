@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 //import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -71,6 +72,8 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
 
   String frequenceType = "SERVICE PONCTUEL";
 
+  bool showMap = false;
+
   GoogleResult? _currentFeature;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -131,466 +134,455 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
     _listProvider = Provider.of<ListProvider>(context);
     _appProvider = Provider.of<AppProvider>(context);
     return Builder(builder: (context) {
-      return SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          body: Stack(
+      return Scaffold(
+        backgroundColor: Color(colorDefaultService),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Color(colorDefaultService),
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            widget.service.title!.toUpperCase(),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          bottom: PreferredSize(
+              child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
+        ),
+        key: _scaffoldKey,
+        body: SingleChildScrollView(
+          child: Stack(
             children: [
-              SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height - 270,
-                      child: GoogleMap(
-                        onMapCreated: (GoogleMapController controller) {
-                          setState(() {
-                            mapcontroller = controller;
-                            getCurrentLocation();
-                          });
-                        },
-                        markers: <Marker>{
-                          Marker(
-                            markerId: MarkerId("UserMarker"),
-                            position: latitude != null
-                                ? LatLng(latitude!, longitude!)
-                                : _markerPosition,
-                          ),
-                        },
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(latitude!, longitude!),
-                          zoom: 14.4746,
-                        ),
+              Container(
+                height: MediaQuery.of(context).size.height,
+              ),
+              Visibility(
+                visible: showMap,
+                child: Container(
+                  height: MediaQuery.of(context).size.height - 270,
+                  child: GoogleMap(
+                    onMapCreated: (GoogleMapController controller) {
+                      setState(() {
+                        mapcontroller = controller;
+                        getCurrentLocation();
+                      });
+                    },
+                    markers: <Marker>{
+                      Marker(
+                        markerId: MarkerId("UserMarker"),
+                        position: latitude != null
+                            ? LatLng(latitude!, longitude!)
+                            : _markerPosition,
                       ),
+                    },
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(latitude!, longitude!),
+                      zoom: 14.4746,
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 480),
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black45, width: 1),
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(30),
-                              topLeft: Radius.circular(30)),
-                          color: Colors.white),
-                      child: Container(
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: showMap ? 480 : 0),
+                width: double.maxFinite,
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                SvgPicture.asset(
+                                  'images/icons/map-marker.svg',
+                                  width: 40,
+                                ),
+                                Expanded(
+                                    child: GestureDetector(
+                                        child: Container(
+                                            height: 40,
+                                            child: Text(searchCtrl.text)),
+                                        onTap: () =>
+                                            showSearhPage(context))),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        height: 20,
+                                        width: 2,
+                                        color: Colors.black,
+                                      ),
+                                      TextButton(
+                                          onPressed: (){
+                                            setState(() {
+                                              showMap = !showMap;
+                                            });
+                                          },
+                                          child: Text('Carte'))
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.black,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: GestureDetector(
-                                onTap: () => showSearhPage(context),
-                                child: TextField(
-                                  controller: searchCtrl,
-                                  enabled: false,
-                                  decoration: InputDecoration(
-                                      hintText: AppLocalizations
-                                          .current.enterAnAdress,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      prefixIcon:
-                                          Icon(FontAwesomeIcons.mapMarkerAlt)),
-                                ),
-                              ),
+                          children: <Widget>[
+                            Text(
+                              "Sélectionnez le type d'habitation",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18),
                             ),
-                            Divider(
-                              thickness: 1,
-                              color: Colors.black,
+                            SizedBox(
+                              height: 10,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "DÉTAILS DU SERVICE",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "À propos de notre service de désinfection",
-                                    style: TextStyle(
-                                        color: Colors.grey.shade600,
-                                        fontSize: 14),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Réservez le service de désinfection",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  Text(
-                                    "Sélectionnez le type d'habitation",
-                                    style: TextStyle(
-                                        color: Colors.grey.shade600,
-                                        fontSize: 14),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  StreamBuilder<List<TarificationObjectRoot>>(
-                                      stream: _bloc.tarificationRootStream,
-                                      builder: (context, snapshot) {
-                                        return snapshot.hasData &&
-                                                snapshot.data != null
-                                            ? Column(
-                                                children: [
-                                                  Row(
-                                                    children: snapshot.data!
-                                                        .mapIndexed<Widget>(
-                                                          (homeType, idx) =>
-                                                              Container(
-                                                                  margin:
-                                                                      EdgeInsets
-                                                                          .only(
-                                                                    right: 8,
-                                                                  ),
+                            StreamBuilder<List<TarificationObjectRoot>>(
+                                stream: _bloc.tarificationRootStream,
+                                builder: (context, snapshot) {
+                                  return snapshot.hasData &&
+                                          snapshot.data != null
+                                      ? Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: snapshot.data!
+                                                  .mapIndexed<Widget>(
+                                                    (homeType, idx) =>
+                                                        Container(
+                                                            margin:
+                                                                EdgeInsets
+                                                                    .only(
+                                                              right: 8,
+                                                            ),
+                                                            child:
+                                                                InkWell(
+                                                              onTap: () {
+                                                                setState(
+                                                                    () {
+                                                                  isSelected =
+                                                                      true;
+                                                                  activeHomeTypeIndex =
+                                                                      idx;
+                                                                });
+                                                              },
+                                                              child:
+                                                                  Container(
+                                                                height:
+                                                                    40,
+                                                                padding:
+                                                                    EdgeInsets.all(
+                                                                        10),
+                                                                decoration: BoxDecoration(
+                                                                    color: isSelected && activeHomeTypeIndex == idx
+                                                                        ? Color(
+                                                                            colorBlueGray)
+                                                                        : Colors
+                                                                            .white,
+                                                                    borderRadius: BorderRadius.circular(
+                                                                        20),
+                                                                    border:
+                                                                        Border.all(color: Color(colorBlueGray))),
+                                                                child:
+                                                                    Center(
                                                                   child:
-                                                                      InkWell(
-                                                                    onTap: () {
-                                                                      setState(
-                                                                          () {
-                                                                        isSelected =
-                                                                            true;
-                                                                        activeHomeTypeIndex =
-                                                                            idx;
-                                                                      });
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      height:
-                                                                          40,
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              10),
-                                                                      decoration: BoxDecoration(
-                                                                          color: isSelected && activeHomeTypeIndex == idx
-                                                                              ? Color(
-                                                                                  colorBlueGray)
-                                                                              : Colors
-                                                                                  .white,
-                                                                          borderRadius: BorderRadius.circular(
-                                                                              20),
-                                                                          border:
-                                                                              Border.all(color: Color(colorBlueGray))),
-                                                                      child:
-                                                                          Center(
-                                                                        child:
-                                                                            Text(
-                                                                          homeType
-                                                                              .libelle,
-                                                                          style: TextStyle(
-                                                                              fontSize: 15,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              color: isSelected && activeHomeTypeIndex == idx ? Colors.white : Color(colorBlueGray)),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  )),
-                                                        )
-                                                        .toList(),
-                                                  ),
+                                                                      Text(
+                                                                    homeType
+                                                                        .libelle,
+                                                                    style: TextStyle(
+                                                                        fontSize: 15,
+                                                                        fontWeight: FontWeight.bold,
+                                                                        color: isSelected && activeHomeTypeIndex == idx ? Colors.white : Color(colorBlueGray)),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            )),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                            SizedBox(height: 20,),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius : BorderRadius.circular(10),
+                                                color: Colors.white
+                                              ),
+                                              padding: EdgeInsets.all(16),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  "Nombre de pièces".text.bold.size(20).make(),
+                                                  "Tous les espaces communs sont inclus".text.size(15).make(),
                                                   Column(
                                                       children: snapshot.data!
                                                           .mapIndexed(
                                                               (e, index) =>
-                                                                  Container(
-                                                                    child:
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Column(
-                                                                          children: e.list != null
-                                                                              ? e.list!.map((e) => index == activeHomeTypeIndex ? tarificationITem(e, index) : Container()).toList()
-                                                                              : [],
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ))
+                                                              Container(
+                                                                child:
+                                                                Column(
+                                                                  crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                                  children: [
+                                                                    Column(
+                                                                      children: e.list != null
+                                                                          ? e.list!.map((e) => index == activeHomeTypeIndex ? tarificationITem(e, index) : Container()).toList()
+                                                                          : [],
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ))
                                                           .toList())
                                                 ],
-                                              )
-                                            : Container();
-                                      }),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  "Y a-t-il autre chose que vous voudriez que nous sachions ?"
-                                      .text
-                                      .gray500
-                                      .make(),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  TextField(
-                                    maxLines: 10,
-                                    minLines: 5,
-                                    maxLength: 200,
-                                    controller: noteCtrl,
-                                    autofocus: false,
-                                    decoration: InputDecoration(
-                                        hintText: "Saisir votre note ici",
-                                        hintStyle: TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            fontSize: 10),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black))),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: Colors.black,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  "DATE ET HEURE"
-                                      .text
-                                      .size(18)
-                                      .fontFamily("SFPro")
-                                      .bold
-                                      .make(),
-                                  "Quand voulez vous l'exécution du service"
-                                      .text
-                                      .size(10)
-                                      .fontFamily("SFPro")
-                                      .bold
-                                      .gray500
-                                      .make(),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              frequenceType =
-                                                  "SERVICE PONCTUEL";
-                                            });
-                                          },
-                                          child: timeType("SERVICE PONCTUEL")),
-                                      const SizedBox(
-                                        width: 30,
-                                      ),
-                                      InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              frequenceType =
-                                                  "SERVICE RECURRENT";
-                                            });
-                                          },
-                                          child: timeType("SERVICE RECURRENT")),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Visibility(
-                                    visible: frequenceType ==
-                                        AppConstant.FREQUENCE_BOOKING_PONCTUAL,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          DatePicker.showDateTimePicker(context,
-                                              showTitleActions: true,
-                                              minTime: DateTime.now(),
-                                              onChanged: (date) {
-                                            print('change $date');
-                                          }, onConfirm: (date) {
-                                            _bloc.setDateBooking(date);
-                                          },
-                                              currentTime: DateTime.now(),
-                                              locale: LocaleType.fr);
-                                        },
-                                        child: const Text(
-                                          'Choisir une date',
-                                          style: TextStyle(
-                                              color: Colors.blue, fontSize: 15),
-                                        )),
-                                  ),
-                                  Visibility(
-                                    visible: frequenceType !=
-                                        AppConstant.FREQUENCE_BOOKING_PONCTUAL,
-                                    child: MaterialButton(
-                                      onPressed: () =>
-                                          showBottomSheetForDayPick(),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.add,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  4),
-                                          "Ajouter une date".text.white.make()
-                                        ],
-                                      ),
-                                      color: const Color(colorBlueGray),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Divider(
-                              thickness: 1,
-                              color: Colors.black,
-                            ),
-                            Visibility(
-                              visible: frequenceType ==
-                                  AppConstant.FREQUENCE_BOOKING_RECURENT,
-                              child: StreamBuilder<List<DayObject>>(
-                                  stream: _bloc.daysStream,
-                                  builder: (context, snapshot) {
-                                    return snapshot.hasData &&
-                                            snapshot.data != null
-                                        ? Container(
-                                            height: 40 *
-                                                snapshot.data!.length
-                                                    .toDouble(),
-                                            width: double.maxFinite,
-                                            child: ListView.builder(
-                                              itemBuilder: (context, index) =>
-                                                  Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    "Chaque ${snapshot.data![index].day}"
-                                                        .text
-                                                        .make(),
-                                                    "à ${snapshot.data![index].time}"
-                                                        .text
-                                                        .make()
-                                                  ],
-                                                ),
                                               ),
-                                              itemCount: snapshot.data!.length,
-                                            ),
-                                          )
-                                        : Container();
-                                  }),
+                                            )
+                                          ],
+                                        )
+                                      : Container();
+                                }),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            AppLocalizations
+                                .current.isThereAnythingElse.text.black
+                                .fontWeight(FontWeight.w600)
+                                .size(15)
+                                .make(),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            TextField(
+                              maxLines: 10,
+                              minLines: 5,
+                              maxLength: 200,
+                              controller: noteCtrl,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                  hintText: AppLocalizations
+                                      .current.enterYourNote,
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  hintStyle: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 10),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide.none)),
+                            )
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.black,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            "DATE ET HEURE"
+                                .text
+                                .size(18)
+                                .fontFamily("SFPro")
+                                .bold
+                                .make(),
+                            "Quand voulez vous l'exécution du service"
+                                .text
+                                .size(10)
+                                .fontFamily("SFPro")
+                                .bold
+                                .gray500
+                                .make(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        frequenceType =
+                                            "SERVICE PONCTUEL";
+                                      });
+                                    },
+                                    child: timeType("SERVICE PONCTUEL")),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        frequenceType =
+                                            "SERVICE RECURRENT";
+                                      });
+                                    },
+                                    child: timeType("SERVICE RECURRENT")),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
                             ),
                             Visibility(
                               visible: frequenceType ==
                                   AppConstant.FREQUENCE_BOOKING_PONCTUAL,
-                              child: StreamBuilder<DateTime>(
-                                  stream: _bloc.bookingDateStream,
-                                  builder: (context, snapshot) {
-                                    return snapshot.hasData &&
-                                            snapshot.data != null
-                                        ? Container(
-                                            child: Center(
-                                                child:
-                                                    "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
-                                                        .text
-                                                        .bold
-                                                        .size(18)
-                                                        .color(
-                                                            Color(0XFF01A6DC))
-                                                        .make()),
-                                          )
-                                        : Container();
-                                  }),
+                              child: TextButton(
+                                  onPressed: () {
+                                    DatePicker.showDateTimePicker(context,
+                                        showTitleActions: true,
+                                        minTime: DateTime.now(),
+                                        onChanged: (date) {
+                                      print('change $date');
+                                    }, onConfirm: (date) {
+                                      _bloc.setDateBooking(date);
+                                    },
+                                        currentTime: DateTime.now(),
+                                        locale: LocaleType.fr);
+                                  },
+                                  child: const Text(
+                                    'Choisir une date',
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 15),
+                                  )),
+                            ),
+                            Visibility(
+                              visible: frequenceType !=
+                                  AppConstant.FREQUENCE_BOOKING_PONCTUAL,
+                              child: MaterialButton(
+                                onPressed: () =>
+                                    showBottomSheetForDayPick(),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                        width: MediaQuery.of(context)
+                                                .size
+                                                .width /
+                                            4),
+                                    "Ajouter une date".text.white.make()
+                                  ],
+                                ),
+                                color: const Color(colorBlueGray),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(30)),
+                              ),
                             ),
                             const SizedBox(
-                              height: 30,
+                              height: 10,
                             ),
-                            CustomButton(
-                                contextProp: context,
-                                onPressedProp: () {
-                                  if (_appProvider.login == null) {
-                                    UtilsFonction.NavigateToRoute(
-                                        context, LoginScreen());
-                                  } else {
-                                    if (_bloc.tarificationRootSubject.value
-                                        .where((element) =>
-                                            element.list!.indexWhere(
-                                                (item) => item.quantity! > 0) ==
-                                            -1)
-                                        .isEmpty) {
-                                      GetIt.I<AppServices>()
-                                          .showSnackbarWithState(Loading(
-                                              hasError: true,
-                                              message:
-                                                  "Veuillez choisir au moins une option avant de passer votre commande"));
-                                      return;
-                                    }
-                                    showRecapSheet();
-                                  }
-                                },
-                                textProp: 'Réserver'.toUpperCase()),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                child: Container(
-                  height: 120,
-                  color: const Color(0XFF02ABDE).withOpacity(0.85),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              icon: const Icon(
-                                Icons.cancel,
-                                color: Colors.white,
-                              ))
-                        ],
+                      const Divider(
+                        thickness: 1,
+                        color: Colors.black,
+                      ),
+                      Visibility(
+                        visible: frequenceType ==
+                            AppConstant.FREQUENCE_BOOKING_RECURENT,
+                        child: StreamBuilder<List<DayObject>>(
+                            stream: _bloc.daysStream,
+                            builder: (context, snapshot) {
+                              return snapshot.hasData &&
+                                      snapshot.data != null
+                                  ? Container(
+                                      height: 40 *
+                                          snapshot.data!.length
+                                              .toDouble(),
+                                      width: double.maxFinite,
+                                      child: ListView.builder(
+                                        itemBuilder: (context, index) =>
+                                            Padding(
+                                          padding:
+                                              const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                            children: [
+                                              "Chaque ${snapshot.data![index].day}"
+                                                  .text
+                                                  .make(),
+                                              "à ${snapshot.data![index].time}"
+                                                  .text
+                                                  .make()
+                                            ],
+                                          ),
+                                        ),
+                                        itemCount: snapshot.data!.length,
+                                      ),
+                                    )
+                                  : Container();
+                            }),
+                      ),
+                      Visibility(
+                        visible: frequenceType ==
+                            AppConstant.FREQUENCE_BOOKING_PONCTUAL,
+                        child: StreamBuilder<DateTime>(
+                            stream: _bloc.bookingDateStream,
+                            builder: (context, snapshot) {
+                              return snapshot.hasData &&
+                                      snapshot.data != null
+                                  ? Container(
+                                      child: Center(
+                                          child:
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                                  .text
+                                                  .bold
+                                                  .size(18)
+                                                  .color(
+                                                      Color(0XFF01A6DC))
+                                                  .make()),
+                                    )
+                                  : Container();
+                            }),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
-                      Hero(
-                          tag: widget.service.id.toString(),
-                          child: Text(
-                            widget.service.title!.toUpperCase(),
-                            style: GoogleFonts.bebasNeue(
-                                color: Colors.white, fontSize: 25),
-                          ))
+                      CustomButton(
+                          contextProp: context,
+                          onPressedProp: () {
+                            if (_appProvider.login == null) {
+                              UtilsFonction.NavigateToRoute(
+                                  context, LoginScreen());
+                            } else {
+                              if (_bloc.tarificationRootSubject.value
+                                  .where((element) =>
+                                      element.list!.indexWhere(
+                                          (item) => item.quantity! > 0) ==
+                                      -1)
+                                  .isEmpty) {
+                                GetIt.I<AppServices>()
+                                    .showSnackbarWithState(Loading(
+                                        hasError: true,
+                                        message:
+                                            "Veuillez choisir au moins une option avant de passer votre commande"));
+                                return;
+                              }
+                              showRecapSheet();
+                            }
+                          },
+                          textProp: 'Réserver'.toUpperCase()),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

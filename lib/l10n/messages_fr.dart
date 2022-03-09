@@ -29,6 +29,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function>{
         "myOrders": MessageLookupByLibrary.simpleMessage("Mes commandes"),
         "noOrders": MessageLookupByLibrary.simpleMessage("Pas de commandes"),
+        "myBooking": MessageLookupByLibrary.simpleMessage("Réservations"),
+        "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
         "buyCryptoConfirmationText": m0,
         "orderDate": m1,
         "chooseYourCountry":
@@ -68,7 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Choisir un service"),
         "order": MessageLookupByLibrary.simpleMessage("Commander"),
         "furnishedHouse":
-            MessageLookupByLibrary.simpleMessage("Maison meublée"),
+            MessageLookupByLibrary.simpleMessage("Vottre maison  est-elle meublée"),
         "isYourHouseFurnished": MessageLookupByLibrary.simpleMessage(
             "Votre maison est-elle meublée ?"),
         "yes": MessageLookupByLibrary.simpleMessage("Oui"),
@@ -79,7 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Saisissez votre note ici"),
         "dateAndHour": MessageLookupByLibrary.simpleMessage("Date et heure"),
         "whenDoYouWantTheExecution": MessageLookupByLibrary.simpleMessage(
-            "Quand voulez vous l'exécution du service ?"),
+            "A quel fréquence voulez vous l'exécution du service ?"),
         "selectDate": MessageLookupByLibrary.simpleMessage("Choisir une date"),
         "addDate": MessageLookupByLibrary.simpleMessage("Ajouter une date"),
         "each": MessageLookupByLibrary.simpleMessage("Chaque"),

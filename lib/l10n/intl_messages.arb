@@ -5,6 +5,16 @@
     "type": "text",
     "placeholders": {}
   },
+  "notifications": "notifications",
+    "@notifications": {
+      "type": "text",
+      "placeholders": {}
+  },
+  "myBooking": "myBooking",
+      "@myBooking": {
+        "type": "text",
+        "placeholders": {}
+  },
   "noOrders": "noOrders",
   "@noOrders": {
     "type": "text",

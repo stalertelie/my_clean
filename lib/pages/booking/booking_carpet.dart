@@ -5,7 +5,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -65,6 +67,8 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
 
   late ListProvider _listProvider;
   late AppProvider _appProvider;
+
+  bool showMap = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
@@ -170,111 +174,171 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
     _listProvider = Provider.of<ListProvider>(context);
     _appProvider = Provider.of<AppProvider>(context);
     return Builder(builder: (context) {
-      return SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          body: Stack(
+      return Scaffold(
+        backgroundColor: Color(colorDefaultService),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Color(colorDefaultService),
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            widget.service.title!.toUpperCase(),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          bottom: PreferredSize(
+              child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
+        ),
+        key: _scaffoldKey,
+        body: SingleChildScrollView(
+          child: Stack(
             children: [
-              SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height - 270,
-                      child: GoogleMap(
-                        onMapCreated: (GoogleMapController controller) {
-                          setState(() {
-                            mapcontroller = controller;
-                            getCurrentLocation();
-                          });
-                        },
-                        markers: <Marker>{
-                          Marker(
-                            markerId: MarkerId("UserMarker"),
-                            position: latitude != null
-                                ? LatLng(latitude!, longitude!)
-                                : _markerPosition,
-                          ),
-                        },
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(latitude!, longitude!),
-                          zoom: 14.4746,
-                        ),
+              Container(
+                height: MediaQuery.of(context).size.height,
+              ),
+              Visibility(
+                visible: showMap,
+                child: Container(
+                  height: MediaQuery.of(context).size.height - 270,
+                  child: GoogleMap(
+                    onMapCreated: (GoogleMapController controller) {
+                      setState(() {
+                        mapcontroller = controller;
+                        getCurrentLocation();
+                      });
+                    },
+                    markers: <Marker>{
+                      Marker(
+                        markerId: MarkerId("UserMarker"),
+                        position: latitude != null
+                            ? LatLng(latitude!, longitude!)
+                            : _markerPosition,
                       ),
+                    },
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(latitude!, longitude!),
+                      zoom: 14.4746,
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 480),
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black45, width: 1),
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(30),
-                              topLeft: Radius.circular(30)),
-                          color: Colors.white),
-                      child: Container(
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: showMap ? 480 : 0),
+                width: double.maxFinite,
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                SvgPicture.asset(
+                                  'images/icons/map-marker.svg',
+                                  width: 40,
+                                ),
+                                Expanded(
+                                    child: GestureDetector(
+                                        child: Container(
+                                            height: 40,
+                                            child: Text(searchCtrl.text)),
+                                        onTap: () =>
+                                            showSearhPage(context))),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        height: 20,
+                                        width: 2,
+                                        color: Colors.black,
+                                      ),
+                                      TextButton(
+                                          onPressed: (){
+                                            setState(() {
+                                              showMap = !showMap;
+                                            });
+                                          },
+                                          child: Text('Carte'))
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: GestureDetector(
-                                onTap: () => showSearhPage(context),
-                                child: TextField(
-                                  controller: searchCtrl,
-                                  enabled: false,
-                                  decoration: InputDecoration(
-                                      hintText: AppLocalizations
-                                          .current.enterAnAdress,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      prefixIcon:
-                                          Icon(FontAwesomeIcons.mapMarkerAlt)),
+                            Text("Quelle est la largeur du tapis ?", style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),),
+                            Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "Taille",
+                                  style: TextStyle(fontSize: 18),
                                 ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                Container(
+                                  width:
+                                  MediaQuery.of(context).size.width *
+                                      0.2,
+                                  child: TextField(
+                                    autofocus: false,
+                                    controller: sizeCtrl,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.black),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.black),
+                                      ),
+                                      border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "M²",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.teal.shade400,
+                                      fontSize: 18),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)
                               ),
-                            ),
-                            Divider(
-                              thickness: 1,
-                              color: Colors.black,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "DÉTAILS DU SERVICE",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "À propos de notre service de nettoyage de tapis",
-                                    style: TextStyle(
-                                        color: Colors.grey.shade600,
-                                        fontSize: 14),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Réservez le service de nettoyage de tapis.",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  Text(
                                     "Sélectionnez votre type de tapis",
                                     style: TextStyle(
-                                        color: Colors.grey.shade600,
-                                        fontSize: 14),
+                                        color: Colors.black,
+                                        fontSize: 18,fontWeight: FontWeight.bold ),
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -283,337 +347,227 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                     stream: _bloc.simpleTarificationStream,
                                     builder: (context, snapshot) {
                                       return (snapshot.hasData &&
-                                              snapshot.data != null
+                                          snapshot.data != null
                                           ? Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: snapshot.data!
-                                                  .mapIndexed<Widget>(
-                                                      (e, idx) => Padding(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal: 0,
-                                                                  vertical: 0),
-                                                          child: Column(
-                                                            children: <Widget>[
-                                                              Row(
-                                                                children: <
-                                                                    Widget>[
-                                                                  Radio<String>(
-                                                                    activeColor:
-                                                                        Color(
-                                                                            0XFF01A6DC),
-                                                                    value: e
-                                                                        .label!,
-                                                                    groupValue:
-                                                                        selectedTapis,
-                                                                    onChanged:
-                                                                        (value) {
-                                                                      setState(
-                                                                          () {
-                                                                        selectedTapis =
-                                                                            value;
-                                                                        tarification =
-                                                                            e;
-                                                                        tarificationId =
-                                                                            idx;
-                                                                      });
-                                                                    },
-                                                                  ),
-                                                                  Text(
-                                                                      e.label!),
-                                                                ],
-                                                              )
-                                                            ],
-                                                          )))
-                                                  .toList(),
-                                            )
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: snapshot.data!
+                                            .mapIndexed<Widget>(
+                                                (e, idx) => Padding(
+                                                padding: EdgeInsets
+                                                    .symmetric(
+                                                    horizontal: 0,
+                                                    vertical: 0),
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Row(
+                                                      children: <
+                                                          Widget>[
+                                                        Radio<String>(
+                                                          activeColor:
+                                                          Color(
+                                                              0XFF01A6DC),
+                                                          value: e
+                                                              .label!,
+                                                          groupValue:
+                                                          selectedTapis,
+                                                          onChanged:
+                                                              (value) {
+                                                            setState(
+                                                                    () {
+                                                                  selectedTapis =
+                                                                      value;
+                                                                  tarification =
+                                                                      e;
+                                                                  tarificationId =
+                                                                      idx;
+                                                                });
+                                                          },
+                                                        ),
+                                                        Text(
+                                                            e.label!),
+                                                      ],
+                                                    )
+                                                  ],
+                                                )))
+                                            .toList(),
+                                      )
                                           : Container());
                                     },
                                   ),
-                                  const SizedBox(
-                                    height: 25,
-                                  ),
-                                  Text("Quelle est la largeur du tapis ?"),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Taille",
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.2,
-                                        child: TextField(
-                                          autofocus: false,
-                                          controller: sizeCtrl,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black),
-                                            ),
-                                            border: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        "M²",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.teal.shade400,
-                                            fontSize: 18),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 25,
-                                  ),
-                                  Text(
-                                    "Avez-vous des photos que vous aimeriez partager ?",
-                                    style:
-                                        TextStyle(color: Colors.grey.shade700),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  _pickedImage == null
-                                      ? GestureDetector(
-                                          onTap: _pickImage,
-                                          child: Image.asset(cameraIcon),
-                                        )
-                                      : GestureDetector(
-                                          onTap: _pickImage,
-                                          child: Container(
-                                              width: 60.0,
-                                              height: 60.0,
-                                              decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image: FileImage(
-                                                          _pickedImage)))),
-                                        ),
-                                  const SizedBox(
-                                    height: 25,
-                                  ),
-                                  "Y a-t-il autre chose que vous voudriez que nous sachions ?"
-                                      .text
-                                      .gray500
-                                      .make(),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  TextField(
-                                    maxLines: 10,
-                                    minLines: 5,
-                                    maxLength: 200,
-                                    controller: noteCtrl,
-                                    autofocus: false,
-                                    decoration: InputDecoration(
-                                        hintText: "Saisir votre note ici",
-                                        hintStyle: TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            fontSize: 10),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black))),
-                                  )
                                 ],
                               ),
                             ),
-                            Divider(
-                              thickness: 1,
-                              color: Colors.black,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  "DATE ET HEURE"
-                                      .text
-                                      .size(18)
-                                      .fontFamily("SFPro")
-                                      .bold
-                                      .make(),
-                                  "Quand voulez vous l'exécution du service"
-                                      .text
-                                      .size(10)
-                                      .fontFamily("SFPro")
-                                      .bold
-                                      .gray500
-                                      .make(),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(10),
-                                    width: 150,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(
-                                            color: Color(colorBlueGray)),
-                                        color: Colors.grey.shade500),
-                                    child: Center(
-                                      child: Text("Service ponctuel",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          )),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  TextButton(
-                                      onPressed: () {
-                                        DatePicker.showDateTimePicker(context,
-                                            showTitleActions: true,
-                                            minTime: DateTime.now(),
-                                            onChanged: (date) {
-                                          print('change $date');
-                                        }, onConfirm: (date) {
-                                          _bloc.setDateBooking(date);
-                                        },
-                                            currentTime: DateTime.now(),
-                                            locale: LocaleType.fr);
-                                      },
-                                      child: const Text(
-                                        'Choisir une date',
-                                        style: TextStyle(
-                                            color: Colors.blue, fontSize: 15),
-                                      )),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Divider(
-                              thickness: 1,
-                              color: Colors.black,
-                            ),
-                            StreamBuilder<DateTime>(
-                                stream: _bloc.bookingDateStream,
-                                builder: (context, snapshot) {
-                                  return snapshot.hasData &&
-                                          snapshot.data != null
-                                      ? Center(
-                                          child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
-                                                  .text
-                                                  .bold
-                                                  .size(18)
-                                                  .color(Color(0XFF01A6DC))
-                                                  .make())
-                                      : Container();
-                                }),
                             const SizedBox(
-                              height: 15,
+                              height: 25,
                             ),
-                            CustomButton(
-                                contextProp: context,
-                                onPressedProp: () {
-                                  if (_appProvider.login == null) {
-                                    UtilsFonction.NavigateToRoute(
-                                        context, LoginScreen());
-                                  } else {
-                                    if (!_bloc.bookingDateSubject.hasValue) {
-                                      GetIt.I<AppServices>()
-                                          .showSnackbarWithState(Loading(
-                                              hasError: true,
-                                              message:
-                                                  "Veuillez choisir une date"));
-                                      return;
-                                    }
-                                    if (searchCtrl.text.isEmpty) {
-                                      GetIt.I<AppServices>()
-                                          .showSnackbarWithState(Loading(
-                                              hasError: true,
-                                              message:
-                                                  "Veuillez entrer votre adresse"));
-                                      return;
-                                    }
-                                    if (!_bloc.bookingDateSubject.hasValue) {
-                                      GetIt.I<AppServices>()
-                                          .showSnackbarWithState(Loading(
-                                              hasError: true,
-                                              message:
-                                                  "Veuillez choisir une date"));
-                                      return;
-                                    }
-                                    if (sizeCtrl.text.isEmpty) {
-                                      GetIt.I<AppServices>()
-                                          .showSnackbarWithState(Loading(
-                                              hasError: true,
-                                              message:
-                                                  "Veuillez saisir le nombre de mètres"));
-                                      return;
-                                    }
-                                    _bloc.addCarpetTarification(
-                                        tarification,
-                                        int.parse(sizeCtrl.text),
-                                        tarificationId);
-                                    showRecapSheet();
-                                  }
-                                },
-                                textProp: 'Réserver'.toUpperCase()),
+                            AppLocalizations
+                                .current.isThereAnythingElse.text.black
+                                .fontWeight(FontWeight.w600)
+                                .size(15)
+                                .make(),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            TextField(
+                              maxLines: 10,
+                              minLines: 5,
+                              maxLength: 200,
+                              controller: noteCtrl,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                                  hintText: AppLocalizations
+                                      .current.enterYourNote,
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  hintStyle: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 10),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide.none)),
+                            )
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                child: Container(
-                  height: 120,
-                  color: const Color(0XFF02ABDE).withOpacity(0.85),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              icon: const Icon(
-                                Icons.cancel,
-                                color: Colors.white,
-                              ))
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            "DATE ET HEURE"
+                                .text
+                                .size(18)
+                                .fontFamily("SFPro")
+                                .bold
+                                .make(),
+                            "Quand voulez vous l'exécution du service"
+                                .text
+                                .size(10)
+                                .fontFamily("SFPro")
+                                .bold
+                                .gray500
+                                .make(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              width: 150,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                      color: Color(colorBlueGray)),
+                                  color: Colors.grey.shade500),
+                              child: Center(
+                                child: Text("Service ponctuel",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    )),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime.now(),
+                                      onChanged: (date) {
+                                    print('change $date');
+                                  }, onConfirm: (date) {
+                                    _bloc.setDateBooking(date);
+                                  },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.fr);
+                                },
+                                child: const Text(
+                                  'Choisir une date',
+                                  style: TextStyle(
+                                      color: Colors.blue, fontSize: 15),
+                                )),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
                       ),
+                      const Divider(
+                        thickness: 1,
+                        color: Colors.black,
+                      ),
+                      StreamBuilder<DateTime>(
+                          stream: _bloc.bookingDateStream,
+                          builder: (context, snapshot) {
+                            return snapshot.hasData &&
+                                    snapshot.data != null
+                                ? Center(
+                                    child:
+                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                            .text
+                                            .bold
+                                            .size(18)
+                                            .color(Color(0XFF01A6DC))
+                                            .make())
+                                : Container();
+                          }),
                       const SizedBox(
-                        height: 20,
+                        height: 15,
                       ),
-                      Hero(
-                          tag: widget.service.id.toString(),
-                          child: Text(
-                            widget.service.title!.toUpperCase(),
-                            style: GoogleFonts.bebasNeue(
-                                color: Colors.white, fontSize: 25),
-                          ))
+                      CustomButton(
+                          contextProp: context,
+                          onPressedProp: () {
+                            if (_appProvider.login == null) {
+                              UtilsFonction.NavigateToRoute(
+                                  context, LoginScreen());
+                            } else {
+                              if (!_bloc.bookingDateSubject.hasValue) {
+                                GetIt.I<AppServices>()
+                                    .showSnackbarWithState(Loading(
+                                        hasError: true,
+                                        message:
+                                            "Veuillez choisir une date"));
+                                return;
+                              }
+                              if (searchCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>()
+                                    .showSnackbarWithState(Loading(
+                                        hasError: true,
+                                        message:
+                                            "Veuillez entrer votre adresse"));
+                                return;
+                              }
+                              if (!_bloc.bookingDateSubject.hasValue) {
+                                GetIt.I<AppServices>()
+                                    .showSnackbarWithState(Loading(
+                                        hasError: true,
+                                        message:
+                                            "Veuillez choisir une date"));
+                                return;
+                              }
+                              if (sizeCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>()
+                                    .showSnackbarWithState(Loading(
+                                        hasError: true,
+                                        message:
+                                            "Veuillez saisir le nombre de mètres"));
+                                return;
+                              }
+                              _bloc.addCarpetTarification(
+                                  tarification,
+                                  int.parse(sizeCtrl.text),
+                                  tarificationId);
+                              showRecapSheet();
+                            }
+                          },
+                          textProp: 'Réserver'.toUpperCase()),
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

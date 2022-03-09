@@ -34,6 +34,14 @@ class AppLocalizations {
     return Intl.message('myOrders', name: 'myOrders', locale: localeName);
   }
 
+  String get myBooking {
+    return Intl.message('myBooking', name: 'myBooking', locale: localeName);
+  }
+
+  String get notifications {
+    return Intl.message('notifications', name: 'notifications', locale: localeName);
+  }
+
   String get noOrders {
     return Intl.message('noOrders', name: 'noOrders', locale: localeName);
   }

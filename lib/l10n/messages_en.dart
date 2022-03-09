@@ -28,6 +28,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{
         "myOrders": MessageLookupByLibrary.simpleMessage("My orders"),
+        "myBooking": MessageLookupByLibrary.simpleMessage("Bookings"),
+        "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
         "noOrders": MessageLookupByLibrary.simpleMessage("No orders"),
         "buyCryptoConfirmationText": m0,
         "orderDate": m1,
@@ -77,7 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter your note here"),
         "dateAndHour": MessageLookupByLibrary.simpleMessage("Date and hour"),
         "whenDoYouWantTheExecution": MessageLookupByLibrary.simpleMessage(
-            "When do you want the execution of the service?"),
+            "How often do you want the execution of the service?"),
         "selectDate": MessageLookupByLibrary.simpleMessage("Select a date"),
         "addDate": MessageLookupByLibrary.simpleMessage("Add a date"),
         "each": MessageLookupByLibrary.simpleMessage("Each"),

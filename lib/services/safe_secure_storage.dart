@@ -1,20 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SafeSecureStorage implements FlutterSecureStorage {
   SafeSecureStorage(this.storage);
 
   final FlutterSecureStorage storage;
-  @override
-  Future<void> write({
-    required String key,
-    required String value,
-    IOSOptions? iOptions,
-    AndroidOptions? aOptions,
-  }) async {
-    await storage.write(
-        key: key, value: value, iOptions: iOptions, aOptions: aOptions);
-  }
+
 
   @override
   Future<void> delete({
@@ -56,4 +46,17 @@ class SafeSecureStorage implements FlutterSecureStorage {
     return storage.containsKey(
         key: key, iOptions: iOptions, aOptions: aOptions);
   }
+
+  @override
+  Future<void> write({
+    required String key,
+    required String value,
+    IOSOptions? iOptions,
+    AndroidOptions? aOptions,
+  }) async {
+    await storage.write(
+        key: key, value: value, iOptions: iOptions, aOptions: aOptions);
+  }
+
+
 }
