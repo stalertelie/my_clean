@@ -20,6 +20,7 @@ import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/img_urls.dart';
 import 'package:my_clean/constants/message_constant.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/frequence.dart';
 import 'package:my_clean/models/loading.dart';
@@ -29,6 +30,7 @@ import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/pages/auth/login_page.dart';
 import 'package:my_clean/pages/booking/booking_bloc.dart';
+import 'package:my_clean/pages/booking/booking_recap.dart';
 import 'package:my_clean/pages/booking/booking_sucess_page.dart';
 import 'package:my_clean/pages/booking/day_time_picker.dart';
 import 'package:my_clean/pages/booking/search_page.dart';
@@ -165,6 +167,12 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
           elevation: 0,
           backgroundColor: Color(colorDefaultService),
           iconTheme: IconThemeData(color: Colors.black),
+          leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+                size: 30,
+              )),
           title: Text(
             widget.service.title!.toUpperCase(),
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
@@ -198,7 +206,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                       ),
                     },
                     initialCameraPosition: CameraPosition(
-                      target: LatLng(latitude!, longitude!),
+                      target: LatLng(latitude ?? 0, longitude ?? 0),
                       zoom: 14.4746,
                     ),
                   ),
@@ -219,8 +227,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
                                   'images/icons/map-marker.svg',
@@ -229,14 +236,14 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                 Expanded(
                                     child: GestureDetector(
                                         child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
                                             height: 40,
                                             child: Text(searchCtrl.text)),
-                                        onTap: () =>
-                                            showSearhPage(context))),
+                                        onTap: () => showSearhPage(context))),
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         height: 20,
@@ -244,7 +251,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                         color: Colors.black,
                                       ),
                                       TextButton(
-                                          onPressed: (){
+                                          onPressed: () {
                                             setState(() {
                                               showMap = !showMap;
                                             });
@@ -270,144 +277,156 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                             ),
                             const SizedBox(
                               height: 30,
-                            ),*/
+                            )
                             Text(
                               "Sélectionnez votre type de matelas",
                               style: TextStyle(
-                                  color: Colors.black,fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 18),
-                            ),
+                            ),,*/
                             SizedBox(
                               height: 10,
                             ),
                             Container(
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white
-                              ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
+                                    "Nombre de places",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  Text(
                                     "Nettoyage vapeur",
                                     style: TextStyle(
-                                        color: Colors.black54,fontWeight: FontWeight.w600,
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w600,
                                         fontSize: 16),
                                   ),
                                   StreamBuilder<List<Price>>(
                                     stream: _bloc.simpleTarificationStream,
                                     builder: (context, snapshot) {
                                       return (snapshot.hasData &&
-                                          snapshot.data != null
+                                              snapshot.data != null
                                           ? Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: snapshot.data!
-                                            .mapIndexed<Widget>(
-                                                (e, idx) => Padding(
-                                              padding: EdgeInsets
-                                                  .symmetric(
-                                                  horizontal:
-                                                  8,
-                                                  vertical:
-                                                  20),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
-                                                children: [
-                                                  idx <= 2
-                                                      ? Text(
-                                                    e.initialNumber.toString() +
-                                                        " " +
-                                                        e.label.toString() +
-                                                        "(s)",
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                        18,
-                                                        fontWeight: FontWeight
-                                                            .bold,
-                                                        fontFamily:
-                                                        "SFPro",
-                                                        color:
-                                                        Color(0XFF01A6DC)),
-                                                  )
-                                                      : Text(
-                                                    e.label
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                        18,
-                                                        fontWeight: FontWeight
-                                                            .bold,
-                                                        fontFamily:
-                                                        "SFPro",
-                                                        color:
-                                                        Color(0XFF01A6DC)),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      e.quantity!
-                                                          .text
-                                                          .size(
-                                                          18)
-                                                          .bold
-                                                          .fontFamily(
-                                                          "SFPro")
-                                                          .color(const Color(
-                                                          0XFF01A6DC))
-                                                          .make(),
-                                                      const SizedBox(
-                                                        width: 50,
-                                                      ),
-                                                      InkWell(
-                                                          onTap: () => _bloc.addSofaTarification(
-                                                              e,
-                                                              -1,
-                                                              idx),
-                                                          child:
-                                                          Container(
-                                                            height:
-                                                            40,
-                                                            width:
-                                                            40,
-                                                            child:
-                                                            Center(child: Icon(Icons.remove)),
-                                                            decoration:
-                                                            BoxDecoration(border: Border.all(color: e.quantity! > 0 ? Colors.grey : Colors.grey.shade300)),
-                                                          )),
-                                                      InkWell(
-                                                        onTap: () =>
-                                                            _bloc.addSofaTarification(
-                                                                e,
-                                                                1,
-                                                                idx),
-                                                        child:
-                                                        Container(
-                                                          height:
-                                                          40,
-                                                          width:
-                                                          40,
-                                                          child: Center(
-                                                              child:
-                                                              Icon(Icons.add)),
-                                                          decoration:
-                                                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ))
-                                            .toList(),
-                                      )
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: snapshot.data!
+                                                  .mapIndexed<Widget>(
+                                                      (e, idx) => Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        8,
+                                                                    vertical:
+                                                                        20),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                idx <= 2
+                                                                    ? Text(
+                                                                        e.initialNumber.toString() +
+                                                                            " " +
+                                                                            e.label!.toCapitalized().toString() +
+                                                                            "(s)",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                18,
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontFamily:
+                                                                                "SFPro",
+                                                                            color:
+                                                                                Color(0XFF01A6DC)),
+                                                                      )
+                                                                    : Text(
+                                                                        e.label!
+                                                                            .toCapitalized()
+                                                                            .toString(),
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                18,
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            fontFamily:
+                                                                                "SFPro",
+                                                                            color:
+                                                                                Color(0XFF01A6DC)),
+                                                                      ),
+                                                                const SizedBox(
+                                                                  width: 20,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    e.quantity!
+                                                                        .text
+                                                                        .size(
+                                                                            18)
+                                                                        .bold
+                                                                        .fontFamily(
+                                                                            "SFPro")
+                                                                        .color(const Color(
+                                                                            0XFF01A6DC))
+                                                                        .make(),
+                                                                    const SizedBox(
+                                                                      width: 50,
+                                                                    ),
+                                                                    InkWell(
+                                                                        onTap: () => _bloc.addSofaTarification(
+                                                                            e,
+                                                                            -1,
+                                                                            idx),
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              40,
+                                                                          width:
+                                                                              40,
+                                                                          child:
+                                                                              Center(child: Icon(Icons.remove)),
+                                                                          decoration:
+                                                                              BoxDecoration(border: Border.all(color: e.quantity! > 0 ? Colors.grey : Colors.grey.shade300)),
+                                                                        )),
+                                                                    InkWell(
+                                                                      onTap: () =>
+                                                                          _bloc.addSofaTarification(
+                                                                              e,
+                                                                              1,
+                                                                              idx),
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            40,
+                                                                        width:
+                                                                            40,
+                                                                        child: Center(
+                                                                            child: Icon(
+                                                                          Icons
+                                                                              .add,
+                                                                          size:
+                                                                              27,
+                                                                        )),
+                                                                        decoration:
+                                                                            BoxDecoration(border: Border.all(color: Colors.grey)),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ))
+                                                  .toList(),
+                                            )
                                           : Container());
                                     },
                                   ),
@@ -415,33 +434,8 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                               ),
                             ),
                             const SizedBox(
-                              height: 25,
+                              height: 10,
                             ),
-                            AppLocalizations
-                                .current.isThereAnythingElse.text.black
-                                .fontWeight(FontWeight.w600)
-                                .size(15)
-                                .make(),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              maxLines: 10,
-                              minLines: 5,
-                              maxLength: 200,
-                              controller: noteCtrl,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations
-                                      .current.enterYourNote,
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 10),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none)),
-                            )
                           ],
                         ),
                       ),
@@ -472,8 +466,8 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                               height: 50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                      color: Color(colorBlueGray)),
+                                  border:
+                                      Border.all(color: Color(colorBlueGray)),
                                   color: Colors.grey.shade500),
                               child: Center(
                                 child: Text("Service ponctuel",
@@ -509,15 +503,10 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                           ],
                         ),
                       ),
-                      const Divider(
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
                       StreamBuilder<DateTime>(
                           stream: _bloc.bookingDateStream,
                           builder: (context, snapshot) {
-                            return snapshot.hasData &&
-                                    snapshot.data != null
+                            return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
                                         "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
@@ -539,24 +528,23 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                   context, LoginScreen());
                             } else {
                               if (!_bloc.totalSubject.hasValue) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
                                         message:
                                             "Veuillez sélectionner au moins un type de matelas"));
                                 return;
                               }
                               if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez choisir une date"));
+                                        message: "Veuillez choisir une date"));
                                 return;
                               }
                               if (searchCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
                                         message:
                                             "Veuillez entrer votre adresse"));
@@ -652,6 +640,29 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
   }
 
   void showRecapSheet() {
+    Frequence? frequence =
+        _listProvider.frequenceList.isNotEmpty && frequenceValue != null
+            ? _listProvider.frequenceList
+                .firstWhere((element) => element.id == frequenceValue)
+            : null;
+    showModalBottomSheet(
+        context: context,
+        enableDrag: false,
+        isScrollControlled: true,
+        builder: (context) => Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: BookingRecapScreen(
+                frequence: frequence,
+                services: widget.service,
+                lieu: searchCtrl.text,
+                amount: _bloc.totalSubject.value,
+                onValidate: ({String note = ''}) {
+                  noteCtrl.text = note;
+                  bookNow();
+                },
+              ),
+            ));
+    return;
     showModalBottomSheet(
         context: _scaffoldKey.currentContext!,
         shape: RoundedRectangleBorder(

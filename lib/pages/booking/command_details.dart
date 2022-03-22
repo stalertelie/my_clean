@@ -286,7 +286,7 @@ class CommandDetailsState extends State<CommandDetails> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text("${userInfos!.prenoms} ${userInfos!.nom}"),
+                            Text("${userInfos?.prenoms} ${userInfos?.nom}"),
                             const SizedBox(
                               height: 5,
                             ),

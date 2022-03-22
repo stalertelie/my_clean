@@ -21,18 +21,6 @@ class RequestExtension<T> {
   static const String _urlEndpoint = 'http://myclean.novate-media.com/';
   static const String _urlEndpointSimple = 'http://myclean.novate-media.com';
 
-  static const int site_id = 737694;
-  static const String api_key = "15597838285ff9fcb51196b9.39481422";
-
-  static const String payUrlSandBox = "https://secure.sandbox.cinetpay.com/";
-  static const String payUrlProd = "c";
-  static const String apiSignatureSanbox =
-      "https://api.sandbox.cinetpay.com/v2/?method=getSignatureByPost";
-  static const String apiSignatureProd =
-      "https://api.cinetpay.com/v2/?method=getSignatureByPost";
-  static const String apiCheckStatus =
-      "https://api.cinetpay.com/v2/?method=checkPayStatus";
-
   //static const  String _urlEndpoint = 'http://10.200.1.66:8080/';
 
   Future<dynamic> post(String url, dynamic data) async {

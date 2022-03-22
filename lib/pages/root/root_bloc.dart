@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class RootBLoc {
   Stream<int> get pageindexStream => _pageindexSubject.stream;
-  final _pageindexSubject = BehaviorSubject<int>();
+  final _pageindexSubject = BehaviorSubject<int>.seeded(0);
 
   BehaviorSubject<int> get pageindexSubject => _pageindexSubject;
 

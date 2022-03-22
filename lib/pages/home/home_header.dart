@@ -18,24 +18,20 @@ class HomeHeader extends StatefulWidget {
 
 class _HomeHeaderState extends State<HomeHeader>
     with SingleTickerProviderStateMixin {
-
   late AnimationController controller;
   late Animation<double> animation;
-
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(duration: const Duration(milliseconds: 250), vsync: this);
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 250), vsync: this);
     animation = Tween<double>(begin: 0, end: 140).animate(controller)
-    ..addListener(() {
-      setState(() {
-
+      ..addListener(() {
+        setState(() {});
       });
-    });
     controller.forward();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +72,11 @@ class _HomeHeaderState extends State<HomeHeader>
               const Padding(
                 padding: EdgeInsets.only(right: 40),
                 child: Text(
-                  "De quel service avez-vous besoi aujourd'hui ?",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+                  "De quel service avez-vous besoin aujourd'hui ?",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               )
             ],
@@ -90,21 +89,19 @@ class _HomeHeaderState extends State<HomeHeader>
 }
 
 class BottomWaveClipper extends CustomClipper<Path> {
-
   final distance;
 
   BottomWaveClipper({this.distance});
-
 
   @override
   Path getClip(Size size) {
     var path = Path();
 
-    path.lineTo(0.0, size.height*1.2 - distance);
+    path.lineTo(0.0, size.height * 1.2 - distance);
 
     // Draw a straight line from current point to the top right corner.
-    path.quadraticBezierTo(
-        size.width / 2, size.height*1.2, size.width, size.height*1.2 - distance);
+    path.quadraticBezierTo(size.width / 2, size.height * 1.2, size.width,
+        size.height * 1.2 - distance);
 
     path.lineTo(size.width, 0.0);
     path.close();
@@ -116,13 +113,11 @@ class BottomWaveClipper extends CustomClipper<Path> {
 }
 
 class BottomShaper extends ShapeBorder {
-
   final distance;
 
   BottomShaper({this.distance});
 
   @override
-  // TODO: implement dimensions
   EdgeInsetsGeometry get dimensions => EdgeInsets.only(bottom: 0);
 
   @override
@@ -144,11 +139,8 @@ class BottomShaper extends ShapeBorder {
   }
 
   @override
-  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-
-  }
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {}
 
   @override
   ShapeBorder scale(double t) => this;
-
 }

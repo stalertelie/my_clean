@@ -141,10 +141,14 @@ class AccountScreenState extends State<AccountScreen> {
       _toggleBottomNavigator(true);
     });
     return Scaffold(
+      backgroundColor: const Color(colorDefaultService),
       appBar: TabAppBar(
-          titleProp: AppLocalizations.current.myAccount, context: context),
+          titleProp: AppLocalizations.current.myAccount,
+          context: context,
+          fontWeight: FontWeight.bold,
+          backgroundColor: const Color(colorDefaultService)),
       body: Container(
-        color: Colors.white,
+        color: const Color(colorDefaultService),
         child: Column(
           children: <Widget>[
             _buildProfile(),
@@ -231,7 +235,7 @@ class AccountScreenState extends State<AccountScreen> {
       String? status,
       Function? onTap}) {
     return Material(
-      color: Colors.white,
+      color: Colors.transparent,
       child: Column(children: <Widget>[
         InkWell(
           onTap: () {
@@ -243,7 +247,7 @@ class AccountScreenState extends State<AccountScreen> {
             height: 64,
             child: Row(children: <Widget>[
               const SizedBox(width: 23.9),
-              Icon(icon, size: 24, color: colorBlueLight),
+              Icon(icon, size: 24, color: Colors.black),
               const SizedBox(width: 10.1),
               Text(text,
                   style: const TextStyle(

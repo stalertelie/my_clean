@@ -21,6 +21,7 @@ import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/img_urls.dart';
 import 'package:my_clean/constants/message_constant.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/frequence.dart';
 import 'package:my_clean/models/loading.dart';
@@ -30,6 +31,7 @@ import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/pages/auth/login_page.dart';
 import 'package:my_clean/pages/booking/booking_bloc.dart';
+import 'package:my_clean/pages/booking/booking_recap.dart';
 import 'package:my_clean/pages/booking/booking_sucess_page.dart';
 import 'package:my_clean/pages/booking/day_time_picker.dart';
 import 'package:my_clean/pages/booking/search_page.dart';
@@ -214,7 +216,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                       ),
                     },
                     initialCameraPosition: CameraPosition(
-                      target: LatLng(latitude!, longitude!),
+                      target: LatLng(latitude ?? 0, longitude ?? 0),
                       zoom: 14.4746,
                     ),
                   ),
@@ -235,8 +237,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
                                   'images/icons/map-marker.svg',
@@ -245,14 +246,14 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                 Expanded(
                                     child: GestureDetector(
                                         child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
                                             height: 40,
                                             child: Text(searchCtrl.text)),
-                                        onTap: () =>
-                                            showSearhPage(context))),
+                                        onTap: () => showSearhPage(context))),
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         height: 20,
@@ -260,7 +261,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                         color: Colors.black,
                                       ),
                                       TextButton(
-                                          onPressed: (){
+                                          onPressed: () {
                                             setState(() {
                                               showMap = !showMap;
                                             });
@@ -277,22 +278,19 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Quelle est la largeur du tapis ?", style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),),
+                            Text(
+                              "Quelle est la taille de votre tapis ?",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  "Taille",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                SizedBox(
-                                  width: 30,
-                                ),
                                 Container(
                                   width:
-                                  MediaQuery.of(context).size.width *
-                                      0.2,
+                                      MediaQuery.of(context).size.width * 0.2,
                                   child: TextField(
                                     autofocus: false,
                                     controller: sizeCtrl,
@@ -300,15 +298,15 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                     decoration: InputDecoration(
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.black),
+                                            color: colorBlueLight, width: 2),
                                       ),
                                       focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.black),
+                                            color: colorBlueLight, width: 2),
                                       ),
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.black),
+                                            color: colorBlueLight, width: 2),
                                       ),
                                     ),
                                   ),
@@ -317,7 +315,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                   "M²",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.teal.shade400,
+                                      color: colorBlueLight,
                                       fontSize: 18),
                                 )
                               ],
@@ -328,111 +326,84 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                             Container(
                               padding: EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)
-                              ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "Sélectionnez votre type de tapis",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,fontWeight: FontWeight.bold ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
                                   StreamBuilder<List<Price>>(
                                     stream: _bloc.simpleTarificationStream,
                                     builder: (context, snapshot) {
                                       return (snapshot.hasData &&
-                                          snapshot.data != null
+                                              snapshot.data != null
                                           ? Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: snapshot.data!
-                                            .mapIndexed<Widget>(
-                                                (e, idx) => Padding(
-                                                padding: EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 0,
-                                                    vertical: 0),
-                                                child: Column(
-                                                  children: <Widget>[
-                                                    Row(
-                                                      children: <
-                                                          Widget>[
-                                                        Radio<String>(
-                                                          activeColor:
-                                                          Color(
-                                                              0XFF01A6DC),
-                                                          value: e
-                                                              .label!,
-                                                          groupValue:
-                                                          selectedTapis,
-                                                          onChanged:
-                                                              (value) {
-                                                            setState(
-                                                                    () {
-                                                                  selectedTapis =
-                                                                      value;
-                                                                  tarification =
-                                                                      e;
-                                                                  tarificationId =
-                                                                      idx;
-                                                                });
-                                                          },
-                                                        ),
-                                                        Text(
-                                                            e.label!),
-                                                      ],
-                                                    )
-                                                  ],
-                                                )))
-                                            .toList(),
-                                      )
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: snapshot.data!
+                                                  .mapIndexed<Widget>(
+                                                      (e, idx) => Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal: 0,
+                                                                  vertical: 0),
+                                                          child: Column(
+                                                            children: <Widget>[
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Text(
+                                                                    e.label!
+                                                                        .toCapitalized(),
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            20),
+                                                                  ),
+                                                                  Radio<String>(
+                                                                    activeColor:
+                                                                        Color(
+                                                                            0XFF01A6DC),
+                                                                    value: e
+                                                                        .label!,
+                                                                    groupValue:
+                                                                        selectedTapis,
+                                                                    onChanged:
+                                                                        (value) {
+                                                                      setState(
+                                                                          () {
+                                                                        selectedTapis =
+                                                                            value;
+                                                                        tarification =
+                                                                            e;
+                                                                        tarificationId =
+                                                                            idx;
+                                                                      });
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            ],
+                                                          )))
+                                                  .toList(),
+                                            )
                                           : Container());
                                     },
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 25,
-                            ),
-                            AppLocalizations
-                                .current.isThereAnythingElse.text.black
-                                .fontWeight(FontWeight.w600)
-                                .size(15)
-                                .make(),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              maxLines: 10,
-                              minLines: 5,
-                              maxLength: 200,
-                              controller: noteCtrl,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations
-                                      .current.enterYourNote,
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 10),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none)),
-                            )
                           ],
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -458,8 +429,8 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                               height: 50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                      color: Color(colorBlueGray)),
+                                  border:
+                                      Border.all(color: Color(colorBlueGray)),
                                   color: Colors.grey.shade500),
                               child: Center(
                                 child: Text("Service ponctuel",
@@ -495,15 +466,10 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                           ],
                         ),
                       ),
-                      const Divider(
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
                       StreamBuilder<DateTime>(
                           stream: _bloc.bookingDateStream,
                           builder: (context, snapshot) {
-                            return snapshot.hasData &&
-                                    snapshot.data != null
+                            return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
                                         "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
@@ -525,45 +491,42 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                   context, LoginScreen());
                             } else {
                               if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez choisir une date"));
+                                        message: "Veuillez choisir une date"));
                                 return;
                               }
                               if (searchCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
                                         message:
                                             "Veuillez entrer votre adresse"));
                                 return;
                               }
                               if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez choisir une date"));
+                                        message: "Veuillez choisir une date"));
                                 return;
                               }
                               if (sizeCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
                                         message:
                                             "Veuillez saisir le nombre de mètres"));
                                 return;
                               }
-                              _bloc.addCarpetTarification(
-                                  tarification,
-                                  int.parse(sizeCtrl.text),
-                                  tarificationId);
+                              _bloc.addCarpetTarification(tarification,
+                                  int.parse(sizeCtrl.text), tarificationId);
+
                               showRecapSheet();
                             }
                           },
-                          textProp: 'Réserver'.toUpperCase()),
+                          textProp: 'COMMANDER'.toUpperCase()),
                     ],
                   ),
                 ),
@@ -650,6 +613,37 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
   }
 
   void showRecapSheet() {
+    Frequence? frequence =
+        _listProvider.frequenceList.isNotEmpty && frequenceValue != null
+            ? _listProvider.frequenceList
+                .firstWhere((element) => element.id == frequenceValue)
+            : null;
+    /*Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => BookingRecapScreen(
+              frequence: frequence,
+              services: widget.service,
+              lieu: searchCtrl.text,
+              amount: _bloc.totalSubject.value,
+            )));*/
+    showModalBottomSheet(
+        context: context,
+        enableDrag: false,
+        isScrollControlled: true,
+        builder: (context) => Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: BookingRecapScreen(
+                frequence: frequence,
+                services: widget.service,
+                lieu: searchCtrl.text,
+                amount: _bloc.totalSubject.value,
+                onValidate: ({String note = ''}) {
+                  noteCtrl.text = note;
+                  bookNow();
+                },
+              ),
+            ));
+    return;
+
     showModalBottomSheet(
         context: _scaffoldKey.currentContext!,
         shape: RoundedRectangleBorder(

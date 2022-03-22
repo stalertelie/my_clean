@@ -18,6 +18,7 @@ import 'package:my_clean/services/booking_api.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:velocity_x/src/extensions/iterable_ext.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class CommandList extends StatefulWidget {
   const CommandList({Key? key}) : super(key: key);
@@ -35,6 +36,10 @@ class CommandListState extends State<CommandList> {
   int page = 1;
 
   final BookingApi bookingApi = Ioc().use('bookingApi');
+
+  int currentFiltreIndex = 0;
+
+  User? globalUser;
 
   @override
   void initState() {
@@ -56,6 +61,9 @@ class CommandListState extends State<CommandList> {
     String? data = await UtilsFonction.getData(AppConstant.USER_INFO);
     final User? user = data != null ? User.fromJson(jsonDecode(data)) : null;
     if (user != null) {
+      setState(() {
+        globalUser = user;
+      });
       getUserCommandsList(user.id);
     } else {
       setState(() {
@@ -72,7 +80,19 @@ class CommandListState extends State<CommandList> {
       if (bookingResponse.hydraMember!.isNotEmpty) {
         setState(() {
           loading = false;
-          commands = bookingResponse.hydraMember;
+          if (currentFiltreIndex == 0) {
+            commands = bookingResponse.hydraMember!
+                .where((element) =>
+                    (element.date ?? DateTime.now()).isAfter(DateTime.now()) ||
+                    (element.date ?? DateTime.now())
+                        .isAtSameMomentAs(DateTime.now()))
+                .toList();
+          } else {
+            commands = bookingResponse.hydraMember!
+                .where((element) =>
+                    (element.date ?? DateTime.now()).isBefore(DateTime.now()))
+                .toList();
+          }
         });
       } else {
         setState(() {
@@ -95,10 +115,12 @@ class CommandListState extends State<CommandList> {
             child: Text(AppLocalizations.current.noOrders),
           )
         : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: commands!
                 .mapIndexed((command, index) => Container(
                       margin: const EdgeInsets.all(5),
-                      child: CommandListItem(command: command),
+                      //child: CommandListItem(command: command),
+                      child: commandItem(command),
                     ))
                 .toList());
   }
@@ -106,16 +128,41 @@ class CommandListState extends State<CommandList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colorGreyShadeLight,
+      backgroundColor: const Color(colorDefaultService),
       appBar: TabAppBar(
           titleProp: AppLocalizations.current.myOrders,
-          titleFontSize: 18,
+          titleFontSize: 20,
+          backgroundColor: Colors.transparent,
           context: context,
           centerTitle: true,
+          fontWeight: FontWeight.bold,
           showBackButton: false),
       body: SafeArea(
           child: Column(
         children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              height: 40,
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(colorGreySecond)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Flexible(child: filterContainer(index: 0, title: 'Actives')),
+                  Flexible(
+                      child: filterContainer(index: 1, title: 'Historiques')),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 25,
+          ),
           Expanded(
             child: RefreshIndicator(
                 onRefresh: () async {
@@ -128,6 +175,7 @@ class CommandListState extends State<CommandList> {
                   child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           loading
                               ? SizedBox(
@@ -147,4 +195,108 @@ class CommandListState extends State<CommandList> {
       )),
     );
   }
+
+  Widget filterContainer({required String title, required int index}) =>
+      GestureDetector(
+        onTap: () {
+          setState(() {
+            currentFiltreIndex = index;
+            if (globalUser != null) {
+              getUserCommandsList(globalUser?.id);
+            }
+          });
+        },
+        child: Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(horizontal: 2),
+            decoration: BoxDecoration(
+              color: index == currentFiltreIndex
+                  ? Colors.white
+                  : Colors.transparent,
+              borderRadius: index == currentFiltreIndex
+                  ? BorderRadius.circular(10)
+                  : BorderRadius.zero,
+            ),
+            child: Center(child: title.text.make())),
+      );
+
+  Widget commandItem(Booking booking) => Material(
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          color: const Color(0XFFE7E7E8),
+          padding: EdgeInsets.all(10),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            "#3092840032".text.bold.size(15).make(),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              AppLocalizations.current.orderDate(UtilsFonction.formatDate(
+                  dateTime: booking.date ?? DateTime.now(), format: "d-MM-y")),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                "Total".text.size(18).bold.make(),
+                Text(
+                  UtilsFonction.formatMoney(booking.priceTotal!.toInt()) +
+                      ' FCFA',
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Color(0XFFBFBFBF))),
+                      onPressed: () {},
+                      child: const Text(
+                        "Voir le reçu",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(colorPrimary))),
+                      onPressed: () {},
+                      child: const Text(
+                        "Reserver encore",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
+            )
+          ]),
+        ),
+      );
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_clean/app_config.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/img_urls.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/entities/booking/booking.dart';
 import 'package:my_clean/pages/booking/command_details.dart';
 import 'package:my_clean/services/localization.dart';
@@ -15,10 +16,10 @@ class CommandListItem extends StatelessWidget {
   String getBookingTitle() {
     if (command.prices!.isNotEmpty) {
       if (command.prices![0].tarification.service!.categorieService == null) {
-        return command.prices![0].tarification.service!.title!.toLowerCase();
+        return command.prices![0].tarification.service!.title!.toCapitalized();
       }
       return command.prices![0].tarification.service!.categorieService!.title!
-          .toLowerCase();
+          .toCapitalized();
     }
     return '';
   }

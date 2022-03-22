@@ -1,6 +1,6 @@
 {
   "@@last_modified": "2018-05-25T11:50:40.743319",
-  "myOrders": "Mes commandes",
+  "myOrders": "Mes Reservations",
   "@myOrders": {
     "type": "text",
     "placeholders": {}
@@ -137,7 +137,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "welcome": "Bienvenue",
+  "welcome": "Bonjour",
   "@welcome": {
     "type": "text",
     "placeholders": {}
@@ -217,7 +217,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "book": "Réserver",
+  "book": "COMMANDER",
   "@book": {
     "type": "text",
     "placeholders": {}

@@ -18,6 +18,7 @@ import 'package:my_clean/components/custom_button.dart';
 import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/message_constant.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/booking_tarification.dart';
 import 'package:my_clean/models/frequence.dart';
@@ -27,6 +28,7 @@ import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/pages/auth/login_page.dart';
 import 'package:my_clean/pages/booking/booking_bloc.dart';
+import 'package:my_clean/pages/booking/booking_recap.dart';
 import 'package:my_clean/pages/booking/booking_sucess_page.dart';
 import 'package:my_clean/pages/booking/day_time_picker.dart';
 import 'package:my_clean/pages/booking/search_bloc.dart';
@@ -138,6 +140,12 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
         backgroundColor: Color(colorDefaultService),
         appBar: AppBar(
           elevation: 0,
+          leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+                size: 30,
+              )),
           backgroundColor: Color(colorDefaultService),
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
@@ -174,7 +182,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                       ),
                     },
                     initialCameraPosition: CameraPosition(
-                      target: LatLng(latitude!, longitude!),
+                      target: LatLng(latitude ?? 0, longitude ?? 0),
                       zoom: 14.4746,
                     ),
                   ),
@@ -195,8 +203,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
                                   'images/icons/map-marker.svg',
@@ -205,14 +212,14 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                 Expanded(
                                     child: GestureDetector(
                                         child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
                                             height: 40,
                                             child: Text(searchCtrl.text)),
-                                        onTap: () =>
-                                            showSearhPage(context))),
+                                        onTap: () => showSearhPage(context))),
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         height: 20,
@@ -220,7 +227,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                         color: Colors.black,
                                       ),
                                       TextButton(
-                                          onPressed: (){
+                                          onPressed: () {
                                             setState(() {
                                               showMap = !showMap;
                                             });
@@ -232,19 +239,16 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                               ],
                             ),
                           )),
-                      Divider(
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Sélectionnez le type d'habitation",
+                              "Choisissez votre type de maison",
                               style: TextStyle(
                                   color: Colors.black,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 18),
                             ),
                             SizedBox(
@@ -256,94 +260,105 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                   return snapshot.hasData &&
                                           snapshot.data != null
                                       ? Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Row(
+                                            Column(
                                               children: snapshot.data!
                                                   .mapIndexed<Widget>(
-                                                    (homeType, idx) =>
+                                                    (homeType, idx) => Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
                                                         Container(
                                                             margin:
-                                                                EdgeInsets
-                                                                    .only(
+                                                                EdgeInsets.only(
                                                               right: 8,
                                                             ),
-                                                            child:
-                                                                InkWell(
+                                                            child: InkWell(
                                                               onTap: () {
-                                                                setState(
-                                                                    () {
+                                                                setState(() {
                                                                   isSelected =
                                                                       true;
                                                                   activeHomeTypeIndex =
                                                                       idx;
                                                                 });
                                                               },
-                                                              child:
-                                                                  Container(
-                                                                height:
-                                                                    40,
-                                                                padding:
-                                                                    EdgeInsets.all(
-                                                                        10),
-                                                                decoration: BoxDecoration(
-                                                                    color: isSelected && activeHomeTypeIndex == idx
-                                                                        ? Color(
-                                                                            colorBlueGray)
-                                                                        : Colors
-                                                                            .white,
-                                                                    borderRadius: BorderRadius.circular(
-                                                                        20),
-                                                                    border:
-                                                                        Border.all(color: Color(colorBlueGray))),
-                                                                child:
-                                                                    Center(
-                                                                  child:
-                                                                      Text(
-                                                                    homeType
-                                                                        .libelle,
-                                                                    style: TextStyle(
-                                                                        fontSize: 15,
-                                                                        fontWeight: FontWeight.bold,
-                                                                        color: isSelected && activeHomeTypeIndex == idx ? Colors.white : Color(colorBlueGray)),
-                                                                  ),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  homeType
+                                                                      .libelle
+                                                                      .toCapitalized(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          20,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Colors
+                                                                          .black),
                                                                 ),
                                                               ),
                                                             )),
+                                                        Radio(
+                                                            value: idx,
+                                                            groupValue:
+                                                                activeHomeTypeIndex,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                isSelected =
+                                                                    true;
+                                                                activeHomeTypeIndex =
+                                                                    idx;
+                                                              });
+                                                            })
+                                                      ],
+                                                    ),
                                                   )
                                                   .toList(),
                                             ),
-                                            SizedBox(height: 20,),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
                                             Container(
                                               decoration: BoxDecoration(
-                                                borderRadius : BorderRadius.circular(10),
-                                                color: Colors.white
-                                              ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.white),
                                               padding: EdgeInsets.all(16),
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  "Nombre de pièces".text.bold.size(20).make(),
-                                                  "Tous les espaces communs sont inclus".text.size(15).make(),
+                                                  "Nombre de pièces"
+                                                      .text
+                                                      .bold
+                                                      .size(20)
+                                                      .make(),
+                                                  "Tous les espaces communs sont inclus"
+                                                      .text
+                                                      .size(15)
+                                                      .make(),
                                                   Column(
                                                       children: snapshot.data!
                                                           .mapIndexed(
                                                               (e, index) =>
-                                                              Container(
-                                                                child:
-                                                                Column(
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                                  children: [
-                                                                    Column(
-                                                                      children: e.list != null
-                                                                          ? e.list!.map((e) => index == activeHomeTypeIndex ? tarificationITem(e, index) : Container()).toList()
-                                                                          : [],
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ))
+                                                                  Container(
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Column(
+                                                                          children: e.list != null
+                                                                              ? e.list!.map((e) => index == activeHomeTypeIndex ? tarificationITem(e, index) : Container()).toList()
+                                                                              : [],
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ))
                                                           .toList())
                                                 ],
                                               ),
@@ -355,37 +370,8 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                             const SizedBox(
                               height: 10,
                             ),
-                            AppLocalizations
-                                .current.isThereAnythingElse.text.black
-                                .fontWeight(FontWeight.w600)
-                                .size(15)
-                                .make(),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              maxLines: 10,
-                              minLines: 5,
-                              maxLength: 200,
-                              controller: noteCtrl,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations
-                                      .current.enterYourNote,
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 10),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none)),
-                            )
                           ],
                         ),
-                      ),
-                      Divider(
-                        thickness: 1,
-                        color: Colors.black,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -413,8 +399,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                 InkWell(
                                     onTap: () {
                                       setState(() {
-                                        frequenceType =
-                                            "SERVICE PONCTUEL";
+                                        frequenceType = "SERVICE PONCTUEL";
                                       });
                                     },
                                     child: timeType("SERVICE PONCTUEL")),
@@ -424,8 +409,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                 InkWell(
                                     onTap: () {
                                       setState(() {
-                                        frequenceType =
-                                            "SERVICE RECURRENT";
+                                        frequenceType = "SERVICE RECURRENT";
                                       });
                                     },
                                     child: timeType("SERVICE RECURRENT")),
@@ -460,8 +444,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                               visible: frequenceType !=
                                   AppConstant.FREQUENCE_BOOKING_PONCTUAL,
                               child: MaterialButton(
-                                onPressed: () =>
-                                    showBottomSheetForDayPick(),
+                                onPressed: () => showBottomSheetForDayPick(),
                                 child: Row(
                                   children: [
                                     Icon(
@@ -469,17 +452,15 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                       color: Colors.white,
                                     ),
                                     SizedBox(
-                                        width: MediaQuery.of(context)
-                                                .size
-                                                .width /
-                                            4),
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                4),
                                     "Ajouter une date".text.white.make()
                                   ],
                                 ),
                                 color: const Color(colorBlueGray),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(30)),
+                                    borderRadius: BorderRadius.circular(30)),
                               ),
                             ),
                             const SizedBox(
@@ -488,32 +469,24 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                           ],
                         ),
                       ),
-                      const Divider(
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
                       Visibility(
                         visible: frequenceType ==
                             AppConstant.FREQUENCE_BOOKING_RECURENT,
                         child: StreamBuilder<List<DayObject>>(
                             stream: _bloc.daysStream,
                             builder: (context, snapshot) {
-                              return snapshot.hasData &&
-                                      snapshot.data != null
+                              return snapshot.hasData && snapshot.data != null
                                   ? Container(
-                                      height: 40 *
-                                          snapshot.data!.length
-                                              .toDouble(),
+                                      height:
+                                          40 * snapshot.data!.length.toDouble(),
                                       width: double.maxFinite,
                                       child: ListView.builder(
                                         itemBuilder: (context, index) =>
                                             Padding(
-                                          padding:
-                                              const EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               "Chaque ${snapshot.data![index].day}"
                                                   .text
@@ -536,8 +509,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                         child: StreamBuilder<DateTime>(
                             stream: _bloc.bookingDateStream,
                             builder: (context, snapshot) {
-                              return snapshot.hasData &&
-                                      snapshot.data != null
+                              return snapshot.hasData && snapshot.data != null
                                   ? Container(
                                       child: Center(
                                           child:
@@ -545,8 +517,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                                   .text
                                                   .bold
                                                   .size(18)
-                                                  .color(
-                                                      Color(0XFF01A6DC))
+                                                  .color(Color(0XFF01A6DC))
                                                   .make()),
                                     )
                                   : Container();
@@ -568,8 +539,8 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                           (item) => item.quantity! > 0) ==
                                       -1)
                                   .isEmpty) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
                                         message:
                                             "Veuillez choisir au moins une option avant de passer votre commande"));
@@ -787,6 +758,29 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
   }
 
   void showRecapSheet() {
+    Frequence? frequence =
+        _listProvider.frequenceList.isNotEmpty && frequenceValue != null
+            ? _listProvider.frequenceList
+                .firstWhere((element) => element.id == frequenceValue)
+            : null;
+    showModalBottomSheet(
+        context: context,
+        enableDrag: false,
+        isScrollControlled: true,
+        builder: (context) => Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: BookingRecapScreen(
+                frequence: frequence,
+                services: widget.service,
+                lieu: searchCtrl.text,
+                amount: _bloc.totalSubject.value,
+                onValidate: ({String note = ''}) {
+                  noteCtrl.text = note;
+                  bookNow();
+                },
+              ),
+            ));
+    return;
     showModalBottomSheet(
         context: _scaffoldKey.currentContext!,
         shape: RoundedRectangleBorder(

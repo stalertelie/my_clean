@@ -50,7 +50,7 @@ class BookingBloc extends BaseBloc {
   BehaviorSubject<List<DayObject>> get daysSubject => _daysSubject;
 
   Stream<int> get totalStream => _totalSubject.stream;
-  final _totalSubject = BehaviorSubject<int>();
+  final _totalSubject = BehaviorSubject<int>.seeded(0);
 
   BehaviorSubject<int> get totalSubject => _totalSubject;
 
@@ -101,6 +101,23 @@ class BookingBloc extends BaseBloc {
         return;
       }
       calculateDetail(quantity);
+    }
+  }
+
+  addTarificationSimplyAirCondition(Price tarification, int quantity,
+      {required int rootId, bool? isOperatorValueNull = false}) {
+    int index = _simpleTarificationSubject.value
+        .indexWhere((element) => element.id == tarification.id);
+
+    if (index != -1) {
+      Price p = _simpleTarificationSubject.value.elementAt(index);
+      p.quantity = (p.quantity ?? 0) + quantity;
+      _simpleTarificationSubject.add(_simpleTarificationSubject.value);
+      if (isOperatorValueNull == true) {
+        calculateDetailOperatorValueIsNull(quantity);
+        return;
+      }
+      calculateDetailSimpleAirConditionner(quantity);
     }
   }
 
@@ -183,6 +200,18 @@ class BookingBloc extends BaseBloc {
         }
       }
     }
+    _totalSubject.add(total);
+  }
+
+  void calculateDetailSimpleAirConditionner(int number) {
+    int total = 0;
+    for (var element in _simpleTarificationSubject.value) {
+      if (element.quantity! > 0) {
+        total += (element.price! * (element.quantity!));
+      }
+    }
+    print("=========TOTAL");
+    print(total);
     _totalSubject.add(total);
   }
 

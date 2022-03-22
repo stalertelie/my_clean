@@ -13,6 +13,7 @@ AppBar TabAppBar(
     Color? backButtonColor,
     Color? titleColor,
     double? titleFontSize,
+    FontWeight fontWeight = FontWeight.w500,
     bool centerTitle = false}) {
   return AppBar(
     title: Padding(
@@ -22,7 +23,7 @@ AppBar TabAppBar(
               fontFamily: "SFPro",
               fontSize: titleFontSize ?? 20,
               height: 23 / 20,
-              fontWeight: FontWeight.w500,
+              fontWeight: fontWeight,
               letterSpacing: 0.15,
               color: titleColor ?? const Color.fromRGBO(0, 0, 0, 0.87))),
     ),

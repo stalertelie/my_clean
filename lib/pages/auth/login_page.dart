@@ -7,6 +7,7 @@ import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/auth/aut_bloc.dart';
 import 'package:my_clean/pages/auth/singup_page.dart';
+import 'package:my_clean/pages/home/home_header.dart';
 import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/providers/app_provider.dart';
 import 'package:my_clean/services/app_service.dart';
@@ -33,9 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print("herre");
 
     _bloc.loadingSubject.listen((value) {
       if (value.message == MessageConstant.loginok) {
@@ -54,40 +53,52 @@ class _LoginScreenState extends State<LoginScreen> {
     _appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(colorBlue),
+        backgroundColor: const Color(colorPrimary),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Center(
-                    child: Container(
-                      width: 200,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(authBlue),
-                      ),
-                      child: Image.asset("images/icons/logo.png"),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipPath(
+                  child: Container(
+                    color: const Color(colorPrimary),
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "images/icons/logo.png",
+                          width: 200,
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  "Connexion".text.size(25).bold.color(Color(colorBlueGray)).make(),
-                  "Renseigner les champs ci-dessous"
-                      .text
-                      .color(Color(colorBlueGray))
-                      .make()
-                ],
-              ),
+                  clipper: BottomWaveClipper(distance: 150),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        "Connexion"
+                            .text
+                            .size(25)
+                            .bold
+                            .color(Color(colorBlueGray))
+                            .make(),
+                        "Renseigner les champs ci-dessous"
+                            .text
+                            .color(Color(colorBlueGray))
+                            .make()
+                      ]),
+                )
+              ],
             ),
             SizedBox(
               height: 10,
@@ -173,7 +184,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Color(colorPrimary),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: ["Connexion".text.white.size(18).bold.make()],
+                          children: [
+                            "Connexion".text.white.size(18).bold.make()
+                          ],
                         ),
                       )
                     ],

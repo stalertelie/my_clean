@@ -1,0 +1,27 @@
+{
+    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+    // Pointez pour afficher la description des attributs existants.
+    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "my_clean",
+            "request": "launch",
+            "type": "dart",
+            "args": ["--no-sound-null-safety"]
+        },
+        {
+            "name": "my_clean (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "args": ["--no-sound-null-safety"]
+        },
+        {
+            "name": "my_clean (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

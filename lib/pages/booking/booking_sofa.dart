@@ -27,6 +27,7 @@ import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/pages/auth/login_page.dart';
 import 'package:my_clean/pages/booking/booking_bloc.dart';
+import 'package:my_clean/pages/booking/booking_recap.dart';
 import 'package:my_clean/pages/booking/booking_sucess_page.dart';
 import 'package:my_clean/pages/booking/day_time_picker.dart';
 import 'package:my_clean/pages/booking/search_bloc.dart';
@@ -40,6 +41,7 @@ import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:my_clean/extensions/extensions.dart';
 
 class BookingSofaScreen extends StatefulWidget {
   final Services service;
@@ -136,6 +138,12 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
         backgroundColor: Color(colorDefaultService),
         appBar: AppBar(
           elevation: 0,
+          leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+                size: 30,
+              )),
           backgroundColor: Color(colorDefaultService),
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
@@ -193,8 +201,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
                                   'images/icons/map-marker.svg',
@@ -203,14 +210,14 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                 Expanded(
                                     child: GestureDetector(
                                         child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
                                             height: 40,
                                             child: Text(searchCtrl.text)),
-                                        onTap: () =>
-                                            showSearhPage(context))),
+                                        onTap: () => showSearhPage(context))),
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         height: 20,
@@ -218,7 +225,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                         color: Colors.black,
                                       ),
                                       TextButton(
-                                          onPressed: (){
+                                          onPressed: () {
                                             setState(() {
                                               showMap = !showMap;
                                             });
@@ -275,135 +282,126 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                 stream: _bloc.tarificationRootStream,
                                 builder: (context, snapshot) {
                                   return snapshot.hasData &&
-                                      snapshot.data != null
+                                          snapshot.data != null
                                       ? Column(
-                                    children: [
-                                      Row(
-                                        children: snapshot.data!
-                                            .mapIndexed<Widget>(
-                                              (carType, idx) =>
-                                              Container(
-                                                  margin:
-                                                  EdgeInsets
-                                                      .only(
-                                                    right: 8,
-                                                  ),
-                                                  child:
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(
-                                                              () {
-                                                            isSelected =
-                                                            true;
-                                                            activeCarTypeIndex =
-                                                                idx;
-                                                          });
-                                                    },
-                                                    child:
-                                                    Container(
-                                                      height:
-                                                      40,
-                                                      width:
-                                                      100,
-                                                      padding:
-                                                      EdgeInsets.all(
-                                                          10),
-                                                      decoration: BoxDecoration(
-                                                          color: isSelected && activeCarTypeIndex == idx
-                                                              ? Color(
-                                                              colorBlueGray)
-                                                              : Colors
-                                                              .white,
-                                                          borderRadius: BorderRadius.circular(
-                                                              20),
-                                                          border:
-                                                          Border.all(color: Color(colorBlueGray))),
-                                                      child:
-                                                      Center(
-                                                        child:
-                                                        Text(
-                                                          carType
-                                                              .libelle,
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight: FontWeight.bold,
-                                                              color: isSelected && activeCarTypeIndex == idx ? Colors.white : Color(colorBlueGray)),
+                                          children: [
+                                            Row(
+                                              children: snapshot.data!
+                                                  .mapIndexed<Widget>(
+                                                    (carType, idx) => Container(
+                                                        margin: EdgeInsets.only(
+                                                          right: 8,
                                                         ),
-                                                      ),
-                                                    ),
-                                                  )),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              isSelected = true;
+                                                              activeCarTypeIndex =
+                                                                  idx;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            height: 35,
+                                                            width: 100,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    7),
+                                                            decoration: BoxDecoration(
+                                                                color: isSelected &&
+                                                                        activeCarTypeIndex ==
+                                                                            idx
+                                                                    ? Color(colorGrey)
+                                                                        .withOpacity(
+                                                                            0.6)
+                                                                    : Colors
+                                                                        .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .black)),
+                                                            child: Center(
+                                                              child: Text(
+                                                                carType.libelle
+                                                                    .toCapitalized(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: isSelected &&
+                                                                            activeCarTypeIndex ==
+                                                                                idx
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 16, vertical: 10),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  "Nombre de places"
+                                                      .text
+                                                      .size(20)
+                                                      .bold
+                                                      .make(),
+                                                  "Nettoyage vapeur"
+                                                      .text
+                                                      .size(20)
+                                                      .make(),
+                                                  Column(
+                                                      children: snapshot.data!
+                                                          .mapIndexed(
+                                                              (e, index) =>
+                                                                  Container(
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Column(
+                                                                          children: e.list != null
+                                                                              ? e.list!.map((e) => index == activeCarTypeIndex ? tarificationITem(e, index) : Container()).toList()
+                                                                              : [],
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ))
+                                                          .toList()),
+                                                ],
+                                              ),
+                                            )
+                                          ],
                                         )
-                                            .toList(),
-                                      ),
-                                      SizedBox(height: 10,),
-                                      Container(
-                                        padding: EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child: Column(
-                                            children: snapshot.data!
-                                                .mapIndexed(
-                                                    (e, index) =>
-                                                    Container(
-                                                      child:
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          Column(
-                                                            children: e.list != null
-                                                                ? e.list!.map((e) => index == activeCarTypeIndex ? tarificationITem(e, index) : Container()).toList()
-                                                                : [],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ))
-                                                .toList()),
-                                      )
-                                    ],
-                                  )
                                       : Container();
                                 }),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            AppLocalizations
-                                .current.isThereAnythingElse.text.black
-                                .fontWeight(FontWeight.w600)
-                                .size(15)
-                                .make(),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              maxLines: 10,
-                              minLines: 5,
-                              maxLength: 200,
-                              controller: noteCtrl,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations
-                                      .current.enterYourNote,
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 10),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none)),
-                            )
                           ],
                         ),
                       ),
-                      Divider(
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -428,8 +426,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                 InkWell(
                                     onTap: () {
                                       setState(() {
-                                        frequenceType =
-                                            "SERVICE PONCTUEL";
+                                        frequenceType = "SERVICE PONCTUEL";
                                       });
                                     },
                                     child: timeType("SERVICE PONCTUEL")),
@@ -439,8 +436,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                 InkWell(
                                     onTap: () {
                                       setState(() {
-                                        frequenceType =
-                                            "SERVICE RECURRENT";
+                                        frequenceType = "SERVICE RECURRENT";
                                       });
                                     },
                                     child: timeType("SERVICE RECURRENT")),
@@ -475,8 +471,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                               visible: frequenceType !=
                                   AppConstant.FREQUENCE_BOOKING_PONCTUAL,
                               child: MaterialButton(
-                                onPressed: () =>
-                                    showBottomSheetForDayPick(),
+                                onPressed: () => showBottomSheetForDayPick(),
                                 child: Row(
                                   children: [
                                     Icon(
@@ -484,28 +479,19 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                       color: Colors.white,
                                     ),
                                     SizedBox(
-                                        width: MediaQuery.of(context)
-                                                .size
-                                                .width /
-                                            4),
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                4),
                                     "Ajouter une date".text.white.make()
                                   ],
                                 ),
                                 color: const Color(colorBlueGray),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(30)),
+                                    borderRadius: BorderRadius.circular(30)),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
                             ),
                           ],
                         ),
-                      ),
-                      const Divider(
-                        thickness: 1,
-                        color: Colors.black,
                       ),
                       Visibility(
                         visible: frequenceType ==
@@ -513,22 +499,18 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                         child: StreamBuilder<List<DayObject>>(
                             stream: _bloc.daysStream,
                             builder: (context, snapshot) {
-                              return snapshot.hasData &&
-                                      snapshot.data != null
+                              return snapshot.hasData && snapshot.data != null
                                   ? Container(
-                                      height: 40 *
-                                          snapshot.data!.length
-                                              .toDouble(),
+                                      height:
+                                          40 * snapshot.data!.length.toDouble(),
                                       width: double.maxFinite,
                                       child: ListView.builder(
                                         itemBuilder: (context, index) =>
                                             Padding(
-                                          padding:
-                                              const EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               "Chaque ${snapshot.data![index].day}"
                                                   .text
@@ -551,8 +533,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                         child: StreamBuilder<DateTime>(
                             stream: _bloc.bookingDateStream,
                             builder: (context, snapshot) {
-                              return snapshot.hasData &&
-                                      snapshot.data != null
+                              return snapshot.hasData && snapshot.data != null
                                   ? Container(
                                       child: Center(
                                           child:
@@ -560,8 +541,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                                   .text
                                                   .bold
                                                   .size(18)
-                                                  .color(
-                                                      Color(0XFF01A6DC))
+                                                  .color(Color(0XFF01A6DC))
                                                   .make()),
                                     )
                                   : Container();
@@ -583,8 +563,8 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                           (item) => item.quantity! > 0) ==
                                       -1)
                                   .isEmpty) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
                                         message:
                                             "Veuillez choisir au moins une option avant de passer votre commande"));
@@ -644,7 +624,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
               .size(18)
               .bold
               .fontFamily("SFPro")
-              .color(const Color(0XFF01A6DC))
+              //.color(const Color(0XFF01A6DC))
               .make(),
           const SizedBox(
             width: 20,
@@ -802,6 +782,29 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
   }
 
   void showRecapSheet() {
+    Frequence? frequence =
+        _listProvider.frequenceList.isNotEmpty && frequenceValue != null
+            ? _listProvider.frequenceList
+                .firstWhere((element) => element.id == frequenceValue)
+            : null;
+    showModalBottomSheet(
+        context: context,
+        enableDrag: false,
+        isScrollControlled: true,
+        builder: (context) => Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: BookingRecapScreen(
+                frequence: frequence,
+                services: widget.service,
+                lieu: searchCtrl.text,
+                amount: _bloc.totalSubject.value,
+                onValidate: ({String note = ''}) {
+                  noteCtrl.text = note;
+                  bookNow();
+                },
+              ),
+            ));
+    return;
     showModalBottomSheet(
         context: _scaffoldKey.currentContext!,
         shape: RoundedRectangleBorder(

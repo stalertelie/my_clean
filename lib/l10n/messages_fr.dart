@@ -27,7 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{
-        "myOrders": MessageLookupByLibrary.simpleMessage("Mes commandes"),
+        "myOrders": MessageLookupByLibrary.simpleMessage("Mes Reservations"),
         "noOrders": MessageLookupByLibrary.simpleMessage("Pas de commandes"),
         "myBooking": MessageLookupByLibrary.simpleMessage("Réservations"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
@@ -65,12 +65,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "commune": MessageLookupByLibrary.simpleMessage("Commune"),
         "somethingIsWrongErrorLabel": MessageLookupByLibrary.simpleMessage(
             "Quelquechose s'est mal passé"),
-        "welcome": MessageLookupByLibrary.simpleMessage("Bienvenue"),
+        "welcome": MessageLookupByLibrary.simpleMessage("Bonjour"),
         "chooseService":
             MessageLookupByLibrary.simpleMessage("Choisir un service"),
         "order": MessageLookupByLibrary.simpleMessage("Commander"),
-        "furnishedHouse":
-            MessageLookupByLibrary.simpleMessage("Vottre maison  est-elle meublée"),
+        "furnishedHouse": MessageLookupByLibrary.simpleMessage(
+            "Vottre maison  est-elle meublée"),
         "isYourHouseFurnished": MessageLookupByLibrary.simpleMessage(
             "Votre maison est-elle meublée ?"),
         "yes": MessageLookupByLibrary.simpleMessage("Oui"),
@@ -88,7 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "at": MessageLookupByLibrary.simpleMessage("à"),
         "pleaseChooseAtLeastOneOption": MessageLookupByLibrary.simpleMessage(
             "Veuillez choisir au moins une option avant de passer votre commande"),
-        "book": MessageLookupByLibrary.simpleMessage("Réserver"),
+        "book": MessageLookupByLibrary.simpleMessage("COMMANDER"),
         "orderSummary":
             MessageLookupByLibrary.simpleMessage("Résumer de la commande"),
         "duration": MessageLookupByLibrary.simpleMessage("Durée"),

@@ -86,7 +86,7 @@ class _ProfileViewFragmentState extends State<ProfileViewFragment> {
     return Container(
       width: double.maxFinite,
       height: 160,
-      color: const Color(0xFFF6F8F8),
+      color: const Color(colorDefaultService),
       child: _gettingProfileDetails ? _buildLoadingScreen() : _buildProfile(),
     );
   }
@@ -96,22 +96,30 @@ class _ProfileViewFragmentState extends State<ProfileViewFragment> {
   }
 
   Widget _buildProfile() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        _buildImagePortion(),
-        _currentUserInfos != null
-            ? Column(
-                children: [
-                  _buildNamePortion(),
-                  _buildPhoneNumberPortion(),
-                ],
-              )
-            : Text(AppLocalizations.current.youAreNotLogged,
-                style: TextStyle(
-                  color: Colors.redAccent.shade400,
-                )),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          _buildImagePortion(),
+          _currentUserInfos != null
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildNamePortion(),
+                      _buildPhoneNumberPortion(),
+                    ],
+                  ),
+                )
+              : Text(AppLocalizations.current.youAreNotLogged,
+                  style: TextStyle(
+                    color: Colors.redAccent.shade400,
+                  )),
+        ],
+      ),
     );
   }
 

@@ -43,8 +43,8 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
   final List<Widget> _listPage = [
     const HomeScreen(),
     const CommandList(),
-    const AccountScreen(),
     const HomeScreen(),
+    const AccountScreen(),
     const CommandList(),
     const ChooseCountryScreen()
   ];
@@ -239,19 +239,6 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
     _appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
       key: _key,
-      // appBar: AppBar(
-      //   title: const Text(''),
-      //   backgroundColor: Colors.white,
-      //   elevation: 0,
-      //   // leading: IconButton(
-      //   //     onPressed: () => _key.currentState!.openDrawer(),
-      //   //     icon: SvgPicture.asset("images/icons/user-profile.svg")),
-      //   // elevation: 0,
-      //   // centerTitle: true,
-
-      //   // backgroundColor: Colors.white,
-      //   // actions: [Image.asset("images/icons/balai.png")],
-      // ),
       body: StreamBuilder<int>(
           stream: _bLoc.pageindexStream,
           builder: (context, snapshot) {
@@ -340,16 +327,24 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
                 return BottomNavigationBar(
                   showSelectedLabels: true,
                   showUnselectedLabels: true,
+                  elevation: 0,
+                  backgroundColor: const Color(colorDefaultService),
                   selectedItemColor: const Color(colorBottomBarIcon),
                   unselectedItemColor: Colors.black,
                   currentIndex: snapshot.data ?? 0,
-                  iconSize: 30,
+                  iconSize: 20,
                   onTap: (index) {
                     _bLoc.switchToPage(index);
                   },
                   items: [
                     BottomNavigationBarItem(
-                        icon: const Icon(Icons.home),
+                        icon: SvgPicture.asset(
+                          "images/icons/house.svg",
+                          width: 30,
+                          color: snapshot.data == 0
+                              ? const Color(colorBottomBarIcon)
+                              : Colors.black,
+                        ),
                         label: AppLocalizations.current.home),
                     BottomNavigationBarItem(
                         icon: const Icon(FontAwesomeIcons.calendarAlt),
@@ -358,7 +353,7 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
                         icon: const Icon(FontAwesomeIcons.bell),
                         label: AppLocalizations.current.notifications),
                     BottomNavigationBarItem(
-                        icon: const Icon(FontAwesomeIcons.user),
+                        icon: const Icon(FontAwesomeIcons.userAlt),
                         label: AppLocalizations.current.account),
                     // const BottomNavigationBarItem(
                     //   icon: Icon(FontAwesomeIcons.envelope),

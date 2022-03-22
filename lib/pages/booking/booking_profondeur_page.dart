@@ -19,6 +19,7 @@ import 'package:my_clean/constants/app_constant.dart';
 //import 'package:latlong2/latlong.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/message_constant.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/booking_tarification.dart';
 import 'package:my_clean/models/frequence.dart';
@@ -27,7 +28,9 @@ import 'package:my_clean/models/services.dart';
 import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/pages/auth/login_page.dart';
+import 'package:my_clean/pages/booking/book_profondeur_bloc.dart';
 import 'package:my_clean/pages/booking/booking_bloc.dart';
+import 'package:my_clean/pages/booking/booking_recap.dart';
 import 'package:my_clean/pages/booking/booking_sucess_page.dart';
 import 'package:my_clean/pages/booking/day_time_picker.dart';
 import 'package:my_clean/pages/booking/search_bloc.dart';
@@ -61,7 +64,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
   GoogleMapController? mapcontroller;
   LatLng _markerPosition = LatLng(51.5, -0.09);
 
-  final BookingBloc _bloc = BookingBloc();
+  final BookProfondeurBloc _bloc = BookProfondeurBloc();
 
   late ListProvider _listProvider;
   late AppProvider _appProvider;
@@ -78,6 +81,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
 
   GoogleResult? _currentFeature;
 
+  String selectedService = '';
+
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -92,11 +97,11 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
     getLatLong();
 
     if (widget.service.services != null) {
-      print('=====DLDLDLDLDLDLDLDLD=====');
-      _bloc.setTarificationRoot(widget.service.services!
+      _bloc.tarificationRootSubject.add(widget.service.services!
           .map((e) => TarificationObjectRoot(
               id: e.id!.toString(),
               libelle: e.title!,
+              total: 0,
               list: e.tarifications
                   ?.map(
                       (e) => TarificationObject(quantity: 0, tarifications: e))
@@ -138,12 +143,20 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
         backgroundColor: Color(colorDefaultService),
         key: _scaffoldKey,
         appBar: AppBar(
+          leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+                size: 30,
+              )),
           elevation: 0,
           backgroundColor: Color(colorDefaultService),
           iconTheme: IconThemeData(color: Colors.black),
+          centerTitle: true,
           title: Text(
             widget.service.title!.toUpperCase(),
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black),
           ),
           bottom: PreferredSize(
               child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
@@ -177,7 +190,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                         ),
                       },
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(latitude!, longitude!),
+                        target: LatLng(latitude ?? 0, longitude ?? 0),
                         zoom: 14.4746,
                       )),
                 ),
@@ -198,8 +211,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
                                   'images/icons/map-marker.svg',
@@ -208,14 +220,14 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                 Expanded(
                                     child: GestureDetector(
                                         child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
                                             height: 40,
                                             child: Text(searchCtrl.text)),
-                                        onTap: () =>
-                                            showSearhPage(context))),
+                                        onTap: () => showSearhPage(context))),
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         height: 20,
@@ -223,7 +235,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                         color: Colors.black,
                                       ),
                                       TextButton(
-                                          onPressed: (){
+                                          onPressed: () {
                                             setState(() {
                                               showMap = !showMap;
                                             });
@@ -235,21 +247,14 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                               ],
                             ),
                           )),
-
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AppLocalizations.current.furnishedHouse
-                                .toUpperCase()
-                                .text
-                                .black
-                                .bold
+                            AppLocalizations.current.isYourHouseFurnished.text
                                 .size(18)
-                                .make(),
-                            AppLocalizations
-                                .current.isYourHouseFurnished.text.gray500
+                                .bold
                                 .make(),
                             SizedBox(
                               height: 10,
@@ -270,13 +275,11 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                         color: isFurnish
                                             ? Color(colorBlueGray)
                                             : Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
                                             color: Color(colorBlueGray))),
                                     child: Center(
-                                      child: AppLocalizations
-                                          .current.yes.text
+                                      child: AppLocalizations.current.yes.text
                                           .size(20)
                                           .bold
                                           .color(isFurnish
@@ -303,13 +306,11 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                         color: !isFurnish
                                             ? Color(colorBlueGray)
                                             : Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
                                             color: Color(colorBlueGray))),
                                     child: Center(
-                                      child: AppLocalizations
-                                          .current.no.text
+                                      child: AppLocalizations.current.no.text
                                           .size(20)
                                           .bold
                                           .color(!isFurnish
@@ -324,83 +325,81 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             const SizedBox(
                               height: 20,
                             ),
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20)
-                              ),
-                              child: StreamBuilder<List<TarificationObjectRoot>>(
-                                  stream: _bloc.tarificationRootStream,
-                                  builder: (context, snapshot) {
-                                    return snapshot.hasData &&
-                                        snapshot.data != null
-                                        ? Column(
-                                      children: snapshot.data!
-                                          .mapIndexed(
-                                              (e, index) => Container(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment
-                                                  .start,
-                                              children: [
-                                                e.libelle
-                                                    .toUpperCase()
-                                                    .text
-                                                    .black
-                                                    .bold
-                                                    .size(20)
-                                                    .make(),
-                                                Column(
-                                                  children: e.list !=
-                                                      null
-                                                      ? e.list!
-                                                      .map((e) =>
-                                                      tarificationITem(e, index))
-                                                      .toList()
-                                                      : [],
-                                                )
-                                              ],
-                                            ),
-                                          ))
-                                          .toList(),
-                                    )
-                                        : Container();
-                                  }),
+                            Text(
+                              "Choissiez votre type de maison",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            StreamBuilder<List<TarificationObjectRoot>>(
+                                stream: _bloc.tarificationRootStream,
+                                builder: (context, snapshot) {
+                                  return Column(
+                                    children: snapshot.data!
+                                        .map((e) => StreamBuilder<
+                                                TarificationObjectRoot?>(
+                                            stream: _bloc.selectedServiceStream,
+                                            builder:
+                                                (context, snapshotService) {
+                                              return Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  e.libelle
+                                                      .toCapitalized()
+                                                      .text
+                                                      .bold
+                                                      .make(),
+                                                  Radio(
+                                                      value: e.id,
+                                                      groupValue:
+                                                          snapshotService
+                                                              .data?.id,
+                                                      onChanged: (value) {
+                                                        _bloc
+                                                            .selectedServiceSubject
+                                                            .add(e);
+                                                      })
+                                                ],
+                                              );
+                                            }))
+                                        .toList(),
+                                  );
+                                }),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    "Nombre de pièces"
+                                        .text
+                                        .size(20)
+                                        .bold
+                                        .make(),
+                                    "Tous les espaces communs sont inclus"
+                                        .text
+                                        .size(15)
+                                        .make(),
+                                    tarificationITem("PIECES")
+                                  ],
+                                )),
                             const SizedBox(
                               height: 10,
                             ),
-                            AppLocalizations
-                                .current.isThereAnythingElse.text.black
-                                .fontWeight(FontWeight.w600)
-                                .size(15)
-                                .make(),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              maxLines: 10,
-                              minLines: 5,
-                              maxLength: 200,
-                              controller: noteCtrl,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations
-                                      .current.enterYourNote,
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 10),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none)),
-                            )
                           ],
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -424,8 +423,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                 InkWell(
                                     onTap: () {
                                       setState(() {
-                                        frequenceType =
-                                            "SERVICE PONCTUEL";
+                                        frequenceType = "SERVICE PONCTUEL";
                                       });
                                     },
                                     child: timeType("SERVICE PONCTUEL")),
@@ -435,8 +433,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                 InkWell(
                                     onTap: () {
                                       setState(() {
-                                        frequenceType =
-                                            "SERVICE RECURRENT";
+                                        frequenceType = "SERVICE RECURRENT";
                                       });
                                     },
                                     child: timeType("SERVICE RECURRENT")),
@@ -456,7 +453,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                         onChanged: (date) {
                                       print('change $date');
                                     }, onConfirm: (date) {
-                                      _bloc.setDateBooking(date);
+                                      _bloc.bookingDateSubject.add(date);
                                     },
                                         currentTime: DateTime.now(),
                                         locale: LocaleType.fr);
@@ -471,8 +468,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                               visible: frequenceType !=
                                   AppConstant.FREQUENCE_BOOKING_PONCTUAL,
                               child: MaterialButton(
-                                onPressed: () =>
-                                    showBottomSheetForDayPick(),
+                                //onPressed: () => showBottomSheetForDayPick(),
+                                onPressed: () => {},
                                 child: Row(
                                   children: [
                                     Icon(
@@ -480,19 +477,16 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                       color: Colors.white,
                                     ),
                                     SizedBox(
-                                        width: MediaQuery.of(context)
-                                                .size
-                                                .width /
-                                            4),
-                                    AppLocalizations
-                                        .current.addDate.text.white
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                4),
+                                    AppLocalizations.current.addDate.text.white
                                         .make()
                                   ],
                                 ),
                                 color: const Color(colorBlueGray),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(30)),
+                                    borderRadius: BorderRadius.circular(30)),
                               ),
                             ),
                             const SizedBox(
@@ -501,32 +495,24 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                           ],
                         ),
                       ),
-                      const Divider(
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
                       Visibility(
                         visible: frequenceType ==
                             AppConstant.FREQUENCE_BOOKING_RECURENT,
                         child: StreamBuilder<List<DayObject>>(
                             stream: _bloc.daysStream,
                             builder: (context, snapshot) {
-                              return snapshot.hasData &&
-                                      snapshot.data != null
+                              return snapshot.hasData && snapshot.data != null
                                   ? Container(
-                                      height: 40 *
-                                          snapshot.data!.length
-                                              .toDouble(),
+                                      height:
+                                          40 * snapshot.data!.length.toDouble(),
                                       width: double.maxFinite,
                                       child: ListView.builder(
                                         itemBuilder: (context, index) =>
                                             Padding(
-                                          padding:
-                                              const EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
                                               "${AppLocalizations.current.each} ${snapshot.data![index].day}"
                                                   .text
@@ -549,8 +535,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                         child: StreamBuilder<DateTime>(
                             stream: _bloc.bookingDateStream,
                             builder: (context, snapshot) {
-                              return snapshot.hasData &&
-                                      snapshot.data != null
+                              return snapshot.hasData && snapshot.data != null
                                   ? Container(
                                       child: Center(
                                           child:
@@ -558,8 +543,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                                   .text
                                                   .bold
                                                   .size(18)
-                                                  .color(
-                                                      Color(0XFF01A6DC))
+                                                  .color(Color(0XFF01A6DC))
                                                   .make()),
                                     )
                                   : Container();
@@ -579,33 +563,54 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                               } else {
                                 if (_bloc.tarificationRootSubject.value
                                     .where((element) =>
-                                        element.list!.indexWhere((item) =>
-                                            item.quantity! > 0) ==
+                                        element.list!.indexWhere(
+                                            (item) => item.quantity! > 0) ==
                                         -1)
                                     .isEmpty) {
-                                  GetIt.I<AppServices>()
-                                      .showSnackbarWithState(Loading(
+                                  GetIt.I<AppServices>().showSnackbarWithState(
+                                      Loading(
                                           hasError: true,
-                                          message: AppLocalizations
-                                              .current
+                                          message: AppLocalizations.current
                                               .pleaseChooseAtLeastOneOption));
+                                  return;
+                                }
+                                if (searchCtrl.text.isEmpty) {
+                                  GetIt.I<AppServices>().showSnackbarWithState(
+                                      Loading(
+                                          hasError: true,
+                                          message:
+                                              "Veuillez entrer votre adresse"));
+                                  return;
+                                }
+                                if (!_bloc.bookingDateSubject.hasValue) {
+                                  GetIt.I<AppServices>().showSnackbarWithState(
+                                      Loading(
+                                          hasError: true,
+                                          message:
+                                              "Veuillez choisir une date"));
+                                  return;
+                                }
+                                if (_bloc.totalSubject.value == 0) {
+                                  GetIt.I<AppServices>().showSnackbarWithState(
+                                      Loading(
+                                          hasError: true,
+                                          message:
+                                              "Veuillez ajouter un service svp"));
                                   return;
                                 }
                                 showRecapSheet();
                               }
                             },
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
+                                borderRadius: BorderRadius.circular(5)),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 30),
+                              padding: const EdgeInsets.symmetric(vertical: 30),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   AppLocalizations.current.book.text
                                       .fontFamily("SFPro")
-                                      .size(18)
+                                      .size(20)
                                       .bold
                                       .white
                                       .make(),
@@ -652,68 +657,73 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
     );
   }
 
-  Widget tarificationITem(TarificationObject tarificationObject, int rootId) {
+  Widget tarificationITem(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          tarificationObject.tarifications!.label!
-              .toUpperCase()
-              .text
-              .size(18)
-              .bold
-              .fontFamily("SFPro")
-              .color(const Color(0XFF01A6DC))
-              .make(),
+          title.toUpperCase().text.size(18).bold.fontFamily("SFPro").make(),
           const SizedBox(
             width: 20,
           ),
-          Row(
-            children: [
-              tarificationObject.quantity!.text
-                  .size(18)
-                  .bold
-                  .fontFamily("SFPro")
-                  .color(const Color(0XFF01A6DC))
-                  .make(),
-              const SizedBox(
-                width: 50,
-              ),
-              InkWell(
-                  onTap: () => _bloc.addTarification(
-                      tarificationObject.tarifications!, -1,
-                      rootId: rootId),
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    child: Center(child: Icon(Icons.remove)),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: tarificationObject.quantity! > 0
-                                ? Colors.grey
-                                : Colors.grey.shade300)),
-                  )),
-              InkWell(
-                onTap: () => _bloc.addTarification(
-                    tarificationObject.tarifications!, 1,
-                    rootId: rootId),
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  child: Center(child: Icon(Icons.add)),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.grey)),
-                ),
-              ),
-            ],
-          )
+          StreamBuilder<TarificationObjectRoot?>(
+              stream: _bloc.selectedServiceStream,
+              builder: (context, snapshot) {
+                return Row(
+                  children: [
+                    "${snapshot.data != null ? snapshot.data!.total : 0}"
+                        .text
+                        .size(18)
+                        .bold
+                        .fontFamily("SFPro")
+                        .color(const Color(0XFF01A6DC))
+                        .make(),
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    InkWell(
+                        onTap: () {
+                          if (snapshot.data!.total > 1) {
+                            _bloc.addTarification(
+                              snapshot.data!,
+                              -1,
+                            );
+                          }
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          child: Center(child: Icon(Icons.remove)),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: snapshot.data != null &&
+                                          snapshot.data!.total > 0
+                                      ? Colors.grey
+                                      : Colors.grey.shade300)),
+                        )),
+                    InkWell(
+                      onTap: () => _bloc.addTarification(
+                        snapshot.data!,
+                        1,
+                      ),
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        child: Center(child: Icon(Icons.add)),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey)),
+                      ),
+                    ),
+                  ],
+                );
+              })
         ],
       ),
     );
   }
 
-  showBottomSheetForDayPick() {
+  /*showBottomSheetForDayPick() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -725,7 +735,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                 Navigator.of(context).pop();
               },
             ));
-  }
+  }*/
 
   Widget timeType(String title) {
     return Container(
@@ -826,140 +836,26 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
   }
 
   void showRecapSheet() {
+    Frequence? frequence =
+        _listProvider.frequenceList.isNotEmpty && frequenceValue != null
+            ? _listProvider.frequenceList
+                .firstWhere((element) => element.id == frequenceValue)
+            : null;
     showModalBottomSheet(
-        context: _scaffoldKey.currentContext!,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (context) => Container(
-              padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    AppLocalizations.current.orderSummary.text
-                        .color(Colors.black54)
-                        .bold
-                        .size(20)
-                        .make(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(
-                      thickness: 2,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        "Service".text.bold.make(),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        widget.service.title!.text.make()
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            AppLocalizations.current.duration.text.bold.make(),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            "${_listProvider.frequenceList != null && _listProvider.frequenceList.isNotEmpty && frequenceValue != null ? _listProvider.frequenceList.firstWhere((element) => element.id == frequenceValue).label : ""}, 4 heures"
-                                .text
-                                .make(),
-                          ],
-                        ),
-                        IconButton(
-                          onPressed: () => () => Navigator.of(context).pop(),
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            AppLocalizations.current.duration.text.bold.make(),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            (searchCtrl.text).text.make(),
-                          ],
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        StreamBuilder<int>(
-                            stream: _bloc.totalStream,
-                            builder: (context, snapshot) {
-                              return snapshot.hasData && snapshot.data != null
-                                  ? Row(
-                                      children: [
-                                        AppLocalizations
-                                            .current.totalAmountToPay.text.bold
-                                            .make(),
-                                        SizedBox(
-                                          width: 50,
-                                        ),
-                                        "FCFA ${UtilsFonction.formatMoney(snapshot.data!)}"
-                                            .text
-                                            .size(18)
-                                            .bold
-                                            .make(),
-                                      ],
-                                    )
-                                  : Container();
-                            }),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    // Text("Détails de la commande",
-                    //     style: TextStyle(
-                    //         fontWeight: FontWeight.bold, fontSize: 15)),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    WidgetTemplate.getActionButtonWithIcon(
-                        callback: () {
-                          bookNow();
-                        },
-                        title: AppLocalizations.current.validate),
-                    SizedBox(
-                      height: 30,
-                    )
-                  ],
-                ),
+        context: context,
+        enableDrag: false,
+        isScrollControlled: true,
+        builder: (context) => Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: BookingRecapScreen(
+                frequence: frequence,
+                services: widget.service,
+                lieu: searchCtrl.text,
+                amount: _bloc.totalSubject.value,
+                onValidate: ({String note = ''}) {
+                  noteCtrl.text = note;
+                  bookNow();
+                },
               ),
             ));
   }

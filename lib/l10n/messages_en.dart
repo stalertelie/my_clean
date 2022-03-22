@@ -63,7 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commune": MessageLookupByLibrary.simpleMessage("Town"),
         "somethingIsWrongErrorLabel":
             MessageLookupByLibrary.simpleMessage("Something went wrong"),
-        "welcome": MessageLookupByLibrary.simpleMessage("Welcome"),
+        "welcome": MessageLookupByLibrary.simpleMessage("Hi"),
         "chooseService":
             MessageLookupByLibrary.simpleMessage("Choose a service"),
         "order": MessageLookupByLibrary.simpleMessage("Order"),

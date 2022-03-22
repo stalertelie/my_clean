@@ -52,7 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0XFFF3F3F8),
-      appBar: AppBar(backgroundColor: const Color(colorPrimary),elevation: 0,),
+      appBar: AppBar(
+        backgroundColor: const Color(colorPrimary),
+        elevation: 0,
+      ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
@@ -61,8 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
               pinned: false,
               floating: true,
               backgroundColor: const Color(0XFFF3F3F8),
-              flexibleSpace: HomeHeader(login: _appProvider.login,),
-              expandedHeight: 300,
+              flexibleSpace: HomeHeader(
+                login: _appProvider.login,
+              ),
+              expandedHeight: 250,
               stretch: true,
               forceElevated: innerBoxIsScrolled,
             ),
@@ -72,8 +77,17 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16, bottom: 16),
-              child: "Services".text.bold.size(45).black.make(),
+              padding: const EdgeInsets.only(left: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  "Services".text.bold.size(45).black.make(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  "Nettoyage".text.bold.size(25).make()
+                ],
+              ),
             ),
             Expanded(
               child: StreamBuilder<Loading>(
@@ -81,140 +95,157 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context, snapshot) {
                     return snapshot.hasData && snapshot.data!.loading == false
                         ? StreamBuilder<List<Services>>(
-                        stream: _bloc.servicesStream,
-                        builder: (context, snapshot) {
-                          return snapshot.hasData
-                              ? Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 0.9),
-                            itemBuilder: (context, index) =>
-                                  GestureDetector(
-                                      onTap: () {
-                                        if (snapshot.data![index].title!
-                                            .toLowerCase()
-                                            .contains(
-                                            "profondeur") ||
-                                            snapshot.data![index].title!
-                                                .toLowerCase()
-                                                .contains("deep")) {
-                                          UtilsFonction.NavigateToRoute(
-                                              context,
-                                              BookingProfondeurScreen(
-                                                  service: snapshot
-                                                      .data![index]));
-                                        } else if (snapshot
-                                            .data![index].title!
-                                            .toLowerCase()
-                                            .contains("vehicule") ||
-                                            snapshot.data![index].title!
-                                                .toLowerCase()
-                                                .contains("cars")) {
-                                          UtilsFonction.NavigateToRoute(
-                                              context,
-                                              BookingVehicleScreen(
-                                                  service: snapshot
-                                                      .data![index]));
-                                        } else if (snapshot
-                                            .data![index].title!
-                                            .toLowerCase()
-                                            .contains("matelas") ||
-                                            snapshot.data![index].title!
-                                                .toLowerCase()
-                                                .contains("mattress")) {
-                                          UtilsFonction.NavigateToRoute(
-                                              context,
-                                              BookingMattressScreen(
-                                                  service: snapshot
-                                                      .data![index]));
-                                        } else if (snapshot
-                                            .data![index].title!
-                                            .toLowerCase()
-                                            .contains("tapis") ||
-                                            snapshot.data![index].title!
-                                                .toLowerCase()
-                                                .contains(
-                                                " carpet cleaning")) {
-                                          UtilsFonction.NavigateToRoute(
-                                              context,
-                                              BookingCarpetScreen(
-                                                  service: snapshot
-                                                      .data![index]));
-                                        } else if (snapshot
-                                            .data![index].title!
-                                            .toLowerCase()
-                                            .contains(
-                                            "climatiseur") ||
-                                            snapshot.data![index].title!
-                                                .toLowerCase()
-                                                .contains(
-                                                "conditioner")) {
-                                          UtilsFonction.NavigateToRoute(
-                                              context,
-                                              BookingClimatiseurScreen(
-                                                  service: snapshot
-                                                      .data![index]));
-                                        } else if (snapshot
-                                            .data![index].title!
-                                            .toLowerCase()
-                                            .contains(
-                                            "chaise, fauteuils et canapes") ||
-                                            snapshot.data![index].title!
-                                                .toLowerCase()
-                                                .contains(
-                                                "chairs, armchairs and carpet")) {
-                                          UtilsFonction.NavigateToRoute(
-                                              context,
-                                              BookingSofaScreen(
-                                                  service: snapshot
-                                                      .data![index]));
-                                        } else if (snapshot
-                                            .data![index].title!
-                                            .toLowerCase()
-                                            .contains(
-                                            "désinfection") ||
-                                            snapshot.data![index].title!
-                                                .toLowerCase()
-                                                .contains(
-                                                "disinfection")) {
-                                          UtilsFonction.NavigateToRoute(
-                                              context,
-                                              BookingDesinfectionScreen(
-                                                  service: snapshot
-                                                      .data![index]));
-                                        } else {
-                                          Fluttertoast.showToast(
-                                              msg: "Bientôt disponible",
-                                              toastLength:
-                                              Toast.LENGTH_SHORT,
-                                              gravity:
-                                              ToastGravity.BOTTOM,
-                                              timeInSecForIosWeb: 1,
-                                              //backgroundColor: Colors.red,
-                                              //textColor: Colors.white,
-                                              fontSize: 16.0);
-                                        }
-                                      },
-                                      child: ServiceItem(
-                                          service:
-                                          snapshot.data![index])),
-                            itemCount: snapshot.data!.length,
-                          ),
-                              )
-                              : WidgetTemplate.getEmptyBox(
-                              message:
-                              "Aucun service disponible pour le moment");
-                        })
+                            stream: _bloc.servicesStream,
+                            builder: (context, snapshot) {
+                              return snapshot.hasData
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: GridView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 0,
+                                                mainAxisSpacing: 0,
+                                                childAspectRatio: 0.8),
+                                        itemBuilder: (context, index) =>
+                                            GestureDetector(
+                                                onTap: () {
+                                                  if (snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "profondeur") ||
+                                                      snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains("deep")) {
+                                                    UtilsFonction.NavigateToRoute(
+                                                        context,
+                                                        BookingProfondeurScreen(
+                                                            service: snapshot
+                                                                .data![index]));
+                                                  } else if (snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "vehicule") ||
+                                                      snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains("cars")) {
+                                                    UtilsFonction.NavigateToRoute(
+                                                        context,
+                                                        BookingVehicleScreen(
+                                                            service: snapshot
+                                                                .data![index]));
+                                                  } else if (snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "matelas") ||
+                                                      snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "mattress")) {
+                                                    UtilsFonction.NavigateToRoute(
+                                                        context,
+                                                        BookingMattressScreen(
+                                                            service: snapshot
+                                                                .data![index]));
+                                                  } else if (snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains("tapis") ||
+                                                      snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              " carpet cleaning")) {
+                                                    UtilsFonction
+                                                        .NavigateToRoute(
+                                                            context,
+                                                            BookingCarpetScreen(
+                                                                service: snapshot
+                                                                        .data![
+                                                                    index]));
+                                                  } else if (snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "climatiseur") ||
+                                                      snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "conditioner")) {
+                                                    UtilsFonction.NavigateToRoute(
+                                                        context,
+                                                        BookingClimatiseurScreen(
+                                                            service: snapshot
+                                                                .data![index]));
+                                                  } else if (snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "chaise, fauteuils et canapes") ||
+                                                      snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "chairs, armchairs and carpet")) {
+                                                    UtilsFonction
+                                                        .NavigateToRoute(
+                                                            context,
+                                                            BookingSofaScreen(
+                                                                service: snapshot
+                                                                        .data![
+                                                                    index]));
+                                                  } else if (snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "désinfection") ||
+                                                      snapshot
+                                                          .data![index].title!
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              "disinfection")) {
+                                                    UtilsFonction.NavigateToRoute(
+                                                        context,
+                                                        BookingDesinfectionScreen(
+                                                            service: snapshot
+                                                                .data![index]));
+                                                  } else {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Bientôt disponible",
+                                                        toastLength:
+                                                            Toast.LENGTH_SHORT,
+                                                        gravity:
+                                                            ToastGravity.BOTTOM,
+                                                        timeInSecForIosWeb: 1,
+                                                        //backgroundColor: Colors.red,
+                                                        //textColor: Colors.white,
+                                                        fontSize: 16.0);
+                                                  }
+                                                },
+                                                child: ServiceItem(
+                                                    service:
+                                                        snapshot.data![index])),
+                                        itemCount: snapshot.data!.length,
+                                      ),
+                                    )
+                                  : WidgetTemplate.getEmptyBox(
+                                      message:
+                                          "Aucun service disponible pour le moment");
+                            })
                         : const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                            child: CircularProgressIndicator(),
+                          );
                   }),
             )
           ],
@@ -227,18 +258,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Material(
-          elevation: 3,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-              height: 150,
-              width: double.maxFinite,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: UtilsFonction.CachedImage(service.contentUrl ?? ""))),
+        Container(
+            //height: 150,
+            width: MediaQuery.of(context).size.width - 10,
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: UtilsFonction.CachedImage(service.contentUrl ?? ""))),
+        const SizedBox(
+          height: 5,
         ),
-        const SizedBox(height: 5,),
-        Text(service.title?.toTitleCase() ?? '', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            service.title?.toTitleCase() ?? '',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          ),
+        )
       ],
     );
   }

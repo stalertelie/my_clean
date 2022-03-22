@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/services/localization.dart';
@@ -231,17 +232,18 @@ class UtilsFonction extends Object {
   }
 
   static CachedNetworkImage CachedImage(String url,
-      {BlendMode blendmod = BlendMode.color, Color c = Colors.transparent}) {
+      {BlendMode blendmod = BlendMode.color,
+      Color c = Colors.transparent,
+      double? width}) {
     return CachedNetworkImage(
       imageUrl: url,
-      placeholder: (context, url) => const SizedBox(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-        height: 10,
-        width: 10,
-      ),
+      placeholder: (context, url) => ConstrainedBox(
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+          constraints: const BoxConstraints(maxHeight: 20, maxWidth: 10)),
       fit: BoxFit.fill,
+      width: width ?? double.maxFinite,
       colorBlendMode: blendmod,
       color: c,
     );

@@ -29,6 +29,7 @@ import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/pages/auth/login_page.dart';
 import 'package:my_clean/pages/booking/booking_bloc.dart';
+import 'package:my_clean/pages/booking/booking_recap.dart';
 import 'package:my_clean/pages/booking/booking_sucess_page.dart';
 import 'package:my_clean/pages/booking/day_time_picker.dart';
 import 'package:my_clean/pages/booking/search_page.dart';
@@ -115,6 +116,13 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
               initialNumber: e.initialNumber,
               quantity: 0))
           .toList());
+      _bloc.setTarificationRoot(widget.service.tarifications!
+          .map((e) => TarificationObjectRoot(
+              id: e.id!.toString(),
+              libelle: e.label!,
+              list:
+                  [TarificationObject(quantity: 0, tarifications: e)].toList()))
+          .toList());
       setState(() {
         tarification = widget.service.tarifications![0];
       });
@@ -179,6 +187,12 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
         key: _scaffoldKey,
         appBar: AppBar(
           elevation: 0,
+          leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+                size: 30,
+              )),
           backgroundColor: Color(colorDefaultService),
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
@@ -214,7 +228,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                       ),
                     },
                     initialCameraPosition: CameraPosition(
-                      target: LatLng(latitude!, longitude!),
+                      target: LatLng(latitude ?? 0, longitude ?? 0),
                       zoom: 14.4746,
                     ),
                   ),
@@ -235,8 +249,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
                                   'images/icons/map-marker.svg',
@@ -245,14 +258,14 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                 Expanded(
                                     child: GestureDetector(
                                         child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10),
                                             height: 40,
                                             child: Text(searchCtrl.text)),
-                                        onTap: () =>
-                                            showSearhPage(context))),
+                                        onTap: () => showSearhPage(context))),
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Container(
                                         height: 20,
@@ -260,7 +273,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                         color: Colors.black,
                                       ),
                                       TextButton(
-                                          onPressed: (){
+                                          onPressed: () {
                                             setState(() {
                                               showMap = !showMap;
                                             });
@@ -272,7 +285,6 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                               ],
                             ),
                           )),
-
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -282,7 +294,8 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                               "CHOISISSEZ UNE SECTION",
                               style: TextStyle(
                                   color: Color(colorPrimary),
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
                               height: 10,
@@ -292,51 +305,107 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                               builder: (context, snapshot) {
                                 return (snapshot.hasData &&
                                         snapshot.data != null
-                                    ? Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: snapshot.data!
-                                            .mapIndexed<Widget>(
-                                                (e, idx) => Padding(
-                                                    padding: EdgeInsets
-                                                        .symmetric(
-                                                            horizontal: 0,
-                                                            vertical: 0),
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        Row(
-                                                          children: <
-                                                              Widget>[
-                                                            Radio<String>(
-                                                              activeColor:
-                                                                  Color(
-                                                                      0XFF01A6DC),
-                                                              value: e
-                                                                  .label!,
-                                                              groupValue:
-                                                                  selectedClimatiseur,
-                                                              onChanged:
-                                                                  (value) {
-                                                                setState(
-                                                                    () {
-                                                                  selectedClimatiseur =
-                                                                      value;
-                                                                  tarification =
-                                                                      e;
-                                                                  tarificationId =
-                                                                      idx;
-                                                                });
-                                                              },
-                                                            ),
-                                                            Text(
-                                                                e.label!),
-                                                          ],
-                                                        )
-                                                      ],
-                                                    )))
-                                            .toList(),
+                                    ? Container(
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.white),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: snapshot.data!
+                                              .mapIndexed<Widget>((e, idx) =>
+                                                  Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 0,
+                                                              vertical: 0),
+                                                      child: Stack(
+                                                        children: [
+                                                          Column(
+                                                            children: <Widget>[
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Text(
+                                                                    e.label!
+                                                                        .toUpperCase(),
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            20),
+                                                                  ),
+                                                                  Radio<String>(
+                                                                    activeColor:
+                                                                        Color(
+                                                                            0XFF01A6DC),
+                                                                    value: e
+                                                                        .label!,
+                                                                    groupValue:
+                                                                        selectedClimatiseur,
+                                                                    onChanged:
+                                                                        (value) {
+                                                                      setState(
+                                                                          () {
+                                                                        selectedClimatiseur =
+                                                                            value;
+                                                                        tarification =
+                                                                            e;
+                                                                        tarificationId =
+                                                                            idx;
+                                                                      });
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              tarificationITem(
+                                                                  e, idx)
+                                                            ],
+                                                          ),
+                                                          Positioned(
+                                                              top: 0,
+                                                              left: 0,
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () {
+                                                                  print("icic");
+                                                                  setState(() {
+                                                                    selectedClimatiseur =
+                                                                        e.label;
+                                                                    tarification =
+                                                                        e;
+                                                                    tarificationId =
+                                                                        idx;
+                                                                  });
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  height: 300,
+                                                                  width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  decoration: BoxDecoration(
+                                                                      color: selectedClimatiseur != null && selectedClimatiseur == e.label
+                                                                          ? Colors
+                                                                              .transparent
+                                                                          : Colors
+                                                                              .white
+                                                                              .withOpacity(0.6)),
+                                                                ),
+                                                              ))
+                                                        ],
+                                                      )))
+                                              .toList(),
+                                        ),
                                       )
                                     : Container());
                               },
@@ -344,72 +413,6 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                             const SizedBox(
                               height: 25,
                             ),
-                            Text("Combien de climatiseurs avez-vous ?"),
-                            Row(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  "Nombre",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                SizedBox(
-                                  width: 30,
-                                ),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width *
-                                          0.2,
-                                  child: TextField(
-                                    autofocus: false,
-                                    controller: numberCtrl,
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black),
-                                      ),
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 25,
-                            ),
-                            AppLocalizations
-                                .current.isThereAnythingElse.text.black
-                                .fontWeight(FontWeight.w600)
-                                .size(15)
-                                .make(),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              maxLines: 10,
-                              minLines: 5,
-                              maxLength: 200,
-                              controller: noteCtrl,
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                  hintText: AppLocalizations
-                                      .current.enterYourNote,
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintStyle: TextStyle(
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 10),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none)),
-                            )
                           ],
                         ),
                       ),
@@ -444,8 +447,8 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                               height: 50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                      color: Color(colorBlueGray)),
+                                  border:
+                                      Border.all(color: Color(colorBlueGray)),
                                   color: Colors.grey.shade500),
                               child: Center(
                                 child: Text("Service ponctuel",
@@ -488,8 +491,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                       StreamBuilder<DateTime>(
                           stream: _bloc.bookingDateStream,
                           builder: (context, snapshot) {
-                            return snapshot.hasData &&
-                                    snapshot.data != null
+                            return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
                                         "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
@@ -511,41 +513,35 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                   context, LoginScreen());
                             } else {
                               if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez choisir une date"));
+                                        message: "Veuillez choisir une date"));
                                 return;
                               }
                               if (searchCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
                                         message:
                                             "Veuillez entrer votre adresse"));
                                 return;
                               }
                               if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez choisir une date"));
+                                        message: "Veuillez choisir une date"));
                                 return;
                               }
-                              if (numberCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>()
-                                    .showSnackbarWithState(Loading(
+                              if (_bloc.totalSubject.value == 0) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
                                         hasError: true,
                                         message:
-                                            "Veuillez saisir le nombre de mètres"));
+                                            "Veuillez ajouter un service svp"));
                                 return;
                               }
-                              _bloc.addCarpetTarification(
-                                  tarification,
-                                  int.parse(numberCtrl.text),
-                                  tarificationId);
                               showRecapSheet();
                             }
                           },
@@ -559,6 +555,59 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
         ),
       );
     });
+  }
+
+  Widget tarificationITem(Price price, int rootId) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          'Nombre'.toUpperCase().text.size(18).bold.fontFamily("SFPro").make(),
+          const SizedBox(
+            width: 20,
+          ),
+          Row(
+            children: [
+              price.quantity!.text
+                  .size(18)
+                  .bold
+                  .fontFamily("SFPro")
+                  .color(const Color(0XFF01A6DC))
+                  .make(),
+              const SizedBox(
+                width: 50,
+              ),
+              InkWell(
+                  onTap: () => _bloc.addTarificationSimplyAirCondition(
+                      price, -1,
+                      rootId: rootId),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    child: Center(child: Icon(Icons.remove)),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: price.quantity! > 0
+                                ? Colors.grey
+                                : Colors.grey.shade300)),
+                  )),
+              InkWell(
+                onTap: () => _bloc.addTarificationSimplyAirCondition(price, 1,
+                    rootId: rootId),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  child: Center(child: Icon(Icons.add)),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.grey)),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   showBottomSheetForDayPick() {
@@ -636,6 +685,29 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
   }
 
   void showRecapSheet() {
+    Frequence? frequence =
+        _listProvider.frequenceList.isNotEmpty && frequenceValue != null
+            ? _listProvider.frequenceList
+                .firstWhere((element) => element.id == frequenceValue)
+            : null;
+    showModalBottomSheet(
+        context: context,
+        enableDrag: false,
+        isScrollControlled: true,
+        builder: (context) => Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: BookingRecapScreen(
+                frequence: frequence,
+                services: widget.service,
+                lieu: searchCtrl.text,
+                amount: _bloc.totalSubject.value,
+                onValidate: ({String note = ''}) {
+                  noteCtrl.text = note;
+                  bookNow();
+                },
+              ),
+            ));
+    return;
     showModalBottomSheet(
         context: _scaffoldKey.currentContext!,
         shape: RoundedRectangleBorder(
