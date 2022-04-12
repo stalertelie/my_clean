@@ -378,20 +378,20 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            "DATE ET HEURE"
+                            AppLocalizations.current.dateAndHour
                                 .text
                                 .size(18)
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            "Quand voulez vous l'exécution du service"
+                            AppLocalizations.current.whenDoYouWantTheExecution
                                 .text
                                 .size(10)
                                 .fontFamily("SFPro")
                                 .bold
                                 .gray500
                                 .make(),
-                            const SizedBox(
+                            /*onst SizedBox(
                               height: 10,
                             ),
                             Row(
@@ -417,7 +417,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                             ),
                             const SizedBox(
                               height: 10,
-                            ),
+                            ),*/
                             Visibility(
                               visible: frequenceType ==
                                   AppConstant.FREQUENCE_BOOKING_PONCTUAL,
@@ -429,13 +429,18 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                         onChanged: (date) {
                                       print('change $date');
                                     }, onConfirm: (date) {
-                                      _bloc.setDateBooking(date);
+                                      if (date.hour > 17 || date.hour < 8) {
+                                        UtilsFonction.showErrorDialog(context,
+                                            "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                      } else {
+                                        _bloc.setDateBooking(date);
+                                      }
                                     },
                                         currentTime: DateTime.now(),
                                         locale: LocaleType.fr);
                                   },
-                                  child: const Text(
-                                    'Choisir une date',
+                                  child: Text(
+                                    AppLocalizations.current.selectDate,
                                     style: TextStyle(
                                         color: Colors.blue, fontSize: 15),
                                   )),
@@ -513,7 +518,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
                                                   .text
                                                   .bold
                                                   .size(18)
@@ -770,6 +775,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
         builder: (context) => Padding(
               padding: const EdgeInsets.only(top: 60),
               child: BookingRecapScreen(
+                bookingDate: _bloc.bookingDateSubject.value,
                 frequence: frequence,
                 services: widget.service,
                 lieu: searchCtrl.text,

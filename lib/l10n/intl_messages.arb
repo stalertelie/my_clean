@@ -55,6 +55,21 @@
     "type": "text",
     "placeholders": {}
   },
+  "myInvoice": "myInvoice",
+  "@myInvoice": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "helpCenter": "helpCenter",
+  "@helpCenter": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "promoCode": "promoCode",
+  "@promoCode": {
+    "type": "text",
+    "placeholders": {}
+  },
   "changeLanguage": "changeLanguage",
   "@changeLanguage": {
     "type": "text",
@@ -189,6 +204,11 @@
   },
   "selectDate": "selectDate",
   "@selectDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectHour": "selectHour",
+  "@selectHour": {
     "type": "text",
     "placeholders": {}
   },

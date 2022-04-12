@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:ioc/ioc.dart';
+import 'package:collection/collection.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/models/services.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/booking/booking_carpet.dart';
+import 'package:my_clean/pages/booking/booking_cleaning.dart';
 import 'package:my_clean/pages/booking/booking_climatiseur.dart';
 import 'package:my_clean/pages/booking/booking_desinfection.dart';
 import 'package:my_clean/pages/booking/booking_profondeur_page.dart';
@@ -17,6 +20,7 @@ import 'package:my_clean/pages/home/home_bloc.dart';
 import 'package:my_clean/pages/home/home_header.dart';
 import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/providers/app_provider.dart';
+import 'package:my_clean/services/app_service.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
@@ -92,11 +96,24 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: StreamBuilder<Loading>(
                   stream: _bloc.loading,
-                  builder: (context, snapshot) {
-                    return snapshot.hasData && snapshot.data!.loading == false
+                  builder: (context, snapshotLoading) {
+                    return snapshotLoading.hasData &&
+                            snapshotLoading.data!.loading == false
                         ? StreamBuilder<List<Services>>(
                             stream: _bloc.servicesStream,
                             builder: (context, snapshot) {
+                              if (GetIt.I<AppServices>().servicePassedId !=
+                                      null &&
+                                  snapshot.hasData &&
+                                  snapshot.data != null &&
+                                  snapshot.data!.isNotEmpty) {
+                                print(GetIt.I<AppServices>().servicePassedId);
+                                Services? services = snapshot.data!
+                                    .firstWhereOrNull((element) =>
+                                        element.id!.trim() ==
+                                        GetIt.I<AppServices>().servicePassedId);
+                                redirectToServiceFromCommand(services);
+                              }
                               return snapshot.hasData
                                   ? Padding(
                                       padding: const EdgeInsets.all(10.0),
@@ -113,125 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         itemBuilder: (context, index) =>
                                             GestureDetector(
                                                 onTap: () {
-                                                  if (snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "profondeur") ||
-                                                      snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains("deep")) {
-                                                    UtilsFonction.NavigateToRoute(
-                                                        context,
-                                                        BookingProfondeurScreen(
-                                                            service: snapshot
-                                                                .data![index]));
-                                                  } else if (snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "vehicule") ||
-                                                      snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains("cars")) {
-                                                    UtilsFonction.NavigateToRoute(
-                                                        context,
-                                                        BookingVehicleScreen(
-                                                            service: snapshot
-                                                                .data![index]));
-                                                  } else if (snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "matelas") ||
-                                                      snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "mattress")) {
-                                                    UtilsFonction.NavigateToRoute(
-                                                        context,
-                                                        BookingMattressScreen(
-                                                            service: snapshot
-                                                                .data![index]));
-                                                  } else if (snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains("tapis") ||
-                                                      snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              " carpet cleaning")) {
-                                                    UtilsFonction
-                                                        .NavigateToRoute(
-                                                            context,
-                                                            BookingCarpetScreen(
-                                                                service: snapshot
-                                                                        .data![
-                                                                    index]));
-                                                  } else if (snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "climatiseur") ||
-                                                      snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "conditioner")) {
-                                                    UtilsFonction.NavigateToRoute(
-                                                        context,
-                                                        BookingClimatiseurScreen(
-                                                            service: snapshot
-                                                                .data![index]));
-                                                  } else if (snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "chaise, fauteuils et canapes") ||
-                                                      snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "chairs, armchairs and carpet")) {
-                                                    UtilsFonction
-                                                        .NavigateToRoute(
-                                                            context,
-                                                            BookingSofaScreen(
-                                                                service: snapshot
-                                                                        .data![
-                                                                    index]));
-                                                  } else if (snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "désinfection") ||
-                                                      snapshot
-                                                          .data![index].title!
-                                                          .toLowerCase()
-                                                          .contains(
-                                                              "disinfection")) {
-                                                    UtilsFonction.NavigateToRoute(
-                                                        context,
-                                                        BookingDesinfectionScreen(
-                                                            service: snapshot
-                                                                .data![index]));
-                                                  } else {
-                                                    Fluttertoast.showToast(
-                                                        msg:
-                                                            "Bientôt disponible",
-                                                        toastLength:
-                                                            Toast.LENGTH_SHORT,
-                                                        gravity:
-                                                            ToastGravity.BOTTOM,
-                                                        timeInSecForIosWeb: 1,
-                                                        //backgroundColor: Colors.red,
-                                                        //textColor: Colors.white,
-                                                        fontSize: 16.0);
-                                                  }
+                                                  goToServiceDetail(
+                                                      snapshot.data![index]);
                                                 },
                                                 child: ServiceItem(
                                                     service:
@@ -252,6 +152,63 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void redirectToServiceFromCommand(Services? services) async {
+    if (services != null) {
+      Future.delayed(
+          const Duration(milliseconds: 300), () => goToServiceDetail(services));
+      GetIt.I<AppServices>().setServicePassedId(null);
+    }
+  }
+
+  void goToServiceDetail(Services services) {
+    if (services.title!.toLowerCase().contains("profondeur") ||
+        services.title!.toLowerCase().contains("deep")) {
+      UtilsFonction.NavigateToRoute(
+          context, BookingProfondeurScreen(service: services));
+    } else if (services.title!.toLowerCase().contains("vehicule") ||
+        services.title!.toLowerCase().contains("cars")) {
+      UtilsFonction.NavigateToRoute(
+          context, BookingVehicleScreen(service: services));
+    } else if (services.title!.toLowerCase().contains("matelas") ||
+        services.title!.toLowerCase().contains("mattress")) {
+      UtilsFonction.NavigateToRoute(
+          context, BookingMattressScreen(service: services));
+    } else if (services.title!.toLowerCase().contains("cleaning") ||
+        services.title!.toLowerCase().contains("domicile")) {
+      UtilsFonction.NavigateToRoute(
+          context, BookingCleaningScreen(service: services));
+    } else if (services.title!.toLowerCase().contains("tapis") ||
+        services.title!.toLowerCase().contains(" carpet cleaning")) {
+      UtilsFonction.NavigateToRoute(
+          context, BookingCarpetScreen(service: services));
+    } else if (services.title!.toLowerCase().contains("climatiseur") ||
+        services.title!.toLowerCase().contains("conditioner")) {
+      UtilsFonction.NavigateToRoute(
+          context, BookingClimatiseurScreen(service: services));
+    } else if (services.title!
+            .toLowerCase()
+            .contains("chaise, fauteuils et canapes") ||
+        services.title!
+            .toLowerCase()
+            .contains("chairs, armchairs and carpet")) {
+      UtilsFonction.NavigateToRoute(
+          context, BookingSofaScreen(service: services));
+    } else if (services.title!.toLowerCase().contains("désinfection") ||
+        services.title!.toLowerCase().contains("disinfection")) {
+      UtilsFonction.NavigateToRoute(
+          context, BookingDesinfectionScreen(service: services));
+    } else {
+      Fluttertoast.showToast(
+          msg: "Bientôt disponible",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          //backgroundColor: Colors.red,
+          //textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   Widget ServiceItem({required Services service}) {

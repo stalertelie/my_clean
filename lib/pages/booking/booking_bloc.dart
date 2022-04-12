@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
 import 'package:ioc/ioc.dart';
+import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/constants/url_constant.dart';
 import 'package:my_clean/models/base_bloc.dart';
@@ -9,6 +10,8 @@ import 'package:my_clean/models/booking.dart';
 import 'package:my_clean/models/booking_tarification.dart';
 import 'package:my_clean/models/data_response.dart';
 import 'package:my_clean/models/entities/frequence.dart';
+import 'package:my_clean/models/extra_service.dart';
+import 'package:my_clean/models/frequence_multiplicity.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/models/price.dart';
 import 'package:my_clean/models/price_booking.dart';
@@ -52,6 +55,10 @@ class BookingBloc extends BaseBloc {
   Stream<int> get totalStream => _totalSubject.stream;
   final _totalSubject = BehaviorSubject<int>.seeded(0);
 
+  Stream<int> get totalAbonmentStream => _totalAbonmentSubject.stream;
+  final _totalAbonmentSubject = BehaviorSubject<int>.seeded(0);
+  BehaviorSubject<int> get totalAbonmentSubject => _totalAbonmentSubject;
+
   BehaviorSubject<int> get totalSubject => _totalSubject;
 
   Stream<List<Price>> get simpleTarificationStream =>
@@ -61,9 +68,82 @@ class BookingBloc extends BaseBloc {
   BehaviorSubject<List<Price>> get simpleTarification =>
       _simpleTarificationSubject;
 
+  Stream<List<ExtraService>> get extrasStream => _extrasSubject.stream;
+  final _extrasSubject = BehaviorSubject<List<ExtraService>>.seeded([]);
+
+  Stream<List<ExtraService>> get selectedExtrasStream =>
+      _selectedExtrasSubject.stream;
+  final _selectedExtrasSubject = BehaviorSubject<List<ExtraService>>.seeded([]);
+  BehaviorSubject<List<ExtraService>> get selectedExtrasSubject =>
+      _selectedExtrasSubject;
+
+  Stream<bool> get isPonctualStream => _isPonctualSubject.stream;
+  final _isPonctualSubject = BehaviorSubject<bool>.seeded(true);
+  BehaviorSubject<bool> get isPonctualSubject => _isPonctualSubject;
+
+  Stream<int> get radioFrequenceStream => _radioFrequenceSubject.stream;
+  final _radioFrequenceSubject = BehaviorSubject<int>.seeded(1);
+  BehaviorSubject<int> get radioFrequenceSubject => _radioFrequenceSubject;
+
+  Stream<List<String>> get dayListStream => _dayListSubject.stream;
+  final _dayListSubject = BehaviorSubject<List<String>>.seeded([]);
+  BehaviorSubject<List<String>> get dayListSubject => _dayListSubject;
+
+  Stream<String> get frequenceHoureStream => _frequenceHoureSubject.stream;
+  final _frequenceHoureSubject =
+      BehaviorSubject<String>.seeded(AppConstant.hourList[0]);
+  BehaviorSubject<String> get frequenceHoureSubject => _frequenceHoureSubject;
+
+  Stream<int> get salleBainStream => _salleBainSubject.stream;
+  final _salleBainSubject = BehaviorSubject<int>.seeded(0);
+
   BookingBloc() {
     _tarificationsSubject.add([]);
     _daysSubject.add([]);
+  }
+
+  void addDays(String day) {
+    if (_dayListSubject.value.contains(day)) {
+      _dayListSubject.value.removeWhere((element) => element == day);
+    } else {
+      if (_radioFrequenceSubject.value > _dayListSubject.value.length) {
+        _dayListSubject.value.add(day);
+      }
+    }
+    _dayListSubject.add(_dayListSubject.value);
+  }
+
+  getExtratFormServices(String idService) {
+    RequestExtension<ExtraService> _requestExtension = RequestExtension();
+
+    Future<dynamic> response =
+        _requestExtension.get(UrlConstant.url_extras + "?service=${idService}");
+    response.then((value) {
+      DataResponse<ExtraService> result = value as DataResponse<ExtraService>;
+      if (result.hydraMember != null && result.hydraMember!.isNotEmpty) {
+        _extrasSubject.add(result.hydraMember!);
+      }
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
+  void addExtra(ExtraService extraService) {
+    if (!_selectedExtrasSubject.hasValue ||
+        _selectedExtrasSubject.value == null) {
+      _selectedExtrasSubject.add([]);
+    }
+    if (_selectedExtrasSubject.value
+        .where((element) => element.id == extraService.id)
+        .isEmpty) {
+      List<ExtraService> list = _selectedExtrasSubject.value;
+      list.add(extraService);
+      _selectedExtrasSubject.add(list);
+    } else {
+      _selectedExtrasSubject.value
+          .removeWhere((element) => element.id == extraService.id);
+      _selectedExtrasSubject.add(_selectedExtrasSubject.value);
+    }
   }
 
   setTarificationRoot(List<TarificationObjectRoot> list) {
@@ -108,7 +188,7 @@ class BookingBloc extends BaseBloc {
       {required int rootId, bool? isOperatorValueNull = false}) {
     int index = _simpleTarificationSubject.value
         .indexWhere((element) => element.id == tarification.id);
-
+    print(index);
     if (index != -1) {
       Price p = _simpleTarificationSubject.value.elementAt(index);
       p.quantity = (p.quantity ?? 0) + quantity;
@@ -173,6 +253,40 @@ class BookingBloc extends BaseBloc {
     _totalSubject.add(total);
   }
 
+  addSalleBin(int value) {
+    if (value < 1) {
+      if (_salleBainSubject.value == 0) {
+        return;
+      }
+    }
+    _salleBainSubject.add(_salleBainSubject.value + value);
+  }
+
+  addHomeCleanTarification(Price tarification, int quantity, int index) {
+    int total = 0;
+    int totalAbonnement = 0;
+    if (index != -1) {
+      Price tarificationActive = _simpleTarificationSubject.value[index];
+      if (tarificationActive.quantity == 0 && quantity == -1) {
+        return;
+      }
+      tarificationActive.quantity =
+          (tarificationActive.quantity ?? 0) + quantity;
+      _simpleTarificationSubject.add(_simpleTarificationSubject.value);
+
+      for (var item in _simpleTarificationSubject.value) {
+        if (item.quantity! > 0) {
+          total += item.price! + (item.operatorValue! * (item.quantity! - 1));
+          totalAbonnement += item.priceAbonment! +
+              (item.operatorValue! * (item.quantity! - 1));
+        }
+      }
+    }
+
+    _totalSubject.add(total);
+    _totalAbonmentSubject.add(totalAbonnement);
+  }
+
   addCarpetTarification(Price tarification, int carpetSize, int sofaTypeIndex) {
     int total = 0;
     if (sofaTypeIndex != -1) {
@@ -232,6 +346,13 @@ class BookingBloc extends BaseBloc {
       }
     }
 
+    if (_dayListSubject.hasValue) {
+      for (var element in _dayListSubject.value) {
+        frequence
+            .add(Frequence(day: element, time: _frequenceHoureSubject.value));
+      }
+    }
+
     List<PriceBooking> listPrice = [];
 
     if (_tarificationRootSubject.hasValue) {
@@ -259,7 +380,9 @@ class BookingBloc extends BaseBloc {
         prices: listPrice,
         frequence: frequence,
         priceTotal: _totalSubject.value,
-        choicesExtra: [],
+        choicesExtra: _extrasSubject.value != null
+            ? _extrasSubject.value.map((e) => e.id!).toList()
+            : [],
         note: note,
         user: userID,
         isMeubler: isMeubler);

@@ -13,6 +13,11 @@ class RootBLoc {
 
   BehaviorSubject<int> get drawerIndexSubject => _drawerIndexSubject;
 
+  Stream<String> get servicePassedIdStream => _servicePassedIdSubject.stream;
+  final _servicePassedIdSubject = BehaviorSubject<String>();
+  BehaviorSubject<String> get servicePassedIdSubject =>
+      _servicePassedIdSubject;
+
   RootBLoc() {
     _pageindexSubject.add(0);
     _drawerIndexSubject.add(0);
@@ -20,6 +25,10 @@ class RootBLoc {
 
   switchToPage(int index) {
     _pageindexSubject.add(index);
+  }
+
+  setServicePAssedId(String id) {
+    _servicePassedIdSubject.add(id);
   }
 
   switchDrawerIndex(int index) {

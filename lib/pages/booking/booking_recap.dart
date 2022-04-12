@@ -15,6 +15,11 @@ class BookingRecapScreen extends StatefulWidget {
   final Frequence? frequence;
   final String? lieu;
   final int amount;
+  final int frequenceByWeek;
+  final List<String> days;
+  final String hour;
+  final DateTime bookingDate;
+  final bool isSubscription;
   final Function({String note}) onValidate;
 
   const BookingRecapScreen(
@@ -23,7 +28,12 @@ class BookingRecapScreen extends StatefulWidget {
       required this.frequence,
       this.lieu,
       required this.amount,
-      required this.onValidate})
+      required this.onValidate,
+      this.frequenceByWeek = 0,
+      this.days = const [],
+      this.hour = "",
+      this.isSubscription = false,
+      required this.bookingDate})
       : super(key: key);
 
   @override
@@ -84,31 +94,37 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                 height: 10,
               ),
               "${widget.services.title}".text.size(18).bold.make(),
-              /*const SizedBox(
-                height: 10,
+              Visibility(
+                visible: widget.isSubscription == true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    "Passage récurrent".text.make(),
+                    "${widget.frequenceByWeek} fois par semaine".text.make(),
+                    widget.days.join(",").text.size(18).bold.make(),
+                    "à, ${widget.hour}".text.size(18).bold.make(),
+                  ],
+                ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  "Premier rendez-vous".text.make(),
-                  "Mercredi 6 Décembre , 9H00".text.size(18).bold.make(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  "Passage(s) récurrent(s)".text.make(),
-                  "Mercredi  9H00 [3H00]".text.size(18).bold.make(),
-                  "Samedi, 9H00 [3H00]".text.size(18).bold.make(),
-                ],
-              ),*/
               const SizedBox(
                 height: 10,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  "Date de la prestation :".text.make(),
-                  "Mercredi 6 Décembre , 9H00".text.size(18).bold.make(),
-                ],
+              Visibility(
+                visible: !widget.isSubscription,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    "Date de la prestation :".text.make(),
+                    "${UtilsFonction.formatDate(dateTime: widget.bookingDate, format: 'EEE d MMMM, H:m')}"
+                        .text
+                        .size(18)
+                        .bold
+                        .make(),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 20,

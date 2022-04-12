@@ -373,35 +373,48 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                                           Positioned(
                                                               top: 0,
                                                               left: 0,
-                                                              child:
-                                                                  GestureDetector(
-                                                                onTap: () {
-                                                                  print("icic");
-                                                                  setState(() {
-                                                                    selectedClimatiseur =
-                                                                        e.label;
-                                                                    tarification =
-                                                                        e;
-                                                                    tarificationId =
-                                                                        idx;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    Container(
-                                                                  height: 300,
-                                                                  width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width,
-                                                                  decoration: BoxDecoration(
-                                                                      color: selectedClimatiseur != null && selectedClimatiseur == e.label
-                                                                          ? Colors
-                                                                              .transparent
-                                                                          : Colors
-                                                                              .white
-                                                                              .withOpacity(0.6)),
-                                                                ),
-                                                              ))
+                                                              child: selectedClimatiseur !=
+                                                                      e.label
+                                                                  ? GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        print(
+                                                                            "icic");
+                                                                        setState(
+                                                                            () {
+                                                                          selectedClimatiseur =
+                                                                              e.label;
+                                                                          tarification =
+                                                                              e;
+                                                                          tarificationId =
+                                                                              idx;
+                                                                        });
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            300,
+                                                                        width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width,
+                                                                        decoration: BoxDecoration(
+                                                                            color: selectedClimatiseur != null && selectedClimatiseur == e.label
+                                                                                ? Colors.transparent
+                                                                                : Colors.white.withOpacity(0.6)),
+                                                                      ),
+                                                                    )
+                                                                  : Container(
+                                                                      height:
+                                                                          10,
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                      decoration: BoxDecoration(
+                                                                          color: selectedClimatiseur != null && selectedClimatiseur == e.label
+                                                                              ? Colors.transparent
+                                                                              : Colors.white.withOpacity(0.6)),
+                                                                    ))
                                                         ],
                                                       )))
                                               .toList(),
@@ -425,20 +438,19 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            "DATE ET HEURE"
-                                .text
+                            AppLocalizations.current.dateAndHour.text
                                 .size(18)
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            "Quand voulez vous l'exécution du service"
-                                .text
+                            AppLocalizations
+                                .current.whenDoYouWantTheExecution.text
                                 .size(10)
                                 .fontFamily("SFPro")
                                 .bold
                                 .gray500
                                 .make(),
-                            const SizedBox(
+                            /*const SizedBox(
                               height: 10,
                             ),
                             Container(
@@ -456,7 +468,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                       color: Colors.white,
                                     )),
                               ),
-                            ),
+                            ),*/
                             const SizedBox(
                               height: 10,
                             ),
@@ -468,13 +480,18 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                       onChanged: (date) {
                                     print('change $date');
                                   }, onConfirm: (date) {
-                                    _bloc.setDateBooking(date);
+                                    if (date.hour > 17 || date.hour < 8) {
+                                      UtilsFonction.showErrorDialog(context,
+                                          "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                    } else {
+                                      _bloc.setDateBooking(date);
+                                    }
                                   },
                                       currentTime: DateTime.now(),
                                       locale: LocaleType.fr);
                                 },
-                                child: const Text(
-                                  'Choisir une date',
+                                child: Text(
+                                  AppLocalizations.current.selectDate,
                                   style: TextStyle(
                                       color: Colors.blue, fontSize: 15),
                                 )),
@@ -494,7 +511,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                             return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
-                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
                                             .text
                                             .bold
                                             .size(18)
@@ -697,6 +714,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
         builder: (context) => Padding(
               padding: const EdgeInsets.only(top: 60),
               child: BookingRecapScreen(
+                bookingDate: _bloc.bookingDateSubject.value,
                 frequence: frequence,
                 services: widget.service,
                 lieu: searchCtrl.text,

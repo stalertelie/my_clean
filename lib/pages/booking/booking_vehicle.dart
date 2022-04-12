@@ -574,7 +574,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     .bold
                                     .gray500
                                     .make(),
-                                const SizedBox(
+                                /*const SizedBox(
                                   height: 10,
                                 ),
                                 Container(
@@ -595,7 +595,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                 ),
                                 const SizedBox(
                                   height: 10,
-                                ),
+                                ),*/
                                 TextButton(
                                     onPressed: () {
                                       DatePicker.showDateTimePicker(context,
@@ -604,13 +604,18 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                           onChanged: (date) {
                                         print('change $date');
                                       }, onConfirm: (date) {
-                                        _bloc.setDateBooking(date);
+                                        if (date.hour > 17 || date.hour < 8) {
+                                          UtilsFonction.showErrorDialog(context,
+                                              "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                        } else {
+                                          _bloc.setDateBooking(date);
+                                        }
                                       },
                                           currentTime: DateTime.now(),
                                           locale: LocaleType.fr);
                                     },
-                                    child: const Text(
-                                      'Choisir une date et heure',
+                                    child: Text(
+                                      AppLocalizations.current.selectDate,
                                       style: TextStyle(
                                           color: Colors.blue, fontSize: 15),
                                     )),
@@ -626,7 +631,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                 return snapshot.hasData && snapshot.data != null
                                     ? Center(
                                         child:
-                                            "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                            "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
                                                 .text
                                                 .bold
                                                 .size(18)
@@ -796,6 +801,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
               padding: const EdgeInsets.only(top: 60),
               child: BookingRecapScreen(
                 frequence: frequence,
+                bookingDate: _bloc.bookingDateSubject.value,
                 services: widget.service,
                 lieu: searchCtrl.text,
                 amount: _bloc.totalSubject.value,
@@ -805,7 +811,6 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                 },
               ),
             ));
-    return;
     return;
     showModalBottomSheet(
         context: _scaffoldKey.currentContext!,

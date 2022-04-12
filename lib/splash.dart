@@ -5,8 +5,10 @@ import 'package:get_it/get_it.dart';
 import 'package:my_clean/pages/root/root_page.dart';
 import 'package:my_clean/providers/list_provider.dart';
 import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SplashScreenPage extends StatefulWidget {
@@ -21,14 +23,20 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     //setup();
     Future.delayed(
-        const Duration(seconds: 4),
-        () => {
-              UtilsFonction.NavigateAndRemoveRight(context, RootPage())
-            });
+        const Duration(seconds: 7),
+        () =>
+            {UtilsFonction.NavigateAndRemoveRight(context, const RootPage())});
+  }
+
+  void initLanguage() async {
+    final Locale newLocale = const Locale('fr');
+    await AppLocalizations.load(newLocale);
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('locale', 'fr');
   }
 
   @override
@@ -41,7 +49,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
               height: MediaQuery.of(context).size.height,
               child: Image.asset(
                 "images/others/splash.png",
-                fit: BoxFit.fill,
+                fit: BoxFit.fitWidth,
               )),
           Positioned(
             top: MediaQuery.of(context).size.height * 2 / 3,

@@ -337,8 +337,12 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                                                     ? Text(
                                                                         e.initialNumber.toString() +
                                                                             " " +
-                                                                            e.label!.toCapitalized().toString() +
-                                                                            "(s)",
+                                                                            e.label!
+                                                                                .toCapitalized()
+                                                                                .toString() +
+                                                                            (e.initialNumber != 1
+                                                                                ? "(s)"
+                                                                                : ''),
                                                                         style: TextStyle(
                                                                             fontSize:
                                                                                 18,
@@ -444,14 +448,13 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            "DATE ET HEURE"
-                                .text
+                            AppLocalizations.current.dateAndHour.text
                                 .size(18)
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            "Quand voulez vous l'exécution du service"
-                                .text
+                            AppLocalizations
+                                .current.whenDoYouWantTheExecution.text
                                 .size(10)
                                 .fontFamily("SFPro")
                                 .bold
@@ -460,7 +463,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                             const SizedBox(
                               height: 10,
                             ),
-                            Container(
+                            /*Container(
                               padding: EdgeInsets.all(10),
                               width: 150,
                               height: 50,
@@ -478,7 +481,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                             ),
                             const SizedBox(
                               height: 10,
-                            ),
+                            ),*/
                             TextButton(
                                 onPressed: () {
                                   DatePicker.showDateTimePicker(context,
@@ -487,13 +490,18 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                       onChanged: (date) {
                                     print('change $date');
                                   }, onConfirm: (date) {
-                                    _bloc.setDateBooking(date);
+                                    if (date.hour > 17 || date.hour < 8) {
+                                      UtilsFonction.showErrorDialog(context,
+                                          "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                    } else {
+                                      _bloc.setDateBooking(date);
+                                    }
                                   },
                                       currentTime: DateTime.now(),
                                       locale: LocaleType.fr);
                                 },
-                                child: const Text(
-                                  'Choisir une date',
+                                child: Text(
+                                  AppLocalizations.current.selectDate,
                                   style: TextStyle(
                                       color: Colors.blue, fontSize: 15),
                                 )),
@@ -509,7 +517,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                             return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
-                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
                                             .text
                                             .bold
                                             .size(18)
@@ -652,6 +660,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
         builder: (context) => Padding(
               padding: const EdgeInsets.only(top: 60),
               child: BookingRecapScreen(
+                bookingDate: _bloc.bookingDateSubject.value,
                 frequence: frequence,
                 services: widget.service,
                 lieu: searchCtrl.text,
@@ -660,138 +669,6 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                   noteCtrl.text = note;
                   bookNow();
                 },
-              ),
-            ));
-    return;
-    showModalBottomSheet(
-        context: _scaffoldKey.currentContext!,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (context) => Container(
-              padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    "RESUME DE LA COMMANDE"
-                        .text
-                        .color(Colors.black54)
-                        .bold
-                        .size(20)
-                        .make(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(
-                      thickness: 2,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        "Service".text.bold.make(),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        widget.service.title!.text.make()
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            "Durée".text.bold.make(),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            "${_listProvider.frequenceList.isNotEmpty && frequenceValue != null ? _listProvider.frequenceList.firstWhere((element) => element.id == frequenceValue).label : ""}, 4 heures"
-                                .text
-                                .make(),
-                          ],
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            "Adresse".text.bold.make(),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            (searchCtrl.text).text.make(),
-                          ],
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        StreamBuilder<int>(
-                            stream: _bloc.totalStream,
-                            builder: (context, snapshot) {
-                              return snapshot.hasData && snapshot.data != null
-                                  ? Row(
-                                      children: <Widget>[
-                                        "Montant à payé".text.bold.make(),
-                                        SizedBox(
-                                          width: 50,
-                                        ),
-                                        "FCFA ${UtilsFonction.formatMoney(snapshot.data!)}"
-                                            .text
-                                            .size(18)
-                                            .bold
-                                            .make(),
-                                      ],
-                                    )
-                                  : Container();
-                            }),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    WidgetTemplate.getActionButtonWithIcon(
-                        callback: () {
-                          bookNow();
-                        },
-                        title: "Valider".toUpperCase()),
-                    SizedBox(
-                      height: 30,
-                    )
-                  ],
-                ),
               ),
             ));
   }

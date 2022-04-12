@@ -405,20 +405,19 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            "DATE ET HEURE"
-                                .text
+                            AppLocalizations.current.dateAndHour.text
                                 .size(18)
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            "Quand voulez vous l'exécution du service"
-                                .text
+                            AppLocalizations
+                                .current.whenDoYouWantTheExecution.text
                                 .size(10)
                                 .fontFamily("SFPro")
                                 .bold
                                 .gray500
                                 .make(),
-                            const SizedBox(
+                            /*const SizedBox(
                               height: 10,
                             ),
                             Row(
@@ -444,7 +443,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                             ),
                             const SizedBox(
                               height: 10,
-                            ),
+                            ),*/
                             Visibility(
                               visible: frequenceType ==
                                   AppConstant.FREQUENCE_BOOKING_PONCTUAL,
@@ -456,13 +455,18 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                         onChanged: (date) {
                                       print('change $date');
                                     }, onConfirm: (date) {
-                                      _bloc.setDateBooking(date);
+                                      if (date.hour > 17 || date.hour < 8) {
+                                        UtilsFonction.showErrorDialog(context,
+                                            "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                      } else {
+                                        _bloc.setDateBooking(date);
+                                      }
                                     },
                                         currentTime: DateTime.now(),
                                         locale: LocaleType.fr);
                                   },
-                                  child: const Text(
-                                    'Choisir une date',
+                                  child: Text(
+                                    AppLocalizations.current.selectDate,
                                     style: TextStyle(
                                         color: Colors.blue, fontSize: 15),
                                   )),
@@ -537,7 +541,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
                                                   .text
                                                   .bold
                                                   .size(18)
@@ -794,6 +798,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
         builder: (context) => Padding(
               padding: const EdgeInsets.only(top: 60),
               child: BookingRecapScreen(
+                bookingDate: _bloc.bookingDateSubject.value,
                 frequence: frequence,
                 services: widget.service,
                 lieu: searchCtrl.text,

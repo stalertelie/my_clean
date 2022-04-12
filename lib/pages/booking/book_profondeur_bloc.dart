@@ -77,7 +77,7 @@ class BookProfondeurBloc extends BaseBloc {
     List<PriceBooking> listPrice = [];
 
     listPrice.add(PriceBooking(
-      tarification: _selectedServiceSubject.value!.id,
+      tarification: _selectedServiceSubject.value!.list![0].tarifications!.id,
       quantity: _selectedServiceSubject.value!.total,
     ));
 
@@ -88,6 +88,7 @@ class BookProfondeurBloc extends BaseBloc {
         date: _bookingDateSubject.hasValue ? _bookingDateSubject.value : null,
         frequence: frequence,
         priceTotal: _totalSubject.value,
+        choicesExtra: [],
         note: note,
         user: userID,
         isMeubler: isMeubler);

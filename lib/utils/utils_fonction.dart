@@ -185,7 +185,7 @@ class UtilsFonction extends Object {
       PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) {
         return page;
       }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
+        var begin = Offset(1.0, 0.0);
         var end = Offset.zero;
         var tween = Tween(begin: begin, end: end);
         return SlideTransition(
@@ -241,7 +241,7 @@ class UtilsFonction extends Object {
           child: const Center(
             child: CircularProgressIndicator(),
           ),
-          constraints: const BoxConstraints(maxHeight: 20, maxWidth: 10)),
+          constraints: const BoxConstraints(maxHeight: 40, maxWidth: 40)),
       fit: BoxFit.fill,
       width: width ?? double.maxFinite,
       colorBlendMode: blendmod,

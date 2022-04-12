@@ -41,7 +41,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "profileDetailsLabel":
             MessageLookupByLibrary.simpleMessage("Profile details"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
-        "myAccount": MessageLookupByLibrary.simpleMessage("My account"),
+        "myAccount": MessageLookupByLibrary.simpleMessage("PROFIL"),
+        "myInvoice": MessageLookupByLibrary.simpleMessage("My invoice"),
+        "helpCenter": MessageLookupByLibrary.simpleMessage("Help center"),
+        "promoCode": MessageLookupByLibrary.simpleMessage("Promo code"),
         "changeLanguage":
             MessageLookupByLibrary.simpleMessage("Change the language"),
         "comingSoon": MessageLookupByLibrary.simpleMessage("Coming soon"),
@@ -81,6 +84,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "whenDoYouWantTheExecution": MessageLookupByLibrary.simpleMessage(
             "How often do you want the execution of the service?"),
         "selectDate": MessageLookupByLibrary.simpleMessage("Select a date"),
+        "selectHour":
+            MessageLookupByLibrary.simpleMessage("Select an hour (8AM:4PM)"),
         "addDate": MessageLookupByLibrary.simpleMessage("Add a date"),
         "each": MessageLookupByLibrary.simpleMessage("Each"),
         "at": MessageLookupByLibrary.simpleMessage("at"),

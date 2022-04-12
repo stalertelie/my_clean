@@ -39,7 +39,8 @@ class AppLocalizations {
   }
 
   String get notifications {
-    return Intl.message('notifications', name: 'notifications', locale: localeName);
+    return Intl.message('notifications',
+        name: 'notifications', locale: localeName);
   }
 
   String get noOrders {
@@ -76,6 +77,18 @@ class AppLocalizations {
 
   String get myAccount {
     return Intl.message('myAccount', name: 'myAccount', locale: localeName);
+  }
+
+  String get myInvoice {
+    return Intl.message('myInvoice', name: 'myInvoice', locale: localeName);
+  }
+
+  String get helpCenter {
+    return Intl.message('helpCenter', name: 'helpCenter', locale: localeName);
+  }
+
+  String get promoCode {
+    return Intl.message('promoCode', name: 'promoCode', locale: localeName);
   }
 
   String get changeLanguage {
@@ -199,6 +212,10 @@ class AppLocalizations {
 
   String get selectDate {
     return Intl.message('selectDate', name: 'selectDate', locale: localeName);
+  }
+
+  String get selectHour {
+    return Intl.message('selectHour', name: 'selectHour', locale: localeName);
   }
 
   String get addDate {

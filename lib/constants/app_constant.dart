@@ -10,8 +10,8 @@ class AppConstant {
   ];
 
   static const FREQUENCE_BOOKING_PONCTUAL = "SERVICE PONCTUEL";
-  static const FREQUENCE_BOOKING_RECURENT = "SERVICE RECURRENT";
+  static const FREQUENCE_BOOKING_RECURENT = "ABONNEMENT";
 
-  static const dayList = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+  static const dayList = ["Lun","Mar","Mer","Jeu","Ven","Sam"];
   static const hourList = ["08H00","09H00","10H00","11H00","14H00","15H00","16H00"];
 }

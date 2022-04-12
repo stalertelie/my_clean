@@ -50,8 +50,23 @@
     "type": "text",
     "placeholders": {}
   },
-  "myAccount": "My account",
+  "myAccount": "PROFIL",
   "@myAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myInvoice": "My Invoice",
+  "@myInvoice": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "helpCenter": "Help center",
+  "@helpCenter": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "promoCode": "Promo code",
+  "@promoCode": {
     "type": "text",
     "placeholders": {}
   },
@@ -187,8 +202,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "selectDate": "Select a date",
+  "selectDate": "Select a date and hour (8AM-4PM)",
   "@selectDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectHour": "Select an hour (8AM-4PM)",
+  "@selectHour": {
     "type": "text",
     "placeholders": {}
   },

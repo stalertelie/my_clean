@@ -407,14 +407,13 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            "DATE ET HEURE"
-                                .text
+                            AppLocalizations.current.dateAndHour.text
                                 .size(18)
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            "Quand voulez vous l'exécution du service"
-                                .text
+                            AppLocalizations
+                                .current.whenDoYouWantTheExecution.text
                                 .size(10)
                                 .fontFamily("SFPro")
                                 .bold
@@ -423,7 +422,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                             const SizedBox(
                               height: 10,
                             ),
-                            Container(
+                            /*Container(
                               padding: EdgeInsets.all(10),
                               width: 150,
                               height: 50,
@@ -441,7 +440,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                             ),
                             const SizedBox(
                               height: 10,
-                            ),
+                            ),*/
                             TextButton(
                                 onPressed: () {
                                   DatePicker.showDateTimePicker(context,
@@ -450,13 +449,18 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                       onChanged: (date) {
                                     print('change $date');
                                   }, onConfirm: (date) {
-                                    _bloc.setDateBooking(date);
+                                    if (date.hour > 17 || date.hour < 8) {
+                                      UtilsFonction.showErrorDialog(context,
+                                          "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                    } else {
+                                      _bloc.setDateBooking(date);
+                                    }
                                   },
                                       currentTime: DateTime.now(),
                                       locale: LocaleType.fr);
                                 },
-                                child: const Text(
-                                  'Choisir une date',
+                                child: Text(
+                                  AppLocalizations.current.selectDate,
                                   style: TextStyle(
                                       color: Colors.blue, fontSize: 15),
                                 )),
@@ -472,7 +476,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                             return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
-                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
                                             .text
                                             .bold
                                             .size(18)
@@ -632,6 +636,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
         builder: (context) => Padding(
               padding: const EdgeInsets.only(top: 60),
               child: BookingRecapScreen(
+                bookingDate: _bloc.bookingDateSubject.value,
                 frequence: frequence,
                 services: widget.service,
                 lieu: searchCtrl.text,

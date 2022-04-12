@@ -6,6 +6,7 @@ class Price {
       this.label,
       this.initialNumber,
       this.price,
+      this.priceAbonment,
       this.priceOperator,
       this.operatorValue,
       this.quantity,
@@ -17,6 +18,7 @@ class Price {
   String? label;
   int? initialNumber;
   int? price;
+  int? priceAbonment;
   String? priceOperator;
   int? operatorValue;
   int? quantity;
@@ -29,6 +31,7 @@ class Price {
         label: json["label"],
         initialNumber: json["initialNumber"],
         price: json["price"],
+        priceAbonment: json["priceAbonment"],
         priceOperator: json["operator"],
         operatorValue: json["operatorValue"],
         quantity: json["quantity"] == null ? null : json["-"],
@@ -41,6 +44,7 @@ class Price {
         "label": label == null ? null : label,
         "initialNumber": initialNumber == null ? null : initialNumber,
         "price": price == null ? null : price,
+        "priceAbonment": priceAbonment == null ? null : priceAbonment,
         "operator": priceOperator,
         "operatorValue": operatorValue,
         "quantity": quantity == null ? null : quantity,

@@ -11,6 +11,7 @@ import 'package:ioc/ioc.dart';
 import 'package:my_clean/app_config.dart';
 import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/colors_constant.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/main.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/account_tab/account_screen.dart';
@@ -21,6 +22,7 @@ import 'package:my_clean/pages/onboarding/choose_country_screen.dart';
 import 'package:my_clean/pages/onboarding/choose_language_screen.dart';
 import 'package:my_clean/pages/root/root_bloc.dart';
 import 'package:my_clean/providers/app_provider.dart';
+import 'package:my_clean/services/app_service.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
@@ -40,14 +42,7 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
   final storage = Ioc().use<FlutterSecureStorage>('secureStorage');
   String? _token = '';
 
-  final List<Widget> _listPage = [
-    const HomeScreen(),
-    const CommandList(),
-    const HomeScreen(),
-    const AccountScreen(),
-    const CommandList(),
-    const ChooseCountryScreen()
-  ];
+  List<Widget> _listPage = [];
 
   final List<DrawerItem> _listDrawerConnectedPages = [
     DrawerItem(
@@ -109,6 +104,23 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    _listPage = [
+      HomeScreen(),
+      CommandList(
+        onServiceRequested: (String? idService) {
+          _bLoc.switchToPage(0);
+          if (idService != null) {
+            GetIt.I<AppServices>().setServicePassedId(idService);
+          }
+        },
+      ),
+      const HomeScreen(),
+      const AccountScreen(),
+      CommandList(
+        onServiceRequested: (String? idService) => {},
+      ),
+      const ChooseCountryScreen()
+    ];
     _bLoc.drawerIndexSubject.listen((value) {
       print(value);
       if (value == 0 && !isInitial) {
@@ -121,7 +133,8 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const CommandList(),
+            builder: (context) =>
+                CommandList(onServiceRequested: (String? id) {}),
           ),
         );
       }
@@ -354,11 +367,8 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
                         label: AppLocalizations.current.notifications),
                     BottomNavigationBarItem(
                         icon: const Icon(FontAwesomeIcons.userAlt),
-                        label: AppLocalizations.current.account),
-                    // const BottomNavigationBarItem(
-                    //   icon: Icon(FontAwesomeIcons.envelope),
-                    //   label: "",
-                    // ),
+                        label:
+                            AppLocalizations.current.myAccount.toCapitalized()),
                   ],
                 );
               })

@@ -418,7 +418,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             const SizedBox(
                               height: 10,
                             ),
-                            Row(
+                            /*Row(
                               children: [
                                 InkWell(
                                     onTap: () {
@@ -441,7 +441,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             ),
                             const SizedBox(
                               height: 10,
-                            ),
+                            ),*/
                             Visibility(
                               visible: frequenceType ==
                                   AppConstant.FREQUENCE_BOOKING_PONCTUAL,
@@ -453,7 +453,12 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                         onChanged: (date) {
                                       print('change $date');
                                     }, onConfirm: (date) {
-                                      _bloc.bookingDateSubject.add(date);
+                                      if (date.hour > 17 || date.hour < 8) {
+                                        UtilsFonction.showErrorDialog(context,
+                                            "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                      } else {
+                                        _bloc.bookingDateSubject.add(date);
+                                      }
                                     },
                                         currentTime: DateTime.now(),
                                         locale: LocaleType.fr);
@@ -539,7 +544,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM hh:mm")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
                                                   .text
                                                   .bold
                                                   .size(18)
@@ -848,6 +853,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
         builder: (context) => Padding(
               padding: const EdgeInsets.only(top: 60),
               child: BookingRecapScreen(
+                bookingDate: _bloc.bookingDateSubject.value,
                 frequence: frequence,
                 services: widget.service,
                 lieu: searchCtrl.text,

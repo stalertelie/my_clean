@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ioc/ioc.dart';
 import 'package:my_clean/components/custom_dialog.dart';
 import 'package:my_clean/components/loader.dart';
@@ -85,7 +86,7 @@ class _ProfileViewFragmentState extends State<ProfileViewFragment> {
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
-      height: 160,
+      //height: ,
       color: const Color(colorDefaultService),
       child: _gettingProfileDetails ? _buildLoadingScreen() : _buildProfile(),
     );
@@ -133,16 +134,16 @@ class _ProfileViewFragmentState extends State<ProfileViewFragment> {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
-              child: Image.asset(imagePlaceholder),
+              child: SvgPicture.asset('images/icons/profil_placeholder.svg'),
             ),
-            Align(
+            /*Align(
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () {},
                 child: const Icon(Icons.add_circle,
                     size: 14, color: colorBlueLight),
               ),
-            ),
+            ),*/
           ],
         ),
       ),

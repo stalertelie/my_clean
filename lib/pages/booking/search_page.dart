@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/GoogleSearch/google_search_result.dart';
@@ -32,11 +33,21 @@ class _SearchPageState extends State<SearchPage> {
           padding: const EdgeInsets.all(16.0),
           child: TextField(
             decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                isDense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 hintText: AppLocalizations.current.enterAnAdress,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                prefixIcon: const Icon(FontAwesomeIcons.mapMarkerAlt)),
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none),
+                prefixIconConstraints:
+                    const BoxConstraints(maxHeight: 40, maxWidth: 40),
+                prefixIcon: SvgPicture.asset(
+                  'images/icons/map-marker.svg',
+                  width: 40,
+                )),
             onChanged: (String value) {
               if (value.length >= 2) {
                 _bloc.getProposition(value);

@@ -21,7 +21,9 @@ import 'package:velocity_x/src/extensions/iterable_ext.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class CommandList extends StatefulWidget {
-  const CommandList({Key? key}) : super(key: key);
+  final Function(String? serviceId) onServiceRequested;
+  const CommandList({Key? key, required this.onServiceRequested})
+      : super(key: key);
 
   @override
   CommandListState createState() => CommandListState();
@@ -285,7 +287,10 @@ class CommandListState extends State<CommandList> {
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                               const Color(colorPrimary))),
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.onServiceRequested(
+                            booking.prices![0].tarification.service!.id);
+                      },
                       child: const Text(
                         "Reserver encore",
                         style: TextStyle(

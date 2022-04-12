@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_clean/constants/colors_constant.dart';
@@ -28,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _showPass = false;
 
+  String indicatif = "+225";
+
   final _formKey = GlobalKey<FormState>();
 
   final AuthBloc _bloc = AuthBloc();
@@ -52,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     _appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(colorPrimary),
         elevation: 0,
@@ -78,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   clipper: BottomWaveClipper(distance: 150),
                 ),
-                SizedBox(
+                /*SizedBox(
                   height: 20,
                 ),
                 Padding(
@@ -97,30 +101,98 @@ class _LoginScreenState extends State<LoginScreen> {
                             .color(Color(colorBlueGray))
                             .make()
                       ]),
-                )
+                )*/
               ],
             ),
-            SizedBox(
-              height: 10,
+            Image.asset(
+              "images/others/login_bg.png",
+              width: 200,
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            "You click, We clean".text.size(20).bold.make(),
             Container(
               color: Colors.white,
               child: Form(
                 key: _formKey,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
-                      TextFormField(
-                        decoration: WidgetTemplate.getInputStyle("Téléphone"),
-                        keyboardType: TextInputType.phone,
-                        controller: _phoneCtrl,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Champ réquis";
-                          }
-                        },
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey, width: 1)),
+                        child: Row(
+                          children: [
+                            Container(
+                              child: DropdownButton<String>(
+                                value: indicatif,
+                                icon: const Icon(Icons.arrow_drop_down),
+                                elevation: 16,
+                                style: const TextStyle(color: Colors.black),
+                                underline: Container(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    indicatif = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  '+225',
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Row(children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.asset(
+                                          'images/icons/ci_logo.png',
+                                          width: 30,
+                                        ),
+                                      ),
+                                      Text(
+                                        "(${value})",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ]),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            Flexible(
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 6, horizontal: 5),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(2),
+                                        borderSide: const BorderSide(
+                                            color: Colors.white, width: 1)),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(2),
+                                        borderSide: const BorderSide(
+                                            color: Colors.white, width: 1)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(2),
+                                        borderSide: const BorderSide(
+                                            color: Colors.white, width: 1)),
+                                    labelText: 'Numéro de telephone'),
+                                keyboardType: TextInputType.phone,
+                                controller: _phoneCtrl,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Champ réquis";
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 20,
@@ -128,6 +200,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       SlideInRight(
                           child: TextFormField(
                         decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 5),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(2),
                                 borderSide:
@@ -195,8 +270,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   "N'avez-vous pas de compte ?"
                       .text

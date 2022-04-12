@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:ioc/ioc.dart';
 import 'package:my_clean/components/custom_dialog.dart';
 import 'package:my_clean/components/loader.dart';
@@ -145,6 +146,7 @@ class AccountScreenState extends State<AccountScreen> {
       appBar: TabAppBar(
           titleProp: AppLocalizations.current.myAccount,
           context: context,
+          centerTitle: true,
           fontWeight: FontWeight.bold,
           backgroundColor: const Color(colorDefaultService)),
       body: Container(
@@ -152,6 +154,9 @@ class AccountScreenState extends State<AccountScreen> {
         child: Column(
           children: <Widget>[
             _buildProfile(),
+            const SizedBox(
+              height: 20,
+            ),
             _buildMenu(),
           ],
         ),
@@ -173,7 +178,7 @@ class AccountScreenState extends State<AccountScreen> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          _buildOption(
+          /*_buildOption(
               icon: Icons.account_circle,
               text: AppLocalizations.current.profileDetailsLabel,
               onTap: () {
@@ -183,101 +188,124 @@ class AccountScreenState extends State<AccountScreen> {
               },
               status: _currentUserInfos != null
                   ? null
-                  : AppLocalizations.current.disconnected),
+                  : AppLocalizations.current.disconnected),*/
+          Visibility(
+            visible: true,
+            child: _buildOption(
+                icon: SvgPicture.asset('images/icons/invoice.svg',
+                    width: 24, height: 30, color: Colors.black),
+                text: AppLocalizations.current.myInvoice,
+                onTap: () {}),
+          ),
           _buildOption(
-              icon: Icons.language,
+              icon: Image.asset('images/icons/help.png',
+                  width: 24, height: 30, color: Colors.black),
+              text: AppLocalizations.current.helpCenter,
+              onTap: () {}),
+          _buildOption(
+              icon: SvgPicture.asset('images/icons/promo_code.svg',
+                  width: 24, height: 24, color: Colors.black),
+              text: AppLocalizations.current.promoCode,
+              onTap: () {}),
+          _buildOption(
+              icon: const Icon(Icons.language, size: 24, color: Colors.black),
               text: AppLocalizations.current.changeLanguage,
               onTap: _navigateToChangeLanguageScreen),
           _buildOption(
-              icon: Icons.security,
+              icon: const Icon(Icons.security, size: 24, color: Colors.black),
               text: AppLocalizations.current.changePassword,
               onTap: () {},
               status: AppLocalizations.current.comingSoon),
-          _buildOption(
+          /*_buildOption(
             icon: Icons.share,
             text: AppLocalizations.current.shareApp,
             onTap: () async {
               await share_link.Share.share(
                   AppLocalizations.current.appDownloadLink(downloadLink));
             },
-          ),
+          ),*/
           _buildOption(
-              icon: Icons.privacy_tip,
+              icon:
+                  const Icon(Icons.privacy_tip, size: 24, color: Colors.black),
               text: AppLocalizations.current.conditionsOfUse,
               onTap: () {},
               status: AppLocalizations.current.comingSoon),
-          _buildOption(
-              icon: Icons.exit_to_app,
-              text: AppLocalizations.current.logout,
-              onTap: () {
-                if (_currentUserInfos != null) {
-                  _logout();
-                }
-              },
-              status: _currentUserInfos != null
-                  ? null
-                  : AppLocalizations.current.disconnected),
-          Container(
+          Visibility(
+            visible: _currentUserInfos != null,
+            child: _buildOption(
+                icon: const Icon(Icons.exit_to_app,
+                    size: 24, color: Colors.black),
+                text: AppLocalizations.current.logout,
+                onTap: () {
+                  if (_currentUserInfos != null) {
+                    _logout();
+                  }
+                },
+                status: _currentUserInfos != null
+                    ? null
+                    : AppLocalizations.current.disconnected),
+          ),
+          /*Container(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text("Version $APP_VERSION"),
             ),
-          )
+          )*/
         ],
       ),
     );
   }
 
   Widget _buildOption(
-      {required IconData icon,
+      {required Widget icon,
       required String text,
       String? status,
       Function? onTap}) {
     return Material(
       color: Colors.transparent,
-      child: Column(children: <Widget>[
-        InkWell(
-          onTap: () {
-            if (onTap != null) {
-              onTap();
-            }
-          },
-          child: SizedBox(
-            height: 64,
-            child: Row(children: <Widget>[
-              const SizedBox(width: 23.9),
-              Icon(icon, size: 24, color: Colors.black),
-              const SizedBox(width: 10.1),
-              Text(text,
-                  style: const TextStyle(
-                      fontFamily: 'Roboto', fontSize: 16, letterSpacing: 0.5)),
-              if (status != null && status.isNotEmpty) ...[
-                Spacer(),
-                Container(
-                  height: 35,
-                  padding: const EdgeInsets.symmetric(horizontal: 13),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE6F4FD),
-                    border: Border.all(color: const Color(0xFF41AC)),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: Center(
-                    child: Text(
-                      status,
-                      style: const TextStyle(
-                          color: Color(0xFF41ACEF), fontSize: 10),
-                      textAlign: TextAlign.center,
-                    ),
+      child: InkWell(
+        onTap: () {
+          if (onTap != null) {
+            onTap();
+          }
+        },
+        child: SizedBox(
+          height: 64,
+          child: Row(children: <Widget>[
+            const SizedBox(width: 23.9),
+            ConstrainedBox(
+              child: icon,
+              constraints: const BoxConstraints(maxHeight: 35, maxWidth: 35),
+            ),
+            const SizedBox(width: 20),
+            Text(text,
+                style: const TextStyle(
+                    fontFamily: 'Roboto', fontSize: 13, letterSpacing: 0.5)),
+            if (status != null && status.isNotEmpty) ...[
+              const Spacer(),
+              Container(
+                height: 35,
+                padding: const EdgeInsets.symmetric(horizontal: 13),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE6F4FD),
+                  border: Border.all(color: const Color(0xFF41AC)),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Center(
+                  child: Text(
+                    status,
+                    style:
+                        const TextStyle(color: Color(0xFF41ACEF), fontSize: 8),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(width: 19.55)
-              ],
-            ]),
-          ),
+              ),
+              //const SizedBox(width: 19.55)
+            ],
+          ]),
         ),
-        const Divider(color: Color.fromRGBO(0, 0, 0, 0.12)),
-      ]),
+      ),
     );
   }
 }

@@ -61,13 +61,14 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  /*SizedBox(
                     height: 30,
                   ),
                   Center(
@@ -80,11 +81,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       child: Image.asset("images/icons/logo.png"),
                     ),
-                  ),
+                  ),*/
                   SizedBox(
                     height: 20,
                   ),
-                  "Inscription"
+                  "Créer un compte"
                       .text
                       .size(25)
                       .bold
@@ -97,7 +98,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
@@ -149,40 +150,31 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // "Commune".text.color(Colors.blue).make(),
-                          // SizedBox(width: 10,),
-                          Flexible(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey)),
-                              child: DropdownButton<String>(
-                                hint: Container(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: const Text('Commune'),
-                                ),
-                                isExpanded: true,
-                                value: commune,
-                                underline: Container(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    commune = newValue;
-                                  });
-                                },
-                                items: AppConstant.communeList
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
+                      Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey)),
+                        child: DropdownButton<String>(
+                          hint: Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: const Text('Commune'),
                           ),
-                        ],
+                          isExpanded: true,
+                          value: commune,
+                          underline: Container(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              commune = newValue;
+                            });
+                          },
+                          items: AppConstant.communeList
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
                       ),
                       SizedBox(
                         height: 10,
@@ -190,6 +182,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       SlideInRight(
                           child: TextFormField(
                         decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 5),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(2),
                                 borderSide:
@@ -239,6 +234,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       SlideInRight(
                           child: TextFormField(
                         decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 5),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(2),
                                 borderSide:
@@ -303,7 +301,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            "S'inscrire".text.white.size(18).bold.make()
+                            "Créer un compte".text.white.size(18).bold.make()
                           ],
                         ),
                       )
