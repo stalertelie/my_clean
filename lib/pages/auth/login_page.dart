@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/auth/aut_bloc.dart';
 import 'package:my_clean/pages/auth/singup_page.dart';
 import 'package:my_clean/pages/home/home_header.dart';
+import 'package:my_clean/pages/root/root_page.dart';
 import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/providers/app_provider.dart';
 import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -74,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         Image.asset(
-                          "images/icons/logo.png",
+                          "images/icons/NCBD.png",
                           width: 200,
                         ),
                       ],
@@ -111,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 20,
             ),
-            "You click, We clean".text.size(20).bold.make(),
+            "You click, We clean".text.fontFamily('SFPro').size(20).bold.make(),
             Container(
               color: Colors.white,
               child: Form(
@@ -121,14 +124,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 40,
+                        height: 10,
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1)),
+                            border: Border.all(color: Colors.grey, width: 1),
+                            borderRadius: BorderRadius.circular(5)),
                         child: Row(
                           children: [
                             Container(
+                              height: 38,
                               child: DropdownButton<String>(
                                 value: indicatif,
                                 icon: const Icon(Icons.arrow_drop_down),
@@ -170,18 +175,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                     contentPadding: const EdgeInsets.symmetric(
                                         vertical: 6, horizontal: 5),
                                     border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(2),
+                                        borderRadius: BorderRadius.circular(5),
                                         borderSide: const BorderSide(
                                             color: Colors.white, width: 1)),
                                     enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(2),
+                                        borderRadius: BorderRadius.circular(5),
                                         borderSide: const BorderSide(
                                             color: Colors.white, width: 1)),
                                     focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(2),
+                                        borderRadius: BorderRadius.circular(5),
                                         borderSide: const BorderSide(
                                             color: Colors.white, width: 1)),
-                                    labelText: 'Numéro de telephone'),
+                                    labelText: AppLocalizations.current.numTel,
+                                    labelStyle: const TextStyle(
+                                        color: Color(0XFFBBBBBB),
+                                        fontFamily: 'SFPro')),
                                 keyboardType: TextInputType.phone,
                                 controller: _phoneCtrl,
                                 validator: (value) {
@@ -194,27 +202,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
+                      const SizedBox(
+                        height: 25,
                       ),
                       SlideInRight(
                           child: TextFormField(
                         decoration: InputDecoration(
                             isDense: true,
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 5),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1)),
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(
+                                    color: Colors.grey, width: 1)),
                             enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1)),
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(
+                                    color: Colors.grey, width: 1)),
                             focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1)),
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: const BorderSide(
+                                    color: Colors.grey, width: 1)),
                             suffixIcon: InkWell(
                                 onTap: () {
                                   setState(() {
@@ -227,9 +235,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       : FontAwesomeIcons.eye,
                                   size: 15,
                                 )),
-                            suffixIconConstraints:
-                                BoxConstraints(maxHeight: 15, minWidth: 40),
-                            labelText: "Mot de passe"),
+                            suffixIconConstraints: const BoxConstraints(
+                                maxHeight: 15, minWidth: 40),
+                            labelText: AppLocalizations.current.password),
                         obscureText: !_showPass,
                         autofocus: false,
                         textInputAction: TextInputAction.done,
@@ -254,8 +262,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (_formKey.currentState!.validate()) {login()}
                         },
                         padding: EdgeInsets.symmetric(
-                          vertical: 20,
+                          vertical: 10,
                         ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
                         color: Color(colorPrimary),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -269,39 +279,54 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  "N'avez-vous pas de compte ?"
-                      .text
-                      .color(Color(colorBlueGray))
-                      .make(),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      UtilsFonction.NavigateToRouteAndWait(
-                              context, SignupScreen())
-                          .then((value) {
-                        print(GetIt.I<AppServices>().userData);
-                        print("icicicic");
-                        if (_appProvider.login != null) {
-                          Navigator.of(context).pop();
-                        }
-                      })
-                    },
-                    child: "S'inscrire"
-                        .text
-                        .color(Color(colorPrimary))
-                        .bold
+            GestureDetector(
+              onTap: () => UtilsFonction.NavigateAndRemoveRight(
+                  context, const RootPage()),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppLocalizations.current.passWithoutConnexion.text
+                        .color(const Color(colorPrimary))
                         .make(),
-                  )
-                ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
               ),
             ),
+            "OU".text.bold.italic.make(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppLocalizations.current.noAccount.text
+                    .color(const Color(colorBlueGray))
+                    .make(),
+                const SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                  onTap: () => {
+                    UtilsFonction.NavigateToRouteAndWait(
+                            context, SignupScreen())
+                        .then((value) {
+                      if (_appProvider.login != null) {
+                        Navigator.of(context).pop();
+                      }
+                    })
+                  },
+                  child: AppLocalizations.current.signUp.text
+                      .color(const Color(colorPrimary))
+                      .bold
+                      .make(),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),

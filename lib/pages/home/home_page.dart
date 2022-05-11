@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            service.title?.toTitleCase() ?? '',
+            service.title?.toCapitalized() ?? '',
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
         )

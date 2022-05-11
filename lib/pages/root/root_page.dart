@@ -18,6 +18,7 @@ import 'package:my_clean/pages/account_tab/account_screen.dart';
 import 'package:my_clean/pages/auth/login_page.dart';
 import 'package:my_clean/pages/booking/command_list.dart';
 import 'package:my_clean/pages/home/home_page.dart';
+import 'package:my_clean/pages/notification/notification_page.dart';
 import 'package:my_clean/pages/onboarding/choose_country_screen.dart';
 import 'package:my_clean/pages/onboarding/choose_language_screen.dart';
 import 'package:my_clean/pages/root/root_bloc.dart';
@@ -114,7 +115,7 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
           }
         },
       ),
-      const HomeScreen(),
+      const NotificationScreen(),
       const AccountScreen(),
       CommandList(
         onServiceRequested: (String? idService) => {},

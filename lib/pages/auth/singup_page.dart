@@ -25,6 +25,7 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController _passCtrl = TextEditingController();
   TextEditingController _repassCtrl = TextEditingController();
   TextEditingController _communeCtrl = TextEditingController();
+  TextEditingController _emailCtrl = TextEditingController();
 
   String? commune;
 
@@ -82,7 +83,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: Image.asset("images/icons/logo.png"),
                     ),
                   ),*/
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   "Créer un compte"
@@ -120,7 +121,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           }
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
@@ -133,7 +134,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           }
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
@@ -147,10 +148,21 @@ class _SignupScreenState extends State<SignupScreen> {
                           }
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Container(
+                      TextFormField(
+                        decoration: WidgetTemplate.getInputStyle("E-mail"),
+                        controller: _emailCtrl,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Champ réquis";
+                          }
+                        },
+                      ),
+                      /*Container(
                         height: 40,
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey)),
@@ -175,7 +187,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             );
                           }).toList(),
                         ),
-                      ),
+                      ),*/
                       SizedBox(
                         height: 10,
                       ),
@@ -186,15 +198,15 @@ class _SignupScreenState extends State<SignupScreen> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 5),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide:
                                     BorderSide(color: Colors.grey, width: 1)),
                             enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide:
                                     BorderSide(color: Colors.grey, width: 1)),
                             focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide:
                                     BorderSide(color: Colors.grey, width: 1)),
                             suffixIcon: InkWell(
@@ -238,15 +250,15 @@ class _SignupScreenState extends State<SignupScreen> {
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 5),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide:
                                     BorderSide(color: Colors.grey, width: 1)),
                             enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide:
                                     BorderSide(color: Colors.grey, width: 1)),
                             focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
+                                borderRadius: BorderRadius.circular(5),
                                 borderSide:
                                     BorderSide(color: Colors.grey, width: 1)),
                             suffixIcon: InkWell(
@@ -294,14 +306,16 @@ class _SignupScreenState extends State<SignupScreen> {
                             print("nono");
                           }
                         },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
                         padding: EdgeInsets.symmetric(
-                          vertical: 20,
+                          vertical: 10,
                         ),
                         color: Color(colorPrimary),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            "Créer un compte".text.white.size(18).bold.make()
+                            "Créer mon compte".text.white.size(18).bold.make()
                           ],
                         ),
                       )

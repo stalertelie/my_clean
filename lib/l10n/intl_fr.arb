@@ -282,4 +282,30 @@
     "type": "text",
     "placeholders": {}
   },
+  "passWithoutConnexion": "Passer sans se connecter",
+  "@passWithoutConnexion": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noAccount": "N'avez-vous pas de compte ?",
+  "@noAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signUp": "S'inscrire",
+  "@signUp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "numTel": "Numéro de téléphone",
+  "@numTel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "Mot de passe",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+
 }

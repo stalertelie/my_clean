@@ -30,6 +30,7 @@ import 'package:my_clean/pages/booking/booking_bloc.dart';
 import 'package:my_clean/pages/booking/booking_recap.dart';
 import 'package:my_clean/pages/booking/booking_sucess_page.dart';
 import 'package:my_clean/pages/booking/day_time_picker.dart';
+import 'package:my_clean/pages/booking/map_view.dart';
 import 'package:my_clean/pages/booking/search_bloc.dart';
 import 'package:my_clean/pages/booking/search_page.dart';
 import 'package:my_clean/pages/widgets/widget_template.dart';
@@ -138,6 +139,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
         backgroundColor: Color(colorDefaultService),
         appBar: AppBar(
           elevation: 0,
+          centerTitle: true,
           leading: IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: Icon(
@@ -148,7 +150,8 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
             widget.service.title!.toUpperCase(),
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black),
           ),
           bottom: PreferredSize(
               child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
@@ -159,32 +162,6 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
             children: [
               Container(
                 height: MediaQuery.of(context).size.height,
-              ),
-              Visibility(
-                visible: showMap,
-                child: Container(
-                  height: MediaQuery.of(context).size.height - 270,
-                  child: GoogleMap(
-                    onMapCreated: (GoogleMapController controller) {
-                      setState(() {
-                        mapcontroller = controller;
-                        getCurrentLocation();
-                      });
-                    },
-                    markers: <Marker>{
-                      Marker(
-                        markerId: MarkerId("UserMarker"),
-                        position: latitude != null
-                            ? LatLng(latitude!, longitude!)
-                            : _markerPosition,
-                      ),
-                    },
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(latitude!, longitude!),
-                      zoom: 14.4746,
-                    ),
-                  ),
-                ),
               ),
               Container(
                 margin: EdgeInsets.only(top: showMap ? 480 : 0),
@@ -227,7 +204,22 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                       TextButton(
                                           onPressed: () {
                                             setState(() {
-                                              showMap = !showMap;
+                                              //showMap = !showMap;
+                                              UtilsFonction
+                                                  .NavigateToRouteAndWait(
+                                                      context,
+                                                      MapViewScreen(
+                                                        initialPosition:
+                                                            _markerPosition,
+                                                      )).then((value) {
+                                                if (value != null) {
+                                                  _markerPosition = value;
+                                                  setState(() {
+                                                    searchCtrl.text =
+                                                        "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                  });
+                                                }
+                                              });
                                             });
                                           },
                                           child: Text('Carte'))
@@ -452,6 +444,10 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                     DatePicker.showDateTimePicker(context,
                                         showTitleActions: true,
                                         minTime: DateTime.now(),
+                                        theme: DatePickerTheme(
+                                            itemStyle: TextStyle(
+                                                color:
+                                                    const Color(colorPrimary))),
                                         onChanged: (date) {
                                       print('change $date');
                                     }, onConfirm: (date) {

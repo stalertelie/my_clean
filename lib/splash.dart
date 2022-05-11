@@ -2,6 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:my_clean/constants/colors_constant.dart';
+import 'package:my_clean/pages/auth/login_page.dart';
 import 'package:my_clean/pages/root/root_page.dart';
 import 'package:my_clean/providers/list_provider.dart';
 import 'package:my_clean/services/app_service.dart';
@@ -25,10 +27,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   void initState() {
     super.initState();
     //setup();
-    Future.delayed(
-        const Duration(seconds: 7),
-        () =>
-            {UtilsFonction.NavigateAndRemoveRight(context, const RootPage())});
+    initLanguage();
+    Future.delayed(const Duration(seconds: 7),
+        () => {UtilsFonction.NavigateAndRemoveRight(context, LoginScreen())});
   }
 
   void initLanguage() async {
@@ -47,9 +48,10 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
         children: [
           Container(
               height: MediaQuery.of(context).size.height,
+              width: double.maxFinite,
               child: Image.asset(
                 "images/others/splash.png",
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.cover,
               )),
           Positioned(
             top: MediaQuery.of(context).size.height * 2 / 3,

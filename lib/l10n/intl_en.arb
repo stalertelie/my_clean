@@ -272,4 +272,30 @@
     "type": "text",
     "placeholders": {}
   },
+  "passWithoutConnexion": "Pass without log in",
+  "@passWithoutConnexion": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noAccount": "You don't have an account ?",
+  "@noAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signUp": "Signup",
+  "@signUp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "numTel": "Phone number",
+  "@numTel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "Password",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+
 }

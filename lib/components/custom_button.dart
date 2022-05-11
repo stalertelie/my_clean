@@ -6,8 +6,9 @@ Widget CustomButton(
     required Function onPressedProp,
     required String textProp,
     bool disabledProp = false,
-    double? padding = 30,
-    BorderRadiusGeometry borderRadius = BorderRadius.zero}) {
+    double? padding = 5,
+    BorderRadiusGeometry borderRadius =
+        const BorderRadius.all(Radius.circular(5))}) {
   return Container(
       child: IgnorePointer(
           ignoring: disabledProp,
@@ -21,6 +22,7 @@ Widget CustomButton(
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(vertical: padding!),
                   width: MediaQuery.of(contextProp).size.width,
+                  height: 50,
                   decoration: BoxDecoration(
                       color: const Color(authBlue), borderRadius: borderRadius),
                   child: Text(textProp,

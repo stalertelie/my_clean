@@ -272,4 +272,29 @@
     "type": "text",
     "placeholders": {}
   },
+  "passWithoutConnexion": "passWithoutConnexion",
+  "@passWithoutConnexion": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noAccount": "noAccount",
+  "@noAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signUp": "signUp",
+  "@signUp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "numTel": "numTel",
+  "@numTel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "password",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
 }

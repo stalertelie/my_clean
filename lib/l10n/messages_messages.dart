@@ -96,6 +96,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("totalAmountToPay"),
         "validate": MessageLookupByLibrary.simpleMessage("validate"),
         "enterAnAdress": MessageLookupByLibrary.simpleMessage("enterAnAdress"),
-        "orderDetails": MessageLookupByLibrary.simpleMessage("orderDetais"),
+        "orderDetails": MessageLookupByLibrary.simpleMessage("orderDetails"),
+        "payCashForExecution":
+            MessageLookupByLibrary.simpleMessage("payCashForExecution"),
+        "passWithoutConnexion":
+            MessageLookupByLibrary.simpleMessage("passWithoutConnexion"),
+        "noAccount": MessageLookupByLibrary.simpleMessage("noAccount"),
+        "signUp": MessageLookupByLibrary.simpleMessage("signUp"),
+        "numTel": MessageLookupByLibrary.simpleMessage("numTel"),
+        "password": MessageLookupByLibrary.simpleMessage("password"),
       };
 }

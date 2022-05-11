@@ -108,5 +108,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Détails de la commande"),
         "payCashForExecution": MessageLookupByLibrary.simpleMessage(
             "Payer cash l'exécution du service"),
+        "passWithoutConnexion":
+            MessageLookupByLibrary.simpleMessage("Passer sans se connecter"),
+        "noAccount":
+            MessageLookupByLibrary.simpleMessage("Vous n'avez pas de compte ?"),
+        "signUp": MessageLookupByLibrary.simpleMessage("S'inscrire"),
+        "numTel": MessageLookupByLibrary.simpleMessage("Numéro de téléphone"),
+        "password": MessageLookupByLibrary.simpleMessage("Mot de passe"),
       };
 }

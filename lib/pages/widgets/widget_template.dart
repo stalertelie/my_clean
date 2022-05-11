@@ -13,13 +13,13 @@ class WidgetTemplate extends Object {
       isDense: true,
       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(color: Colors.grey, width: 1)),
       enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(color: Colors.grey, width: 1)),
       focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(5),
           borderSide: BorderSide(color: Colors.grey, width: 1)),
       labelText: title);
 

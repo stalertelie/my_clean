@@ -270,6 +270,27 @@ class AppLocalizations {
     return Intl.message('orderDetails',
         name: 'orderDetails', locale: localeName);
   }
+
+  String get passWithoutConnexion {
+    return Intl.message('passWithoutConnexion',
+        name: 'passWithoutConnexion', locale: localeName);
+  }
+
+  String get noAccount {
+    return Intl.message('noAccount', name: 'noAccount', locale: localeName);
+  }
+
+  String get signUp {
+    return Intl.message('signUp', name: 'signUp', locale: localeName);
+  }
+
+  String get numTel {
+    return Intl.message('numTel', name: 'numTel', locale: localeName);
+  }
+
+  String get password {
+    return Intl.message('password', name: 'password', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

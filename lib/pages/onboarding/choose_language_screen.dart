@@ -164,7 +164,6 @@ class ChooseLanguageScreenState extends State<ChooseLanguageScreen> {
                     child: Align(
                         alignment: Alignment.bottomCenter,
                         child: CustomButton(
-                            padding: 0,
                             contextProp: context,
                             onPressedProp: () {
                               _goToHome();
