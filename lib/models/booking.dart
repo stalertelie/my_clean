@@ -27,31 +27,27 @@ class Booking {
   List<PriceBooking>? prices;
   int? priceTotal;
   String? gps;
-  List<Frequence>? frequence;
+  String? frequence;
   bool? isMeubler;
 
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
         choicesExtra: json["choicesExtra"] == null
             ? null
             : List<String>.from(json["choicesExtra"].map((x) => x)),
-        localisation:
-            json["localisation"] == null ? null : json["localisation"],
-        user: json["user"] == null ? null : json["user"],
+        localisation: json["localisation"] ?? null,
+        user: json["user"] ?? null,
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),
-        note: json["note"] == null ? null : json["note"],
+        note: json["note"] ?? null,
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
         prices: json["prices"] == null
             ? null
             : List<PriceBooking>.from(
                 json["prices"].map((x) => PriceBooking.fromJson(x))),
-        priceTotal: json["priceTotal"] == null ? null : json["priceTotal"],
-        gps: json["gps"] == null ? null : json["gps"],
-        frequence: json["frequence"] == null
-            ? null
-            : List<Frequence>.from(
-                json['frequence'].map((x) => Frequence.fromJson(x))),
+        priceTotal: json["priceTotal"] ?? null,
+        gps: json["gps"] ?? null,
+        frequence: json["frequence"] == null ? null : json['frequence'],
         isMeubler: json["isMeubler"],
       );
 
@@ -59,19 +55,17 @@ class Booking {
         "choicesExtra": choicesExtra == null
             ? null
             : List<dynamic>.from(choicesExtra!.map((x) => x)),
-        "localisation": localisation == null ? null : localisation,
-        "user": user == null ? null : user,
+        "localisation": localisation,
+        "user": user,
         "createdAt": createdAt == null ? null : createdAt!.toIso8601String(),
-        "note": note == null ? null : note,
+        "note": note,
         "date": date == null ? null : date!.toIso8601String(),
         "prices": prices == null
             ? null
             : List<dynamic>.from(prices!.map((x) => x.toJson())),
-        "priceTotal": priceTotal == null ? null : priceTotal,
-        "gps": gps == null ? null : gps,
-        "frequence": frequence == null
-            ? null
-            : List<dynamic>.from(frequence!.map((x) => x.toJson())),
+        "priceTotal": priceTotal,
+        "gps": gps,
+        "frequence": frequence,
         "isMeubler": isMeubler,
       };
 }

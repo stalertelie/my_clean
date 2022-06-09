@@ -47,6 +47,10 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String? lieu = widget.lieu;
+    if (lieu != null && lieu.length > 30) {
+      lieu = lieu.substring(0, 30);
+    }
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(colorDefaultService),
@@ -117,8 +121,10 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    "Date de la prestation :".text.make(),
-                    "${UtilsFonction.formatDate(dateTime: widget.bookingDate, format: 'EEE d MMMM, H:m')}"
+                    AppLocalizations.current.bookingDate.text.make(),
+                    UtilsFonction.formatDate(
+                            dateTime: widget.bookingDate,
+                            format: 'EEE d MMMM, H:m')
                         .text
                         .size(18)
                         .bold
@@ -137,8 +143,8 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                 },
                 child: Row(
                   children: [
-                    "Laisser des instructions".text.make(),
-                    SizedBox(
+                    AppLocalizations.current.bookingInstruction.text.make(),
+                    const SizedBox(
                       width: 10,
                     ),
                     Container(
@@ -186,8 +192,7 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        'Ajouter un moyent paiement'
-                            .text
+                        AppLocalizations.current.addPaymentMethod.text
                             .color(const Color(colorPrimary))
                             .make(),
                         const Icon(Icons.keyboard_arrow_right)
@@ -197,15 +202,15 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
               const SizedBox(
                 height: 10,
               ),
-              'Paiement à la livraison'.text.bold.make(),
+              AppLocalizations.current.deliveryPayment.text.bold.make(),
               const SizedBox(
                 height: 10,
               ),
-              'Lieu de prestation'.text.make(),
+              AppLocalizations.current.deliveryPlace.text.make(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  (widget.lieu ?? '').text.bold.size(18).make(),
+                  (lieu ?? '').text.bold.size(18).make(),
                   IconButton(
                     icon: SvgPicture.asset(
                       "images/icons/edit.svg",
@@ -225,11 +230,11 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
           elevation: 5,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Container(
+            child: SizedBox(
               height: 100,
               child: CustomButton(
                   contextProp: context,
-                  textProp: "Commander",
+                  textProp: AppLocalizations.current.order,
                   borderRadius: BorderRadius.circular(10),
                   onPressedProp: () => widget.onValidate(note: noteCtrl.text)),
             ),

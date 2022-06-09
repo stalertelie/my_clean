@@ -47,6 +47,10 @@ class AppLocalizations {
     return Intl.message('noOrders', name: 'noOrders', locale: localeName);
   }
 
+  String get whatService {
+    return Intl.message('whatService', name: 'whatService', locale: localeName);
+  }
+
   String orderDate(date) {
     return Intl.message('orderDate',
         name: 'orderDate', locale: localeName, args: [date]);
@@ -290,6 +294,167 @@ class AppLocalizations {
 
   String get password {
     return Intl.message('password', name: 'password', locale: localeName);
+  }
+
+  String get selectMatiere {
+    return Intl.message('selectMatiere',
+        name: 'selectMatiere', locale: localeName);
+  }
+
+  String get numberPlace {
+    return Intl.message('numberPlace', name: 'numberPlace', locale: localeName);
+  }
+
+  String get steamCleaning {
+    return Intl.message('steamCleaning',
+        name: 'steamCleaning', locale: localeName);
+  }
+
+  String get chooseTypeHouse {
+    return Intl.message('chooseTypeHouse',
+        name: 'chooseTypeHouse', locale: localeName);
+  }
+
+  String get numberRoom {
+    return Intl.message('numberRoom', name: 'numberRoom', locale: localeName);
+  }
+
+  String get allArea {
+    return Intl.message('allArea', name: 'allArea', locale: localeName);
+  }
+
+  String get additionnalTask {
+    return Intl.message('additionnalTask',
+        name: 'additionnalTask', locale: localeName);
+  }
+
+  String get vehiculeType {
+    return Intl.message('vehiculeType',
+        name: 'vehiculeType', locale: localeName);
+  }
+
+  String get yourOrder {
+    return Intl.message('yourOrder', name: 'yourOrder', locale: localeName);
+  }
+
+  String get bookingItems {
+    return Intl.message('bookingItems',
+        name: 'bookingItems', locale: localeName);
+  }
+
+  String get erroTimeFrame {
+    return Intl.message('erroTimeFrame',
+        name: 'erroTimeFrame', locale: localeName);
+  }
+
+  String get adressError {
+    return Intl.message('adressError', name: 'adressError', locale: localeName);
+  }
+
+  String get dateError {
+    return Intl.message('dateError', name: 'dateError', locale: localeName);
+  }
+
+  String get serviceError {
+    return Intl.message('serviceError',
+        name: 'serviceError', locale: localeName);
+  }
+
+  String get meterError {
+    return Intl.message('meterError', name: 'meterError', locale: localeName);
+  }
+
+  String get matressTypeError {
+    return Intl.message('matressTypeError',
+        name: 'matressTypeError', locale: localeName);
+  }
+
+  String get deliveryPlace {
+    return Intl.message('deliveryPlace',
+        name: 'deliveryPlace', locale: localeName);
+  }
+
+  String get deliveryPayment {
+    return Intl.message('deliveryPayment',
+        name: 'deliveryPayment', locale: localeName);
+  }
+
+  String get addPaymentMethod {
+    return Intl.message('addPaymentMethod',
+        name: 'addPaymentMethod', locale: localeName);
+  }
+
+  String get bookingInstruction {
+    return Intl.message('bookingInstruction',
+        name: 'bookingInstruction', locale: localeName);
+  }
+
+  String get bookingDate {
+    return Intl.message('bookingDate', name: 'bookingDate', locale: localeName);
+  }
+
+  String get paymentMod {
+    return Intl.message('paymentMod', name: 'paymentMod', locale: localeName);
+  }
+
+  String get billing {
+    return Intl.message('billing', name: 'billing', locale: localeName);
+  }
+
+  String get orderNo {
+    return Intl.message('orderNo', name: 'orderNo', locale: localeName);
+  }
+
+  String get requiredField {
+    return Intl.message('requiredField',
+        name: 'requiredField', locale: localeName);
+  }
+
+  String get map {
+    return Intl.message('map', name: 'map', locale: localeName);
+  }
+
+  String get paymentMethod {
+    return Intl.message('paymentMethod',
+        name: 'paymentMethod', locale: localeName);
+  }
+
+  String get serviceEvaluate {
+    return Intl.message('serviceEvaluate',
+        name: 'serviceEvaluate', locale: localeName);
+  }
+
+  String get finish {
+    return Intl.message('finish', name: 'finish', locale: localeName);
+  }
+
+  String get viewRecept {
+    return Intl.message('viewRecept', name: 'viewRecept', locale: localeName);
+  }
+
+  String get bookAgain {
+    return Intl.message('bookAgain', name: 'bookAgain', locale: localeName);
+  }
+
+  String get bookingDone {
+    return Intl.message('bookingDone', name: 'bookingDone', locale: localeName);
+  }
+
+  String get bookingDoneMessage {
+    return Intl.message('bookingDoneMessage',
+        name: 'bookingDoneMessage', locale: localeName);
+  }
+
+  String get active {
+    return Intl.message('active', name: 'active', locale: localeName);
+  }
+
+  String get history {
+    return Intl.message('history', name: 'history', locale: localeName);
+  }
+
+  String get cleaning {
+    return Intl.message('cleaning', name: 'cleaning', locale: localeName);
   }
 }
 

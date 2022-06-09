@@ -156,7 +156,8 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                 fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black),
           ),
           bottom: PreferredSize(
-              child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
+              child: Text(AppLocalizations.current.yourOrder),
+              preferredSize: Size.fromHeight(1)),
         ),
         key: _scaffoldKey,
         body: SingleChildScrollView(
@@ -224,7 +225,8 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                               });
                                             });
                                           },
-                                          child: Text('Carte'))
+                                          child: Text(
+                                              AppLocalizations.current.map))
                                     ],
                                   ),
                                 )
@@ -237,7 +239,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Choisissez votre type de maison",
+                              AppLocalizations.current.chooseTypeHouse,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
@@ -323,13 +325,12 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  "Nombre de pièces"
-                                                      .text
-                                                      .bold
+                                                  AppLocalizations.current
+                                                      .numberRoom.text.bold
                                                       .size(20)
                                                       .make(),
-                                                  "Tous les espaces communs sont inclus"
-                                                      .text
+                                                  AppLocalizations
+                                                      .current.allArea.text
                                                       .size(15)
                                                       .make(),
                                                   Column(
@@ -425,14 +426,19 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                       print('change $date');
                                     }, onConfirm: (date) {
                                       if (date.hour > 17 || date.hour < 8) {
-                                        UtilsFonction.showErrorDialog(context,
-                                            "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                        UtilsFonction.showErrorDialog(
+                                            context,
+                                            AppLocalizations
+                                                .current.erroTimeFrame);
                                       } else {
                                         _bloc.setDateBooking(date);
                                       }
                                     },
                                         currentTime: DateTime.now(),
-                                        locale: LocaleType.fr);
+                                        locale:
+                                            GetIt.I<AppServices>().lang == 'fr'
+                                                ? LocaleType.fr
+                                                : LocaleType.en);
                                   },
                                   child: Text(
                                     AppLocalizations.current.selectDate,
@@ -531,7 +537,10 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                           onPressedProp: () {
                             if (_appProvider.login == null) {
                               UtilsFonction.NavigateToRoute(
-                                  context, LoginScreen());
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
                             } else {
                               if (_bloc.tarificationRootSubject.value
                                   .where((element) =>
@@ -542,14 +551,15 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                 GetIt.I<AppServices>().showSnackbarWithState(
                                     Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez choisir au moins une option avant de passer votre commande"));
+                                        message: AppLocalizations.current
+                                            .pleaseChooseAtLeastOneOption));
                                 return;
                               }
                               showRecapSheet();
                             }
                           },
-                          textProp: 'Réserver'.toUpperCase()),
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase()),
                     ],
                   ),
                 ),
@@ -782,133 +792,6 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
               ),
             ));
     return;
-    showModalBottomSheet(
-        context: _scaffoldKey.currentContext!,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (context) => Container(
-              padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    "RESUME DE LA COMMANDE"
-                        .text
-                        .color(Colors.black54)
-                        .bold
-                        .size(20)
-                        .make(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(
-                      thickness: 2,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        "Service".text.bold.make(),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        Text(widget.service.title!)
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            "Durée".text.bold.make(),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            "${_listProvider.frequenceList != null && _listProvider.frequenceList.isNotEmpty && frequenceValue != null ? _listProvider.frequenceList.firstWhere((element) => element.id == frequenceValue).label : ""}, 4 heures"
-                                .text
-                                .make(),
-                          ],
-                        ),
-                        IconButton(
-                          onPressed: () => () => Navigator.of(context).pop(),
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            "Adresse".text.bold.make(),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            (searchCtrl.text).text.make(),
-                          ],
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        StreamBuilder<int>(
-                            stream: _bloc.totalStream,
-                            builder: (context, snapshot) {
-                              return snapshot.hasData && snapshot.data != null
-                                  ? Row(
-                                      children: [
-                                        "Montant a payer".text.bold.make(),
-                                        SizedBox(
-                                          width: 50,
-                                        ),
-                                        "FCFA ${UtilsFonction.formatMoney(snapshot.data!)}"
-                                            .text
-                                            .size(18)
-                                            .bold
-                                            .make(),
-                                      ],
-                                    )
-                                  : Container();
-                            }),
-                        IconButton(
-                          onPressed: () => () => Navigator.of(context).pop(),
-                          icon: Icon(Icons.edit),
-                          color: Color(colorPrimary),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    WidgetTemplate.getActionButtonWithIcon(
-                        callback: () {
-                          bookNow();
-                        },
-                        title: "VALIDER"),
-                    SizedBox(
-                      height: 30,
-                    )
-                  ],
-                ),
-              ),
-            ));
   }
 
   bookNow() {

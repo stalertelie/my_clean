@@ -29,6 +29,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function>{
         "myOrders": MessageLookupByLibrary.simpleMessage("Mes Reservations"),
         "noOrders": MessageLookupByLibrary.simpleMessage("Pas de commandes"),
+        "whatService": MessageLookupByLibrary.simpleMessage(
+            "De quel service avez-vous besoin aujourd'hui ?"),
         "myBooking": MessageLookupByLibrary.simpleMessage("Réservations"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
         "buyCryptoConfirmationText": m0,
@@ -115,5 +117,62 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("S'inscrire"),
         "numTel": MessageLookupByLibrary.simpleMessage("Numéro de téléphone"),
         "password": MessageLookupByLibrary.simpleMessage("Mot de passe"),
+        "selectMatiere":
+            MessageLookupByLibrary.simpleMessage("Sélectionnez la matière"),
+        "numberPlace": MessageLookupByLibrary.simpleMessage("Nombre de places"),
+        "steamCleaning":
+            MessageLookupByLibrary.simpleMessage("Nettoyage vapeur"),
+        "chooseTypeHouse": MessageLookupByLibrary.simpleMessage(
+            "Choisissez votre type de maison"),
+        "numberRoom": MessageLookupByLibrary.simpleMessage("Nombre de pièces"),
+        "allArea": MessageLookupByLibrary.simpleMessage(
+            "Tous les espaces communs sont inclus"),
+        "additionnalTask": MessageLookupByLibrary.simpleMessage(
+            "Sélectionnez vos tâches supplémentaires"),
+        "vehiculeType": MessageLookupByLibrary.simpleMessage(
+            "Sélectionnez votre type de véhicule"),
+        "yourOrder": MessageLookupByLibrary.simpleMessage("Votre commande"),
+        "bookingItems":
+            MessageLookupByLibrary.simpleMessage("Article dans votre commande"),
+        "erroTimeFrame": MessageLookupByLibrary.simpleMessage(
+            "Nous ne prestons pas dans cet intervalle de temps.Désolé."),
+        "adressError": MessageLookupByLibrary.simpleMessage(
+            "Veuillez entrer votre adresse"),
+        "dateError":
+            MessageLookupByLibrary.simpleMessage("Veuillez choisir une date"),
+        "serviceError": MessageLookupByLibrary.simpleMessage(
+            "Veuillez ajouter un service svp"),
+        "meterError": MessageLookupByLibrary.simpleMessage(
+            "Veuillez saisir le nombre de mètres"),
+        "matressTypeError": MessageLookupByLibrary.simpleMessage(
+            "Veuillez sélectionner au moins un type de matelas"),
+        "deliveryPlace":
+            MessageLookupByLibrary.simpleMessage("Lieu de prestation"),
+        "deliveryPayment":
+            MessageLookupByLibrary.simpleMessage("Paiement à la livraison"),
+        "addPaymentMethod":
+            MessageLookupByLibrary.simpleMessage("Ajouter un moyent paiement"),
+        "bookingInstruction":
+            MessageLookupByLibrary.simpleMessage("Laisser des instructions"),
+        "bookingDate":
+            MessageLookupByLibrary.simpleMessage("Date de la prestation :"),
+        "paymentMod": MessageLookupByLibrary.simpleMessage("Mode de paiement"),
+        "billing": MessageLookupByLibrary.simpleMessage("Facturation"),
+        "orderNo": MessageLookupByLibrary.simpleMessage("Commande n°"),
+        "requiredField": MessageLookupByLibrary.simpleMessage("Champ requis"),
+        "map": MessageLookupByLibrary.simpleMessage("Carte"),
+        "paymentMethod":
+            MessageLookupByLibrary.simpleMessage("Moyen de paiement"),
+        "serviceEvaluate":
+            MessageLookupByLibrary.simpleMessage("Evaluez la prestation"),
+        "finish": MessageLookupByLibrary.simpleMessage("Terminer"),
+        "viewRecept": MessageLookupByLibrary.simpleMessage("Voir le reçu"),
+        "bookAgain": MessageLookupByLibrary.simpleMessage("Reserver encore"),
+        "bookingDone": MessageLookupByLibrary.simpleMessage("Commande ajoutée"),
+        "bookingDoneMessage": MessageLookupByLibrary.simpleMessage(
+            "Nos agens vous contacterons sous peu."),
+        "active": MessageLookupByLibrary.simpleMessage("Actives"),
+        "history": MessageLookupByLibrary.simpleMessage("Historiques"),
+        "cleaning": MessageLookupByLibrary.simpleMessage("Nettoyage."),
       };
 }

@@ -86,7 +86,7 @@ class BookProfondeurBloc extends BaseBloc {
         gps: gps,
         prices: listPrice,
         date: _bookingDateSubject.hasValue ? _bookingDateSubject.value : null,
-        frequence: frequence,
+        frequence: frequence.map((e) => "${e.day} à ${e.time} \n").join(","),
         priceTotal: _totalSubject.value,
         choicesExtra: [],
         note: note,

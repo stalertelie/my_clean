@@ -51,9 +51,10 @@ class CommandDetailsState extends State<CommandDetails> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: widget.command.frequence!
+      children: [] /*widget.command.frequence!
           .mapIndexed((e, i) => Text('${e.day} à ${e.time}'))
-          .toList(),
+          .toList()*/
+      ,
     );
   }
 
@@ -89,15 +90,16 @@ class CommandDetailsState extends State<CommandDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Commande n° : ${widget.command.id}',
+                              AppLocalizations.current.orderNo +
+                                  ': ${widget.command.id}',
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
-                            Text(
-                                "Date d'exécution : ${UtilsFonction.formatDate(dateTime: widget.command.date ?? DateTime.now(), format: "d-MM-y à h:mm")}"),
+                            Text(AppLocalizations.current.bookingDate +
+                                " : ${UtilsFonction.formatDate(dateTime: widget.command.date ?? DateTime.now(), format: "d-MM-y à h:mm")}"),
                             const SizedBox(
                               height: 5,
                             ),
@@ -111,7 +113,7 @@ class CommandDetailsState extends State<CommandDetails> {
                       height: 10,
                     ),
                     Text(
-                      'Article dans votre commande'.toUpperCase(),
+                      AppLocalizations.current.bookingItems.toUpperCase(),
                       style: const TextStyle(fontSize: 14.0),
                     ),
                     const SizedBox(
@@ -203,9 +205,10 @@ class CommandDetailsState extends State<CommandDetails> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            const Text(
-                              'Mode de paiement',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            Text(
+                              AppLocalizations.current.paymentMod,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
                               height: 5,
@@ -271,7 +274,7 @@ class CommandDetailsState extends State<CommandDetails> {
                       height: 10,
                     ),
                     Text(
-                      'Facturation'.toUpperCase(),
+                      AppLocalizations.current.billing.toUpperCase(),
                       style: const TextStyle(fontSize: 14.0),
                     ),
                     const SizedBox(

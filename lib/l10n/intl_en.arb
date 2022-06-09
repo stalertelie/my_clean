@@ -20,6 +20,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "whatService": "What service do you need today ?",
+  "@whatService": {
+    "type": "text",
+    "placeholders": {}
+  },
   "orderDate": "{date}",
   "@orderDate": {
     "type": "text",
@@ -297,5 +302,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "selectMatiere": "Select the material",
+  "@selectMatiere": {
+    "type": "text",
+    "placeholders": {}
+  },
+
 
 }

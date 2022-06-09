@@ -7,17 +7,13 @@ part of 'booking.dart';
 // **************************************************************************
 
 Booking _$BookingFromJson(Map<String, dynamic> json) => Booking(
-    user: json['user'] != null ? json['user'] as String : null,
+    user: json['user'] != null ? json['user']['nom'] as String : null,
     localisation:
         json['localisation'] != null ? json['localisation'] as String : null,
     date: json['date'] != null ? DateTime.parse(json['date'] as String) : null,
     priceTotal: json['priceTotal'] != null ? json['priceTotal'] as int : null,
     isMeubler: json['isMeubler'] != null ? json['isMeubler'] as bool : null,
-    frequence: json['frequence'] != null
-        ? (json['frequence'] as List)
-            .map((e) => Frequence.fromJson(e as Map<String, dynamic>))
-            .toList()
-        : null,
+    frequence: json['frequence'] != null ? json['frequence'] as String : null,
     gps: json['gps'] != null ? json['gps'] as String : null,
     prices: json['prices'] != null
         ? (json['prices'] as List)

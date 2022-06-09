@@ -28,7 +28,8 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:my_clean/extensions/extensions.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final VoidCallback onProfilTapped;
+  const HomeScreen({Key? key, required this.onProfilTapped}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -70,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: const Color(0XFFF3F3F8),
               flexibleSpace: HomeHeader(
                 login: _appProvider.login,
+                onProfiTaped: () => widget.onProfilTapped(),
               ),
               expandedHeight: 250,
               stretch: true,
@@ -89,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  "Nettoyage".text.bold.size(25).make()
+                  AppLocalizations.current.cleaning.text.bold.size(25).make()
                 ],
               ),
             ),
@@ -187,16 +189,14 @@ class _HomeScreenState extends State<HomeScreen> {
         services.title!.toLowerCase().contains("conditioner")) {
       UtilsFonction.NavigateToRoute(
           context, BookingClimatiseurScreen(service: services));
-    } else if (services.title!
-            .toLowerCase()
-            .contains("chaise, fauteuils et canapes") ||
+    } else if (services.title!.toLowerCase().contains("canapé") ||
         services.title!
             .toLowerCase()
             .contains("chairs, armchairs and carpet")) {
       UtilsFonction.NavigateToRoute(
           context, BookingSofaScreen(service: services));
-    } else if (services.title!.toLowerCase().contains("désinfection") ||
-        services.title!.toLowerCase().contains("disinfection")) {
+    } else if (services.title!.toLowerCase().contains("3d") ||
+        services.title!.toLowerCase().contains("3D")) {
       UtilsFonction.NavigateToRoute(
           context, BookingDesinfectionScreen(service: services));
     } else {
@@ -227,8 +227,10 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            service.title?.toCapitalized() ?? '',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            service.title?.toLowerCase() == '3d'
+                ? '3D'
+                : service.title?.toCapitalized() ?? '',
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
         )
       ],

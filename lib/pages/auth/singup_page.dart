@@ -7,13 +7,18 @@ import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/auth/aut_bloc.dart';
+import 'package:my_clean/pages/root/root_page.dart';
 import 'package:my_clean/pages/widgets/widget_template.dart';
 import 'package:my_clean/providers/app_provider.dart';
 import 'package:my_clean/services/app_service.dart';
+import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SignupScreen extends StatefulWidget {
+  final bool toPop;
+
+  const SignupScreen({Key? key, required this.toPop}) : super(key: key);
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -39,7 +44,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _bloc.loadingSubject.listen((value) {
       if (value.loading == false && value.message == MessageConstant.signupok) {
@@ -48,7 +52,11 @@ class _SignupScreenState extends State<SignupScreen> {
             .messengerGlobalKey
             ?.currentState
             ?.clearSnackBars();
-        Navigator.of(context).pop(true);
+        if (widget.toPop) {
+          Navigator.of(context).pop(true);
+        } else {
+          UtilsFonction.NavigateAndRemoveRight(context, const RootPage());
+        }
       }
     });
   }
@@ -58,7 +66,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(colorPrimary),
+        backgroundColor: const Color(colorPrimary),
       ),
       body: SingleChildScrollView(
         child: Column(

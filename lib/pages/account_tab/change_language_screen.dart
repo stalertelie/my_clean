@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:my_clean/components/tab_app_bar.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/pages/account_tab/account_screen.dart';
 import 'package:my_clean/pages/root/root_bloc.dart';
 import 'package:my_clean/pages/root/root_page.dart';
+import 'package:my_clean/services/app_service.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,6 +40,8 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
     setState(() {
       _currentLocaleCode = localeCode;
     });
+
+    GetIt.I<AppServices>().setLang(localeCode);
 
     final Locale newLocale = Locale(localeCode);
     await AppLocalizations.load(newLocale);

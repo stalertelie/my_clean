@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/colors_constant.dart';
+import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/auth/login_page.dart';
 import 'package:my_clean/pages/root/root_page.dart';
 import 'package:my_clean/providers/list_provider.dart';
@@ -28,8 +32,23 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     //setup();
     initLanguage();
-    Future.delayed(const Duration(seconds: 7),
-        () => {UtilsFonction.NavigateAndRemoveRight(context, LoginScreen())});
+    Future.delayed(
+        const Duration(seconds: 7),
+        () => {
+              UtilsFonction.getData(AppConstant.USER_INFO).then((value) {
+                if (value != null) {
+                  User user = User.fromJson(jsonDecode(value));
+                  GetIt.I<AppServices>().setUSer(user);
+                  UtilsFonction.NavigateAndRemoveRight(context, RootPage());
+                } else {
+                  UtilsFonction.NavigateAndRemoveRight(
+                      context,
+                      LoginScreen(
+                        toPop: false,
+                      ));
+                }
+              })
+            });
   }
 
   void initLanguage() async {
@@ -38,6 +57,8 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('locale', 'fr');
+
+    GetIt.I<AppServices>().setLang('fr');
   }
 
   @override

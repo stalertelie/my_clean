@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/pages/root/root_page.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -19,6 +20,7 @@ class _BookingResultScreenState extends State<BookingResultScreen> {
       child: Scaffold(
         backgroundColor: const Color(colorDefaultService),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -27,76 +29,26 @@ class _BookingResultScreenState extends State<BookingResultScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Image.asset(
-                    "images/others/evaluationicon.png",
-                    height: 150,
+                  const Icon(
+                    Icons.done_outline_sharp,
+                    color: Colors.green,
+                    size: 100,
                   ),
-                  "EVALUEZ LA PRESTATION".text.size(25).bold.make(),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  RatingStars(
-                    value: evaluationValue,
-                    onValueChanged: (value) {
-                      setState(() {
-                        evaluationValue = value;
-                      });
-                    },
-                    starBuilder: (index, color) => Icon(
-                      Icons.star,
-                      color: color,
-                      size: 50,
-                    ),
-                    starCount: 5,
-                    starSize: 40,
-                    maxValue: 5,
-                    starSpacing: 5,
-                    maxValueVisibility: true,
-                    valueLabelVisibility: false,
-                    animationDuration: Duration(milliseconds: 1000),
-                    starOffColor: const Color(0xffe7e8ea),
-                    starColor: Color.fromARGB(255, 219, 200, 30),
-                  ),
+                  AppLocalizations.current.bookingDone
+                      .toUpperCase()
+                      .text
+                      .size(20)
+                      .bold
+                      .make(),
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    width: double.maxFinite,
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        "Detail de la commande"
-                            .text
-                            .color(Color(colorPrimary))
-                            .make(),
-                        Icon(Icons.keyboard_arrow_right)
-                      ],
-                    ),
-                  )
+                  AppLocalizations.current.bookingDoneMessage.text
+                      .size(15)
+                      .make(),
                 ],
               ),
             ),
-
-            /*Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  "Quel étape suivante ?".text.size(18).bold.make(),
-                  SizedBox(height: 10,),
-                  "- Nous vous enverrons rapidement un courriel une fois que votre réservation est confirmée".text.make(),
-                  SizedBox(height: 10,),
-                  "- Un agent du service clientèle peut prendre contact avec vous pour confirmer les détails de votre demande".text.make(),
-                  SizedBox(height: 10,),
-                  "- Vous paierez lorsque le service sera terminé".text.make(),
-                  SizedBox(height: 10,),
-                ],
-              ),
-            ),*/
             Expanded(
               child: Container(),
             ),
@@ -110,14 +62,16 @@ class _BookingResultScreenState extends State<BookingResultScreen> {
                   child: Container(
                     height: 50,
                     width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      color: const Color(colorPrimary),
+                    decoration: const BoxDecoration(
+                      color: Color(colorPrimary),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        "Terminer".text.bold.white.size(25).make(),
+                        AppLocalizations.current.finish.text.bold.white
+                            .size(25)
+                            .make(),
                       ],
                     ),
                   ),

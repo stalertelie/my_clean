@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function>{
         "myOrders": MessageLookupByLibrary.simpleMessage("myOrders"),
         "noOrders": MessageLookupByLibrary.simpleMessage("noOrders"),
+        "whatService": MessageLookupByLibrary.simpleMessage("whatService"),
         "myBooking": MessageLookupByLibrary.simpleMessage("myBooking"),
         "notifications": MessageLookupByLibrary.simpleMessage("notifications"),
         "buyCryptoConfirmationText": m0,
@@ -105,5 +106,60 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("signUp"),
         "numTel": MessageLookupByLibrary.simpleMessage("numTel"),
         "password": MessageLookupByLibrary.simpleMessage("password"),
+        "selectMatiere":
+            MessageLookupByLibrary.simpleMessage("Select the material"),
+        "numberPlace": MessageLookupByLibrary.simpleMessage("Number of seats"),
+        "steamCleaning": MessageLookupByLibrary.simpleMessage("Steam cleaning"),
+        "chooseTypeHouse":
+            MessageLookupByLibrary.simpleMessage("Choose your type of house"),
+        "numberRoom": MessageLookupByLibrary.simpleMessage("Number of rooms"),
+        "allArea": MessageLookupByLibrary.simpleMessage(
+            "All common areas are included"),
+        "additionnalTask": MessageLookupByLibrary.simpleMessage(
+            "Select your additional tasks"),
+        "vehiculeType":
+            MessageLookupByLibrary.simpleMessage("Select your vehicle type"),
+        "yourOrder": MessageLookupByLibrary.simpleMessage("Your order"),
+        "bookingItems":
+            MessageLookupByLibrary.simpleMessage("Item in your order"),
+        "erroTimeFrame": MessageLookupByLibrary.simpleMessage(
+            "We do not provide services in this time frame."),
+        "adressError":
+            MessageLookupByLibrary.simpleMessage("Please enter your address"),
+        "dateError":
+            MessageLookupByLibrary.simpleMessage("Please select a date"),
+        "serviceError":
+            MessageLookupByLibrary.simpleMessage("Please add a service"),
+        "meterError": MessageLookupByLibrary.simpleMessage(
+            "Please enter the number of meters"),
+        "matressTypeError": MessageLookupByLibrary.simpleMessage(
+            "Please select at least one type of mattress"),
+        "deliveryPlace":
+            MessageLookupByLibrary.simpleMessage("Place of delivery"),
+        "deliveryPayment":
+            MessageLookupByLibrary.simpleMessage("Payment on delivery"),
+        "addPaymentMethod":
+            MessageLookupByLibrary.simpleMessage("Add a payment method"),
+        "bookingInstruction":
+            MessageLookupByLibrary.simpleMessage("Leave instructions"),
+        "bookingDate": MessageLookupByLibrary.simpleMessage("Date of service:"),
+        "paymentMod": MessageLookupByLibrary.simpleMessage("Method of payment"),
+        "billing": MessageLookupByLibrary.simpleMessage("Billing"),
+        "orderNo": MessageLookupByLibrary.simpleMessage("Order No."),
+        "requiredField": MessageLookupByLibrary.simpleMessage("Required field"),
+        "map": MessageLookupByLibrary.simpleMessage("Map"),
+        "paymentMethod": MessageLookupByLibrary.simpleMessage("Payment method"),
+        "serviceEvaluate":
+            MessageLookupByLibrary.simpleMessage("Evaluate the service"),
+        "finish": MessageLookupByLibrary.simpleMessage("Finish"),
+        "viewRecept": MessageLookupByLibrary.simpleMessage("View receipt"),
+        "bookAgain": MessageLookupByLibrary.simpleMessage("Book again"),
+        "bookingDone":
+            MessageLookupByLibrary.simpleMessage("Order successfully added"),
+        "bookingDoneMessage": MessageLookupByLibrary.simpleMessage(
+            "Our agents will contact you shortly."),
+        "active": MessageLookupByLibrary.simpleMessage("Active."),
+        "history": MessageLookupByLibrary.simpleMessage("History."),
+        "cleaning": MessageLookupByLibrary.simpleMessage("Cleaning."),
       };
 }

@@ -20,6 +20,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "whatService": "De quel service avez-vous besoin aujourd'hui ?",
+  "@whatService": {
+    "type": "text",
+    "placeholders": {}
+  },
   "orderDate": "Le {date}",
   "@orderDate": {
     "type": "text",
@@ -304,6 +309,11 @@
   },
   "password": "Mot de passe",
   "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectMatiere": "Sélectionnez la matière",
+  "@selectMatiere": {
     "type": "text",
     "placeholders": {}
   },

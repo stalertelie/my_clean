@@ -154,7 +154,8 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                 fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black),
           ),
           bottom: PreferredSize(
-              child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
+              child: Text(AppLocalizations.current.yourOrder),
+              preferredSize: Size.fromHeight(1)),
         ),
         key: _scaffoldKey,
         body: SingleChildScrollView(
@@ -222,7 +223,8 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                               });
                                             });
                                           },
-                                          child: Text('Carte'))
+                                          child: Text(
+                                              AppLocalizations.current.map))
                                     ],
                                   ),
                                 )
@@ -261,7 +263,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                               height: 30,
                             ),*/
                             Text(
-                              "Sélectionnez la matière",
+                              AppLocalizations.current.selectMatiere,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -353,13 +355,13 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  "Nombre de places"
-                                                      .text
+                                                  AppLocalizations
+                                                      .current.numberPlace.text
                                                       .size(20)
                                                       .bold
                                                       .make(),
-                                                  "Nettoyage vapeur"
-                                                      .text
+                                                  AppLocalizations.current
+                                                      .steamCleaning.text
                                                       .size(20)
                                                       .make(),
                                                   Column(
@@ -452,14 +454,19 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                       print('change $date');
                                     }, onConfirm: (date) {
                                       if (date.hour > 17 || date.hour < 8) {
-                                        UtilsFonction.showErrorDialog(context,
-                                            "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                        UtilsFonction.showErrorDialog(
+                                            context,
+                                            AppLocalizations
+                                                .current.erroTimeFrame);
                                       } else {
                                         _bloc.setDateBooking(date);
                                       }
                                     },
                                         currentTime: DateTime.now(),
-                                        locale: LocaleType.fr);
+                                        locale:
+                                            GetIt.I<AppServices>().lang == 'fr'
+                                                ? LocaleType.fr
+                                                : LocaleType.en);
                                   },
                                   child: Text(
                                     AppLocalizations.current.selectDate,
@@ -555,7 +562,10 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                           onPressedProp: () {
                             if (_appProvider.login == null) {
                               UtilsFonction.NavigateToRoute(
-                                  context, LoginScreen());
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
                             } else {
                               if (_bloc.tarificationRootSubject.value
                                   .where((element) =>
@@ -566,14 +576,15 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                 GetIt.I<AppServices>().showSnackbarWithState(
                                     Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez choisir au moins une option avant de passer votre commande"));
+                                        message: AppLocalizations.current
+                                            .pleaseChooseAtLeastOneOption));
                                 return;
                               }
                               showRecapSheet();
                             }
                           },
-                          textProp: 'Réserver'.toUpperCase()),
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase()),
                     ],
                   ),
                 ),

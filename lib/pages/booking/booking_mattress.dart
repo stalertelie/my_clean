@@ -89,6 +89,8 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
   double? latitude;
   double? longitude;
 
+  String currentLocal = 'fr';
+
   @override
   void initState() {
     super.initState();
@@ -181,7 +183,8 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                 fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black),
           ),
           bottom: PreferredSize(
-              child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
+              child: Text(AppLocalizations.current.yourOrder),
+              preferredSize: Size.fromHeight(1)),
         ),
         body: SingleChildScrollView(
           child: Stack(
@@ -248,7 +251,8 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                               });
                                             });
                                           },
-                                          child: Text('Carte'))
+                                          child: Text(
+                                              AppLocalizations.current.map))
                                     ],
                                   ),
                                 )
@@ -289,13 +293,13 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Nombre de places",
+                                    AppLocalizations.current.numberPlace,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20),
                                   ),
                                   Text(
-                                    "Nettoyage vapeur",
+                                    AppLocalizations.current.steamCleaning,
                                     style: TextStyle(
                                         color: Colors.black54,
                                         fontWeight: FontWeight.w600,
@@ -333,7 +337,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                                                                 .toCapitalized()
                                                                                 .toString() +
                                                                             (e.initialNumber != 1
-                                                                                ? "(s)"
+                                                                                ? "s"
                                                                                 : ''),
                                                                         style: TextStyle(
                                                                             fontSize:
@@ -487,14 +491,19 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                     print('change $date');
                                   }, onConfirm: (date) {
                                     if (date.hour > 17 || date.hour < 8) {
-                                      UtilsFonction.showErrorDialog(context,
-                                          "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                      UtilsFonction.showErrorDialog(
+                                          context,
+                                          AppLocalizations
+                                              .current.erroTimeFrame);
                                     } else {
                                       _bloc.setDateBooking(date);
                                     }
                                   },
                                       currentTime: DateTime.now(),
-                                      locale: LocaleType.fr);
+                                      locale:
+                                          GetIt.I<AppServices>().lang == 'fr'
+                                              ? LocaleType.fr
+                                              : LocaleType.en);
                                 },
                                 child: Text(
                                   AppLocalizations.current.selectDate,
@@ -529,35 +538,40 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                           onPressedProp: () {
                             if (_appProvider.login == null) {
                               UtilsFonction.NavigateToRoute(
-                                  context, LoginScreen());
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
                             } else {
                               if (!_bloc.totalSubject.hasValue) {
                                 GetIt.I<AppServices>().showSnackbarWithState(
                                     Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez sélectionner au moins un type de matelas"));
+                                        message: AppLocalizations
+                                            .current.matressTypeError));
                                 return;
                               }
                               if (!_bloc.bookingDateSubject.hasValue) {
                                 GetIt.I<AppServices>().showSnackbarWithState(
                                     Loading(
                                         hasError: true,
-                                        message: "Veuillez choisir une date"));
+                                        message: AppLocalizations
+                                            .current.dateError));
                                 return;
                               }
                               if (searchCtrl.text.isEmpty) {
                                 GetIt.I<AppServices>().showSnackbarWithState(
                                     Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez entrer votre adresse"));
+                                        message: AppLocalizations
+                                            .current.adressError));
                                 return;
                               }
                               showRecapSheet();
                             }
                           },
-                          textProp: 'Réserver'.toUpperCase()),
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase()),
                     ],
                   ),
                 ),

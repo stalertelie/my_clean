@@ -20,6 +20,9 @@ import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class LoginScreen extends StatefulWidget {
+  final bool? toPop;
+  const LoginScreen({Key? key, this.toPop}) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -49,7 +52,11 @@ class _LoginScreenState extends State<LoginScreen> {
             .currentState!
             .clearSnackBars();
         _appProvider.updateConnectedUSer(value.data);
-        Navigator.of(context).pop();
+        if (widget.toPop != true) {
+          UtilsFonction.NavigateAndRemoveRight(context, RootPage());
+        } else {
+          Navigator.of(context).pop();
+        }
       }
     });
   }
@@ -194,7 +201,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: _phoneCtrl,
                                 validator: (value) {
                                   if (value!.isEmpty) {
-                                    return "Champ réquis";
+                                    return AppLocalizations
+                                        .current.requiredField;
                                   }
                                 },
                               ),
@@ -249,24 +257,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: _passCtrl,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Champ réquis";
+                            return AppLocalizations.current.requiredField;
                           } else
                             return null;
                         },
                       )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       MaterialButton(
                         onPressed: () => {
                           if (_formKey.currentState!.validate()) {login()}
                         },
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           vertical: 10,
                         ),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        color: Color(colorPrimary),
+                        color: const Color(colorPrimary),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -310,8 +318,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 GestureDetector(
                   onTap: () => {
                     UtilsFonction.NavigateToRouteAndWait(
-                            context, SignupScreen())
-                        .then((value) {
+                        context,
+                        const SignupScreen(
+                          toPop: false,
+                        )).then((value) {
                       if (_appProvider.login != null) {
                         Navigator.of(context).pop();
                       }

@@ -106,7 +106,9 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     _listPage = [
-      HomeScreen(),
+      HomeScreen(
+        onProfilTapped: () => _bLoc.pageindexSubject.add(3),
+      ),
       CommandList(
         onServiceRequested: (String? idService) {
           _bLoc.switchToPage(0);
@@ -400,7 +402,7 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
                   Row(
                     children: [
                       drawerItem.icon,
-                      SizedBox(
+                      const SizedBox(
                         width: 40,
                       ),
                       drawerItem.title.text

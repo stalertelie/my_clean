@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_clean/constants/colors_constant.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ModePaymentScreen extends StatefulWidget {
@@ -17,8 +18,8 @@ class _ModePaymentScreenState extends State<ModePaymentScreen> {
       backgroundColor: const Color(colorDefaultService),
       appBar: AppBar(
         title: Text(
-          'Moyen de paiement',
-          style: TextStyle(color: Colors.black),
+          AppLocalizations.current.paymentMethod,
+          style: const TextStyle(color: Colors.black),
         ),
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: const Color(colorDefaultService),
@@ -30,11 +31,11 @@ class _ModePaymentScreenState extends State<ModePaymentScreen> {
         child: Column(
           children: [
             Center(child: SvgPicture.asset('images/others/credit_card.svg')),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             GestureDetector(
-              onTap: ()=>Navigator.of(context).pop(),
+              onTap: () => Navigator.of(context).pop(),
               child: PaimentOptionWidget(
                   title: 'Payer cash après la livraison',
                   bgColor: const Color(colorPrimary),

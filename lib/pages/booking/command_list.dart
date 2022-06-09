@@ -155,9 +155,12 @@ class CommandListState extends State<CommandList> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Flexible(child: filterContainer(index: 0, title: 'Actives')),
                   Flexible(
-                      child: filterContainer(index: 1, title: 'Historiques')),
+                      child: filterContainer(
+                          index: 0, title: AppLocalizations.current.active)),
+                  Flexible(
+                      child: filterContainer(
+                          index: 1, title: AppLocalizations.current.history)),
                 ],
               ),
             ),
@@ -266,9 +269,9 @@ class CommandListState extends State<CommandList> {
                           backgroundColor:
                               MaterialStateProperty.all(Color(0XFFBFBFBF))),
                       onPressed: () {},
-                      child: const Text(
-                        "Voir le reçu",
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.current.viewRecept,
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
@@ -291,9 +294,9 @@ class CommandListState extends State<CommandList> {
                         widget.onServiceRequested(
                             booking.prices![0].tarification.service!.id);
                       },
-                      child: const Text(
-                        "Reserver encore",
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.current.bookAgain,
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold),

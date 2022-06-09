@@ -24,6 +24,7 @@ class RequestExtension<T> {
   //static const  String _urlEndpoint = 'http://10.200.1.66:8080/';
 
   Future<dynamic> post(String url, dynamic data) async {
+    print(data);
     final response = await http.post(Uri.parse(_urlEndpoint + url),
         headers: {
           "Content-Type": "application/json; charset=utf-8",
@@ -31,7 +32,6 @@ class RequestExtension<T> {
         },
         body: data);
     print("=====URL OF CALL ===== ${_urlEndpoint + url}");
-    print(data);
     print(response.body);
 
     if (response.statusCode == 200 || response.statusCode == 201) {

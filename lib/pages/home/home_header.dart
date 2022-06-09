@@ -6,11 +6,10 @@ import 'package:my_clean/services/localization.dart';
 
 class HomeHeader extends StatefulWidget {
   final User? login;
+  final VoidCallback onProfiTaped;
 
-  const HomeHeader({
-    Key? key,
-    this.login,
-  }) : super(key: key);
+  const HomeHeader({Key? key, this.login, required this.onProfiTaped})
+      : super(key: key);
 
   @override
   State<HomeHeader> createState() => _HomeHeaderState();
@@ -60,20 +59,23 @@ class _HomeHeaderState extends State<HomeHeader>
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
-                  SvgPicture.asset(
-                    'images/icons/avatar.svg',
-                    width: 25,
+                  GestureDetector(
+                    onTap: () => widget.onProfiTaped(),
+                    child: SvgPicture.asset(
+                      'images/icons/avatar.svg',
+                      width: 25,
+                    ),
                   )
                 ],
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Padding(
-                padding: EdgeInsets.only(right: 40),
+              Padding(
+                padding: const EdgeInsets.only(right: 40),
                 child: Text(
-                  "De quel service avez-vous besoin aujourd'hui ?",
-                  style: TextStyle(
+                  AppLocalizations.current.whatService,
+                  style: const TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),

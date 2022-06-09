@@ -60,7 +60,7 @@ class WidgetTemplate extends Object {
           double? size}) =>
       InkWell(
         child: MaterialButton(
-          color: color ?? Color(0XFF02ABDE),
+          color: color ?? const Color(0XFF02ABDE),
           onPressed: callback,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),

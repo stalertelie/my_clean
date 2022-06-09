@@ -138,7 +138,7 @@ class AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       _toggleBottomNavigator(true);
     });
     return Scaffold(

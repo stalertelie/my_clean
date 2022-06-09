@@ -160,7 +160,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                 fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black),
           ),
           bottom: PreferredSize(
-              child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
+              child: Text(AppLocalizations.current.yourOrder),
+              preferredSize: Size.fromHeight(1)),
         ),
         body: SingleChildScrollView(
           child: Stack(
@@ -228,7 +229,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                               });
                                             });
                                           },
-                                          child: Text('Carte'))
+                                          child: Text(
+                                              AppLocalizations.current.map))
                                     ],
                                   ),
                                 )
@@ -314,7 +316,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                               height: 20,
                             ),
                             Text(
-                              "Choissiez votre type de maison",
+                              AppLocalizations.current.chooseTypeHouse,
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             ),
@@ -325,36 +327,39 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                 stream: _bloc.tarificationRootStream,
                                 builder: (context, snapshot) {
                                   return Column(
-                                    children: snapshot.data!
-                                        .map((e) => StreamBuilder<
-                                                TarificationObjectRoot?>(
-                                            stream: _bloc.selectedServiceStream,
-                                            builder:
-                                                (context, snapshotService) {
-                                              return Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  e.libelle
-                                                      .toCapitalized()
-                                                      .text
-                                                      .bold
-                                                      .make(),
-                                                  Radio(
-                                                      value: e.id,
-                                                      groupValue:
-                                                          snapshotService
-                                                              .data?.id,
-                                                      onChanged: (value) {
-                                                        _bloc
-                                                            .selectedServiceSubject
-                                                            .add(e);
-                                                      })
-                                                ],
-                                              );
-                                            }))
-                                        .toList(),
+                                    children: snapshot.hasData
+                                        ? snapshot.data!
+                                            .map((e) => StreamBuilder<
+                                                    TarificationObjectRoot?>(
+                                                stream:
+                                                    _bloc.selectedServiceStream,
+                                                builder:
+                                                    (context, snapshotService) {
+                                                  return Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      e.libelle
+                                                          .toCapitalized()
+                                                          .text
+                                                          .bold
+                                                          .make(),
+                                                      Radio(
+                                                          value: e.id,
+                                                          groupValue:
+                                                              snapshotService
+                                                                  .data?.id,
+                                                          onChanged: (value) {
+                                                            _bloc
+                                                                .selectedServiceSubject
+                                                                .add(e);
+                                                          })
+                                                    ],
+                                                  );
+                                                }))
+                                            .toList()
+                                        : [],
                                   );
                                 }),
                             const SizedBox(
@@ -368,13 +373,11 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    "Nombre de pièces"
-                                        .text
+                                    AppLocalizations.current.numberRoom.text
                                         .size(20)
                                         .bold
                                         .make(),
-                                    "Tous les espaces communs sont inclus"
-                                        .text
+                                    AppLocalizations.current.allArea.text
                                         .size(15)
                                         .make(),
                                     tarificationITem("PIECES")
@@ -446,14 +449,19 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                       print('change $date');
                                     }, onConfirm: (date) {
                                       if (date.hour > 17 || date.hour < 8) {
-                                        UtilsFonction.showErrorDialog(context,
-                                            "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                        UtilsFonction.showErrorDialog(
+                                            context,
+                                            AppLocalizations
+                                                .current.erroTimeFrame);
                                       } else {
                                         _bloc.bookingDateSubject.add(date);
                                       }
                                     },
                                         currentTime: DateTime.now(),
-                                        locale: LocaleType.fr);
+                                        locale:
+                                            GetIt.I<AppServices>().lang == 'fr'
+                                                ? LocaleType.fr
+                                                : LocaleType.en);
                                   },
                                   child: Text(
                                     AppLocalizations.current.selectDate,
@@ -556,7 +564,10 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             onPressed: () {
                               if (_appProvider.login == null) {
                                 UtilsFonction.NavigateToRoute(
-                                    context, LoginScreen());
+                                    context,
+                                    LoginScreen(
+                                      toPop: true,
+                                    ));
                               } else {
                                 if (_bloc.tarificationRootSubject.value
                                     .where((element) =>
@@ -575,24 +586,24 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   GetIt.I<AppServices>().showSnackbarWithState(
                                       Loading(
                                           hasError: true,
-                                          message:
-                                              "Veuillez entrer votre adresse"));
+                                          message: AppLocalizations
+                                              .current.adressError));
                                   return;
                                 }
                                 if (!_bloc.bookingDateSubject.hasValue) {
                                   GetIt.I<AppServices>().showSnackbarWithState(
                                       Loading(
                                           hasError: true,
-                                          message:
-                                              "Veuillez choisir une date"));
+                                          message: AppLocalizations
+                                              .current.dateError));
                                   return;
                                 }
                                 if (_bloc.totalSubject.value == 0) {
                                   GetIt.I<AppServices>().showSnackbarWithState(
                                       Loading(
                                           hasError: true,
-                                          message:
-                                              "Veuillez ajouter un service svp"));
+                                          message: AppLocalizations
+                                              .current.serviceError));
                                   return;
                                 }
                                 showRecapSheet();

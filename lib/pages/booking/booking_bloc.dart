@@ -378,7 +378,7 @@ class BookingBloc extends BaseBloc {
         gps: gps,
         date: _bookingDateSubject.hasValue ? _bookingDateSubject.value : null,
         prices: listPrice,
-        frequence: frequence,
+        frequence: frequence.map((e) => "${e.day} à ${e.time} \n").join(","),
         priceTotal: _totalSubject.value,
         choicesExtra: _extrasSubject.value != null
             ? _extrasSubject.value.map((e) => e.id!).toList()
@@ -431,7 +431,7 @@ class BookingBloc extends BaseBloc {
         gps: gps,
         date: _bookingDateSubject.hasValue ? _bookingDateSubject.value : null,
         prices: listPrice,
-        frequence: frequence,
+        frequence: frequence.map((e) => "${e.day} à ${e.time} \n").join(","),
         priceTotal: _totalSubject.value,
         choicesExtra: [],
         note: note,

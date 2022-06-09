@@ -190,7 +190,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                 fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black),
           ),
           bottom: PreferredSize(
-              child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
+              child: Text(AppLocalizations.current.yourOrder),
+              preferredSize: Size.fromHeight(1)),
         ),
         body: Stack(
           children: [
@@ -269,7 +270,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                                   });
                                                 });
                                               },
-                                              child: Text('Carte'))
+                                              child: Text(
+                                                  AppLocalizations.current.map))
                                         ],
                                       ),
                                     )
@@ -308,7 +310,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                   height: 30,
                                 ),*/
                                 Text(
-                                  "Sélectionnez votre type de véhicule",
+                                  AppLocalizations.current.vehiculeType,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18,
@@ -608,14 +610,19 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                         print('change $date');
                                       }, onConfirm: (date) {
                                         if (date.hour > 17 || date.hour < 8) {
-                                          UtilsFonction.showErrorDialog(context,
-                                              "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                          UtilsFonction.showErrorDialog(
+                                              context,
+                                              AppLocalizations
+                                                  .current.erroTimeFrame);
                                         } else {
                                           _bloc.setDateBooking(date);
                                         }
                                       },
                                           currentTime: DateTime.now(),
-                                          locale: LocaleType.fr);
+                                          locale: GetIt.I<AppServices>().lang ==
+                                                  'fr'
+                                              ? LocaleType.fr
+                                              : LocaleType.en);
                                     },
                                     child: Text(
                                       AppLocalizations.current.selectDate,
@@ -650,7 +657,10 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                               onPressedProp: () {
                                 if (_appProvider.login == null) {
                                   UtilsFonction.NavigateToRoute(
-                                      context, LoginScreen());
+                                      context,
+                                      LoginScreen(
+                                        toPop: true,
+                                      ));
                                 } else {
                                   if (_bloc.tarificationRootSubject.value
                                       .where((element) =>
@@ -668,7 +678,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                   showRecapSheet();
                                 }
                               },
-                              textProp: 'COMMANDER'.toUpperCase()),
+                              textProp:
+                                  AppLocalizations.current.order.toUpperCase()),
                         ],
                       ),
                     ),

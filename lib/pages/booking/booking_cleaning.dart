@@ -186,7 +186,8 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                 fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black),
           ),
           bottom: PreferredSize(
-              child: Text('Votre commande'), preferredSize: Size.fromHeight(1)),
+              child: Text(AppLocalizations.current.yourOrder),
+              preferredSize: Size.fromHeight(1)),
         ),
         body: SingleChildScrollView(
           child: Stack(
@@ -252,7 +253,8 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                             });
                                           });
                                         },
-                                        child: Text('Carte'))
+                                        child:
+                                            Text(AppLocalizations.current.map))
                                   ],
                                 )
                               ],
@@ -292,13 +294,13 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Nombre de pièces",
+                                    AppLocalizations.current.numberRoom,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20),
                                   ),
                                   Text(
-                                    "Tous les espaces communs sont inclus",
+                                    AppLocalizations.current.allArea,
                                     style: TextStyle(
                                         color: Colors.black54,
                                         fontWeight: FontWeight.w600,
@@ -502,8 +504,8 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    "Sélectionnez vos tâches supplémentaires"
-                                        .text
+                                    AppLocalizations
+                                        .current.additionnalTask.text
                                         .size(18)
                                         .make(),
                                     const SizedBox(
@@ -673,13 +675,18 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                                 date.hour < 8) {
                                               UtilsFonction.showErrorDialog(
                                                   context,
-                                                  "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                                  AppLocalizations
+                                                      .current.erroTimeFrame);
                                             } else {
                                               _bloc.setDateBooking(date);
                                             }
                                           },
                                               currentTime: DateTime.now(),
-                                              locale: LocaleType.fr);
+                                              locale:
+                                                  GetIt.I<AppServices>().lang ==
+                                                          'fr'
+                                                      ? LocaleType.fr
+                                                      : LocaleType.en);
                                         },
                                         child: Text(
                                           AppLocalizations.current.selectDate,
@@ -848,9 +855,12 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                                   if (value != null) {
                                                     if (value.hour > 17 ||
                                                         value.hour < 8) {
-                                                      UtilsFonction.showErrorDialog(
-                                                          context,
-                                                          "Nous ne prestons pas dans cet intervalle de temps.Désolé!");
+                                                      UtilsFonction
+                                                          .showErrorDialog(
+                                                              context,
+                                                              AppLocalizations
+                                                                  .current
+                                                                  .erroTimeFrame);
                                                     } else {
                                                       _bloc
                                                           .frequenceHoureSubject
@@ -940,7 +950,10 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                           onPressedProp: () {
                             if (_appProvider.login == null) {
                               UtilsFonction.NavigateToRoute(
-                                  context, LoginScreen());
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
                             } else {
                               if (!_bloc.totalSubject.hasValue) {
                                 GetIt.I<AppServices>().showSnackbarWithState(
@@ -965,21 +978,23 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                 GetIt.I<AppServices>().showSnackbarWithState(
                                     Loading(
                                         hasError: true,
-                                        message: "Veuillez choisir une date"));
+                                        message: AppLocalizations
+                                            .current.dateError));
                                 return;
                               }
                               if (searchCtrl.text.isEmpty) {
                                 GetIt.I<AppServices>().showSnackbarWithState(
                                     Loading(
                                         hasError: true,
-                                        message:
-                                            "Veuillez entrer votre adresse"));
+                                        message: AppLocalizations
+                                            .current.adressError));
                                 return;
                               }
                               showRecapSheet();
                             }
                           },
-                          textProp: 'Réserver'.toUpperCase()),
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase()),
                     ],
                   ),
                 ),

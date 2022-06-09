@@ -266,8 +266,7 @@ class UtilsFonction extends Object {
               ),
               actions: <Widget>[
                 ZoomIn(
-                  child: OutlineButton(
-                    splashColor: Colors.red,
+                  child: TextButton(
                     child: Text(
                       "Annuler",
                       style: TextStyle(color: Colors.red),
@@ -278,7 +277,7 @@ class UtilsFonction extends Object {
                   ),
                 ),
                 ZoomIn(
-                  child: OutlineButton(
+                  child: TextButton(
                     child: const Text(
                       "Oui",
                       style: TextStyle(color: Colors.green),
@@ -311,8 +310,7 @@ class UtilsFonction extends Object {
               ),
               actions: <Widget>[
                 ZoomIn(
-                  child: OutlineButton(
-                    splashColor: Colors.red,
+                  child: TextButton(
                     child: const Text(
                       "FERMER",
                       style: TextStyle(color: Colors.red),

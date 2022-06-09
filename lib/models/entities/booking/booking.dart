@@ -4,7 +4,6 @@ import 'dart:ffi';
 import 'package:json_annotation/json_annotation.dart';
 // import 'package:build_runner/build_runner.dart';
 import 'package:my_clean/models/entities/prices/prices.dart';
-import 'package:my_clean/models/entities/frequence.dart';
 
 part 'booking.g.dart';
 
@@ -16,7 +15,7 @@ class Booking {
   List<Prices>? prices;
   int? priceTotal;
   bool? isMeubler;
-  List<Frequence>? frequence;
+  String? frequence;
   String? gps;
   String? note;
   int? id;

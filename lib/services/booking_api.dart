@@ -18,12 +18,14 @@ class BookingApi {
   Future<GetBookingResponse> getCommandList(
       {required String id, int? page = 1}) async {
     final String url = config.apiBaseUrl + endpoint + '?user=$id&page=$page';
+    print(url);
     final response = await client.get(Uri.parse(url), headers: {
       // HttpHeaders.acceptHeader: 'application/ld+json',
       HttpHeaders.contentTypeHeader: 'application/ld+json'
     });
 
     Map<String, dynamic> responseMap = jsonDecode(response.body);
+    print(response.body);
 
     final bookingResponse = GetBookingResponse.fromJson(responseMap);
 
