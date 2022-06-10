@@ -456,6 +456,18 @@ class AppLocalizations {
   String get cleaning {
     return Intl.message('cleaning', name: 'cleaning', locale: localeName);
   }
+
+  String get frequency {
+    return Intl.message('frequency', name: 'frequency', locale: localeName);
+  }
+
+  String get oneTimeWeek {
+    return Intl.message('oneTimeWeek', name: 'oneTimeWeek', locale: localeName);
+  }
+
+  String get selectDay {
+    return Intl.message('selectDay', name: 'selectDay', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -10,8 +10,10 @@ part 'booking.g.dart';
 @JsonSerializable()
 class Booking {
   String? user;
+  String? code;
   String? localisation;
   DateTime? date;
+  bool? isClosed;
   List<Prices>? prices;
   int? priceTotal;
   bool? isMeubler;
@@ -30,6 +32,8 @@ class Booking {
       this.gps,
       this.prices,
       this.note,
+      this.isClosed,
+      this.code,
       this.id});
 
   factory Booking.fromJson(Map<String, dynamic> json) =>

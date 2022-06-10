@@ -386,9 +386,12 @@ class BookingBloc extends BaseBloc {
         note: note,
         user: userID,
         isMeubler: isMeubler);
-
+    if (isPonctualSubject.hasValue && isPonctualSubject.value != true) {
+      booking.frequence = "1 fois/semaine, ${booking.frequence}";
+    }
+    //print(jsonEncode(booking));
+    //return;
     loadingSubject.add(Loading(loading: true, message: "Réservation en cours"));
-    print(loadingSubject.valueOrNull);
     GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
 
     Future<dynamic> response =

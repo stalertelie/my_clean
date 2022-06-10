@@ -174,5 +174,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "active": MessageLookupByLibrary.simpleMessage("Actives"),
         "history": MessageLookupByLibrary.simpleMessage("Historiques"),
         "cleaning": MessageLookupByLibrary.simpleMessage("Nettoyage."),
+        "frequency": MessageLookupByLibrary.simpleMessage("Fréquence."),
+        "oneTimeWeek":
+            MessageLookupByLibrary.simpleMessage("1 fois par semaine"),
+        "selectDay": MessageLookupByLibrary.simpleMessage(
+            "Sélectionnez le jour de la semaine"),
       };
 }

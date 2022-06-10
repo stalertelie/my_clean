@@ -326,6 +326,11 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             StreamBuilder<List<TarificationObjectRoot>>(
                                 stream: _bloc.tarificationRootStream,
                                 builder: (context, snapshot) {
+                                  if (snapshot.hasData &&
+                                      !_bloc.selectedServiceSubject.hasValue) {
+                                    _bloc.selectedServiceSubject
+                                        .add(snapshot.data!.first);
+                                  }
                                   return Column(
                                     children: snapshot.hasData
                                         ? snapshot.data!

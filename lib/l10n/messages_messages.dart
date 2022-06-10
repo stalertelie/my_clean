@@ -157,9 +157,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "bookingDone":
             MessageLookupByLibrary.simpleMessage("Order successfully added"),
         "bookingDoneMessage": MessageLookupByLibrary.simpleMessage(
-            "Our agents will contact you shortly."),
-        "active": MessageLookupByLibrary.simpleMessage("Active."),
-        "history": MessageLookupByLibrary.simpleMessage("History."),
-        "cleaning": MessageLookupByLibrary.simpleMessage("Cleaning."),
+            "Our agents will contact you shortly"),
+        "active": MessageLookupByLibrary.simpleMessage("Active"),
+        "history": MessageLookupByLibrary.simpleMessage("History"),
+        "cleaning": MessageLookupByLibrary.simpleMessage("Cleaning"),
+        "frequency": MessageLookupByLibrary.simpleMessage("Frequency"),
+        "oneTimeWeek": MessageLookupByLibrary.simpleMessage("1 time per week"),
+        "selectDay":
+            MessageLookupByLibrary.simpleMessage("Select the day of the week"),
       };
 }

@@ -15,12 +15,14 @@ Booking _$BookingFromJson(Map<String, dynamic> json) => Booking(
     isMeubler: json['isMeubler'] != null ? json['isMeubler'] as bool : null,
     frequence: json['frequence'] != null ? json['frequence'] as String : null,
     gps: json['gps'] != null ? json['gps'] as String : null,
+    code: json['code'] != null ? json['code'] as String : null,
     prices: json['prices'] != null
         ? (json['prices'] as List)
             .map((e) => Prices.fromJson(e as Map<String, dynamic>))
             .toList()
         : null,
     note: json['note'] != null ? json['note'] as String : null,
+    isClosed: json['isClosed'] != null ? json['isClosed'] as bool : null,
     id: json['id'] != null ? json['id'] as int : null);
 
 Map<String, dynamic> _$BookingToJson(Booking instance) => <String, dynamic>{

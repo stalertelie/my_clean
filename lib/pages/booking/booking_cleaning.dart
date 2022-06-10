@@ -408,7 +408,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                           : Container());
                                     },
                                   ),
-                                  Padding(
+                                  /*Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 20),
                                     child: Row(
@@ -416,7 +416,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "Salle de bain".toString(),
+                                          "Chambre".toString(),
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
@@ -484,7 +484,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                             })
                                       ],
                                     ),
-                                  )
+                                  )*/
                                 ],
                               ),
                             ),
@@ -704,7 +704,10 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        "Fréquence".text.size(20).bold.make(),
+                                        AppLocalizations.current.frequency.text
+                                            .size(20)
+                                            .bold
+                                            .make(),
                                         SizedBox(
                                           height: 10,
                                         ),
@@ -723,10 +726,11 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                                     frequenceItem(
                                                         frequenceMutiplicity:
                                                             FrequenceMutiplicity(
-                                                                title:
-                                                                    '1 fois par semaine',
+                                                                title: AppLocalizations
+                                                                    .current
+                                                                    .oneTimeWeek,
                                                                 count: 1)),
-                                                    Divider(
+                                                    /*Divider(
                                                       color: Colors.black,
                                                     ),
                                                     frequenceItem(
@@ -743,7 +747,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                                             FrequenceMutiplicity(
                                                                 title:
                                                                     "3 fois par semaine",
-                                                                count: 3)),
+                                                                count: 3))*/
                                                   ],
                                                 );
                                               }),
@@ -771,12 +775,10 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                               color: Colors.white,
                                               borderRadius:
                                                   BorderRadius.circular(10)),
-                                          child:
-                                              "Selectionnez le(s) jour(s) de la semaine"
-                                                  .text
-                                                  .bold
-                                                  .size(18)
-                                                  .make(),
+                                          child: AppLocalizations
+                                              .current.selectDay.text.bold
+                                              .size(18)
+                                              .make(),
                                         ),
                                         SizedBox(
                                           height: 10,
@@ -784,7 +786,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                         StreamBuilder<List<String>>(
                                             stream: _bloc.dayListStream,
                                             builder: (context, snapshot) {
-                                              return Container(
+                                              return SizedBox(
                                                 height: 80,
                                                 child: ListView.builder(
                                                     itemBuilder:
