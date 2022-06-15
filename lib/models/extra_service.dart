@@ -5,6 +5,7 @@ class ExtraService {
       this.extraServiceId,
       this.title,
       this.image,
+      this.price,
       this.contentUrl});
 
   String? id;
@@ -13,6 +14,7 @@ class ExtraService {
   String? title;
   String? image;
   String? contentUrl;
+  int? price;
 
   factory ExtraService.fromJson(Map<String, dynamic> json) => ExtraService(
         id: json["@id"],
@@ -20,6 +22,7 @@ class ExtraService {
         extraServiceId: json["id"],
         title: json["title"],
         image: json["image"],
+        price: json["price"],
         contentUrl: json["contentUrl"],
       );
 
@@ -29,5 +32,6 @@ class ExtraService {
         "id": extraServiceId,
         "title": title,
         "image": image,
+        "price": price,
       };
 }

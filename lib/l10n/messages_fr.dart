@@ -77,14 +77,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "furnishedHouse": MessageLookupByLibrary.simpleMessage(
             "Vottre maison  est-elle meublée"),
         "isYourHouseFurnished": MessageLookupByLibrary.simpleMessage(
-            "Votre maison est-elle meublée ?"),
+            "Est ce que c’est une résidence meublée ?"),
         "yes": MessageLookupByLibrary.simpleMessage("Oui"),
         "no": MessageLookupByLibrary.simpleMessage("Non"),
         "isThereAnythingElse": MessageLookupByLibrary.simpleMessage(
             "Y a-t-il autre chose que vous voudriez que nous sachions ?"),
         "enterYourNote":
             MessageLookupByLibrary.simpleMessage("Saisissez votre note ici"),
-        "dateAndHour": MessageLookupByLibrary.simpleMessage("Date et heure"),
+        "dateAndHour":
+            MessageLookupByLibrary.simpleMessage("Choisir la date et l’heure"),
         "whenDoYouWantTheExecution": MessageLookupByLibrary.simpleMessage(
             "A quel fréquence voulez vous l'exécution du service ?"),
         "selectDate": MessageLookupByLibrary.simpleMessage(
@@ -173,11 +174,20 @@ class MessageLookup extends MessageLookupByLibrary {
             "Nos agens vous contacterons sous peu."),
         "active": MessageLookupByLibrary.simpleMessage("Actives"),
         "history": MessageLookupByLibrary.simpleMessage("Historiques"),
-        "cleaning": MessageLookupByLibrary.simpleMessage("Nettoyage."),
-        "frequency": MessageLookupByLibrary.simpleMessage("Fréquence."),
+        "cleaning": MessageLookupByLibrary.simpleMessage("Nettoyage"),
+        "frequency": MessageLookupByLibrary.simpleMessage("Fréquence"),
         "oneTimeWeek":
             MessageLookupByLibrary.simpleMessage("1 fois par semaine"),
+        "roomSurface":
+            MessageLookupByLibrary.simpleMessage("Surface de la pièce"),
         "selectDay": MessageLookupByLibrary.simpleMessage(
             "Sélectionnez le jour de la semaine"),
+        "chooseSection":
+            MessageLookupByLibrary.simpleMessage("Choisir une section"),
+        "carpetSize": MessageLookupByLibrary.simpleMessage(
+            "Quelle est la taille de votre tapis ?"),
+        "location": MessageLookupByLibrary.simpleMessage("Localisation"),
+        "useLocation":
+            MessageLookupByLibrary.simpleMessage("Utiliser l'emplacement"),
       };
 }

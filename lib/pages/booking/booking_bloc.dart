@@ -139,10 +139,20 @@ class BookingBloc extends BaseBloc {
       List<ExtraService> list = _selectedExtrasSubject.value;
       list.add(extraService);
       _selectedExtrasSubject.add(list);
+      int total = _totalSubject.value;
+      total += extraService.price!;
+      _totalSubject.add(total);
+      totalAbonmentSubject
+          .add(totalAbonmentSubject.value + extraService.price!);
     } else {
       _selectedExtrasSubject.value
           .removeWhere((element) => element.id == extraService.id);
       _selectedExtrasSubject.add(_selectedExtrasSubject.value);
+      int total = _totalSubject.value;
+      total -= extraService.price!;
+      _totalSubject.add(total);
+      totalAbonmentSubject
+          .add(totalAbonmentSubject.value - extraService.price!);
     }
   }
 
@@ -181,6 +191,24 @@ class BookingBloc extends BaseBloc {
         return;
       }
       calculateDetail(quantity);
+    }
+  }
+
+  add3dCustomTarification(int quantity) {
+    TarificationObjectRoot tarificationRootObject =
+        _tarificationRootSubject.value.elementAt(2);
+    TarificationObject tarificationObject = tarificationRootObject.list!
+        .where((element) =>
+            element.tarifications!.min! <= quantity &&
+            element.tarifications!.max! >= quantity)
+        .first;
+    if (tarificationObject != null) {
+      print("Nottt nullll");
+      tarificationObject.quantity = quantity;
+      _tarificationRootSubject.add(_tarificationRootSubject.value);
+      int total = 0;
+      total = tarificationObject.tarifications!.price!;
+      _totalSubject.add(total);
     }
   }
 
@@ -307,6 +335,12 @@ class BookingBloc extends BaseBloc {
     for (var element in _tarificationRootSubject.value) {
       for (var item in element.list!) {
         if (item.quantity! > 0) {
+          if (item.tarifications!.priceOperator == null) {
+            item.tarifications!.priceOperator! == "+";
+          }
+          if (item.tarifications!.operatorValue == null) {
+            item.tarifications!.operatorValue = item.tarifications!.price;
+          }
           if (item.tarifications!.priceOperator! == "+") {
             total += item.tarifications!.price! +
                 (item.tarifications!.operatorValue! * (item.quantity! - 1));
@@ -380,8 +414,8 @@ class BookingBloc extends BaseBloc {
         prices: listPrice,
         frequence: frequence.map((e) => "${e.day} à ${e.time} \n").join(","),
         priceTotal: _totalSubject.value,
-        choicesExtra: _extrasSubject.value != null
-            ? _extrasSubject.value.map((e) => e.id!).toList()
+        choicesExtra: _selectedExtrasSubject.value != null
+            ? _selectedExtrasSubject.value.map((e) => e.id!).toList()
             : [],
         note: note,
         user: userID,

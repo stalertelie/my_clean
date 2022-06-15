@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -261,10 +262,16 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                                                 _markerPosition,
                                                           )).then((value) {
                                                     if (value != null) {
-                                                      _markerPosition = value;
+                                                      _markerPosition =
+                                                          value[0];
                                                       setState(() {
-                                                        searchCtrl.text =
-                                                            "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                        if (value[1] == null) {
+                                                          searchCtrl.text =
+                                                              "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                        } else {
+                                                          searchCtrl.text =
+                                                              value[1];
+                                                        }
                                                       });
                                                     }
                                                   });
@@ -568,13 +575,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     .fontFamily("SFPro")
                                     .bold
                                     .make(),
-                                AppLocalizations
-                                    .current.whenDoYouWantTheExecution.text
-                                    .size(10)
-                                    .fontFamily("SFPro")
-                                    .bold
-                                    .gray500
-                                    .make(),
+
                                 /*const SizedBox(
                                   height: 10,
                                 ),
@@ -609,6 +610,8 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                           onChanged: (date) {
                                         print('change $date');
                                       }, onConfirm: (date) {
+                                        print(GetIt.I<AppServices>().lang ==
+                                            "fr");
                                         if (date.hour > 17 || date.hour < 8) {
                                           UtilsFonction.showErrorDialog(
                                               context,
@@ -618,7 +621,9 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                           _bloc.setDateBooking(date);
                                         }
                                       },
-                                          currentTime: DateTime.now(),
+                                          currentTime:
+                                              _bloc.bookingDateSubject.hasValue && _bloc.bookingDateSubject.value != null ?
+                                                  _bloc.bookingDateSubject.value : DateTime.now(),
                                           locale: GetIt.I<AppServices>().lang ==
                                                   'fr'
                                               ? LocaleType.fr
@@ -641,7 +646,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                 return snapshot.hasData && snapshot.data != null
                                     ? Center(
                                         child:
-                                            "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
+                                            "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
                                                 .text
                                                 .bold
                                                 .size(18)
@@ -652,34 +657,6 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                           const SizedBox(
                             height: 15,
                           ),
-                          CustomButton(
-                              contextProp: context,
-                              onPressedProp: () {
-                                if (_appProvider.login == null) {
-                                  UtilsFonction.NavigateToRoute(
-                                      context,
-                                      LoginScreen(
-                                        toPop: true,
-                                      ));
-                                } else {
-                                  if (_bloc.tarificationRootSubject.value
-                                      .where((element) =>
-                                          element.list!.indexWhere(
-                                              (item) => item.quantity! > 0) ==
-                                          -1)
-                                      .isEmpty) {
-                                    GetIt.I<AppServices>()
-                                        .showSnackbarWithState(Loading(
-                                            hasError: true,
-                                            message:
-                                                "Veuillez choisir un seul type de véhicule"));
-                                    return;
-                                  }
-                                  showRecapSheet();
-                                }
-                              },
-                              textProp:
-                                  AppLocalizations.current.order.toUpperCase()),
                         ],
                       ),
                     ),
@@ -723,6 +700,44 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
             )*/
           ],
         ),
+        bottomNavigationBar: CustomButton(
+            contextProp: context,
+            onPressedProp: () {
+              if (_appProvider.login == null) {
+                UtilsFonction.NavigateToRoute(
+                    context,
+                    LoginScreen(
+                      toPop: true,
+                    ));
+              } else {
+                if (_bloc.tarificationRootSubject.value
+                    .where((element) =>
+                        element.list!
+                            .indexWhere((item) => item.quantity! > 0) ==
+                        -1)
+                    .isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations
+                          .current.pleaseChooseAtLeastOneOption));
+                  return;
+                }
+                if (searchCtrl.text.isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.adressError));
+                  return;
+                }
+                if (!_bloc.bookingDateSubject.hasValue) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.dateError));
+                  return;
+                }
+                showRecapSheet();
+              }
+            },
+            textProp: AppLocalizations.current.order.toUpperCase()),
       );
     });
   }
@@ -788,7 +803,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
   }
 
   void showSearhPage(BuildContext ctx) {
-    _scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
+    /*_scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
           callBack: (GoogleResult feature) {
             Navigator.of(context).pop();
             _currentFeature = feature;
@@ -798,7 +813,24 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
             _animatedMapMove(_markerPosition, 15);
             setState(() {});
           },
-        ));
+        ));*/
+    UtilsFonction.NavigateToRouteAndWait(
+        context,
+        MapViewScreen(
+          initialPosition: _markerPosition,
+        )).then((value) {
+      if (value != null) {
+        _markerPosition = value[0];
+        setState(() {
+          if (value[1] == null) {
+            searchCtrl.text =
+                "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+          } else {
+            searchCtrl.text = value[1];
+          }
+        });
+      }
+    });
   }
 
   void showRecapSheet() {

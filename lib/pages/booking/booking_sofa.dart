@@ -104,6 +104,10 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                       (e) => TarificationObject(quantity: 0, tarifications: e))
                   .toList()))
           .toList());
+      _bloc.tarificationRootSubject.value[0].list!.forEach((element) {
+        element.quantity = element.tarifications?.min;
+      });
+      _bloc.calculateDetail(0);
     }
 
     _bloc.loadingSubject.listen((value) {
@@ -214,10 +218,15 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                                             _markerPosition,
                                                       )).then((value) {
                                                 if (value != null) {
-                                                  _markerPosition = value;
+                                                  _markerPosition = value[0];
                                                   setState(() {
-                                                    searchCtrl.text =
-                                                        "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    if (value[1] == null) {
+                                                      searchCtrl.text =
+                                                          "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    } else {
+                                                      searchCtrl.text =
+                                                          value[1];
+                                                    }
                                                   });
                                                 }
                                               });
@@ -404,13 +413,13 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            AppLocalizations
+                            /*AppLocalizations
                                 .current.whenDoYouWantTheExecution.text
                                 .size(10)
                                 .fontFamily("SFPro")
                                 .bold
                                 .gray500
-                                .make(),
+                                .make(),*/
                             /*const SizedBox(
                               height: 10,
                             ),
@@ -544,7 +553,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
                                                   .text
                                                   .bold
                                                   .size(18)
@@ -555,7 +564,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                             }),
                       ),
                       const SizedBox(
-                        height: 30,
+                        height: 60,
                       ),
                       CustomButton(
                           contextProp: context,
@@ -567,17 +576,28 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                     toPop: true,
                                   ));
                             } else {
-                              if (_bloc.tarificationRootSubject.value
-                                  .where((element) =>
-                                      element.list!.indexWhere(
-                                          (item) => item.quantity! > 0) ==
-                                      -1)
-                                  .isEmpty) {
+                              if (_bloc.totalSubject.value == 0) {
                                 GetIt.I<AppServices>().showSnackbarWithState(
                                     Loading(
                                         hasError: true,
                                         message: AppLocalizations.current
                                             .pleaseChooseAtLeastOneOption));
+                                return;
+                              }
+                              if (searchCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.adressError));
+                                return;
+                              }
+                              if (!_bloc.bookingDateSubject.hasValue) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.dateError));
                                 return;
                               }
                               showRecapSheet();
@@ -778,18 +798,23 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
   }
 
   void showSearhPage(BuildContext ctx) {
-    _scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
-          callBack: (GoogleResult feature) {
-            print("yyyy");
-            Navigator.of(context).pop();
-            _currentFeature = feature;
-            searchCtrl.text = feature.name!;
-            _markerPosition = LatLng(feature.geometry!.location!.lat!,
-                feature.geometry!.location!.lng!);
-            _animatedMapMove(_markerPosition, 15);
-            setState(() {});
-          },
-        ));
+    UtilsFonction.NavigateToRouteAndWait(
+        context,
+        MapViewScreen(
+          initialPosition: _markerPosition,
+        )).then((value) {
+      if (value != null) {
+        _markerPosition = value[0];
+        setState(() {
+          if (value[1] == null) {
+            searchCtrl.text =
+                "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+          } else {
+            searchCtrl.text = value[1];
+          }
+        });
+      }
+    });
   }
 
   void showRecapSheet() {

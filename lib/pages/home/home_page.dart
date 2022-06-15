@@ -177,12 +177,12 @@ class _HomeScreenState extends State<HomeScreen> {
         services.title!.toLowerCase().contains("mattress")) {
       UtilsFonction.NavigateToRoute(
           context, BookingMattressScreen(service: services));
-    } else if (services.title!.toLowerCase().contains("cleaning") ||
+    } else if (services.title!.toLowerCase().contains("home cleaning") ||
         services.title!.toLowerCase().contains("domicile")) {
       UtilsFonction.NavigateToRoute(
           context, BookingCleaningScreen(service: services));
     } else if (services.title!.toLowerCase().contains("tapis") ||
-        services.title!.toLowerCase().contains(" carpet cleaning")) {
+        services.title!.toLowerCase().contains("carpet cleaning")) {
       UtilsFonction.NavigateToRoute(
           context, BookingCarpetScreen(service: services));
     } else if (services.title!.toLowerCase().contains("climatiseur") ||
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
       UtilsFonction.NavigateToRoute(
           context, BookingSofaScreen(service: services));
     } else if (services.title!.toLowerCase().contains("3d") ||
-        services.title!.toLowerCase().contains("3D")) {
+        services.title!.toLowerCase().contains("3d")) {
       UtilsFonction.NavigateToRoute(
           context, BookingDesinfectionScreen(service: services));
     } else {

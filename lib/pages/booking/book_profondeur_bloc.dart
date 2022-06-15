@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
@@ -11,6 +12,7 @@ import 'package:my_clean/models/entities/prices/prices.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/models/price.dart';
 import 'package:my_clean/models/price_booking.dart';
+import 'package:my_clean/models/tarification_object.dart';
 import 'package:my_clean/models/tarification_object_root.dart';
 import 'package:my_clean/pages/booking/booking_bloc.dart';
 import 'package:my_clean/services/app_service.dart';
@@ -25,6 +27,10 @@ class BookProfondeurBloc extends BaseBloc {
   Stream<int> get totalStream => _totalSubject.stream;
   final _totalSubject = BehaviorSubject<int>.seeded(0);
   BehaviorSubject<int> get totalSubject => _totalSubject;
+
+  Stream<int> get totalItem => _totalItemSubject.stream;
+  final _totalItemSubject = BehaviorSubject<int>.seeded(0);
+  BehaviorSubject<int> get totalItemSubject => _totalItemSubject;
 
   Stream<List<TarificationObjectRoot>> get tarificationRootStream =>
       _tarificationRootSubject.stream;
@@ -44,22 +50,26 @@ class BookProfondeurBloc extends BaseBloc {
 
   BehaviorSubject<List<DayObject>> get daysSubject => _daysSubject;
 
-  void addTarification(
-      TarificationObjectRoot tarificationObjectRoot, int number) {
-    List<TarificationObjectRoot> list = _tarificationRootSubject.value;
-    int newNumber = list
-            .firstWhere((element) => element.id == tarificationObjectRoot.id)
-            .total +
-        number;
-    _selectedServiceSubject.add(_selectedServiceSubject.value);
-    list
-        .firstWhere((element) => element.id == tarificationObjectRoot.id)
-        .total += number;
-    _tarificationRootSubject.add(list);
-    int total = _selectedServiceSubject.value!.list![0].tarifications!.price! +
-        ((newNumber - 1) *
-            _selectedServiceSubject
-                .value!.list![0].tarifications!.operatorValue!);
+  void addTarification(int number) {
+    _totalItemSubject.add(_totalItemSubject.value + number);
+    List<TarificationObject> tarificationObjectList = _selectedServiceSubject
+        .value!.list!
+        .where((element) =>
+            element.tarifications!.min! <= _totalItemSubject.value &&
+            element.tarifications!.max! >= _totalItemSubject.value)
+        .toList();
+    if (tarificationObjectList.isEmpty) {
+      return;
+    }
+    TarificationObject tarificationObject = tarificationObjectList.first;
+    if (_totalItemSubject.value <
+        tarificationObject.tarifications!.initialNumber!) {
+      return;
+    }
+    int total = tarificationObject.tarifications!.price! +
+        (_totalItemSubject.value -
+                tarificationObject.tarifications!.initialNumber!) *
+            tarificationObject.tarifications!.operatorValue!;
     _totalSubject.add(total);
   }
 

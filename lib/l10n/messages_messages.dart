@@ -72,14 +72,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "order": MessageLookupByLibrary.simpleMessage("order"),
         "furnishedHouse":
             MessageLookupByLibrary.simpleMessage("furnishedHouse"),
-        "isYourHouseFurnished":
-            MessageLookupByLibrary.simpleMessage("isYourHouseFurnished"),
+        "isYourHouseFurnished": MessageLookupByLibrary.simpleMessage(
+            "Is it a furnished residence?"),
         "yes": MessageLookupByLibrary.simpleMessage("yes"),
         "no": MessageLookupByLibrary.simpleMessage("no"),
         "isThereAnythingElse":
             MessageLookupByLibrary.simpleMessage("isThereAnythingElse"),
         "enterYourNote": MessageLookupByLibrary.simpleMessage("enterYourNote"),
-        "dateAndHour": MessageLookupByLibrary.simpleMessage("dateAndHour"),
+        "dateAndHour":
+            MessageLookupByLibrary.simpleMessage("Choose the date and time"),
         "whenDoYouWantTheExecution":
             MessageLookupByLibrary.simpleMessage("whenDoYouWantTheExecution"),
         "selectDate": MessageLookupByLibrary.simpleMessage("selectDate"),
@@ -165,5 +166,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "oneTimeWeek": MessageLookupByLibrary.simpleMessage("1 time per week"),
         "selectDay":
             MessageLookupByLibrary.simpleMessage("Select the day of the week"),
+        "roomSurface":
+            MessageLookupByLibrary.simpleMessage("Surface of the room"),
+        "chooseSection":
+            MessageLookupByLibrary.simpleMessage("Choose a section"),
+        "carpetSize": MessageLookupByLibrary.simpleMessage(
+            "What is the size of your carpet?"),
+        "location": MessageLookupByLibrary.simpleMessage("Location"),
+        "useLocation": MessageLookupByLibrary.simpleMessage("Use location"),
       };
 }

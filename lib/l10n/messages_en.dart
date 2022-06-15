@@ -74,15 +74,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "order": MessageLookupByLibrary.simpleMessage("Order"),
         "furnishedHouse":
             MessageLookupByLibrary.simpleMessage("Furnished house"),
-        "isYourHouseFurnished":
-            MessageLookupByLibrary.simpleMessage("Is your house furnished?"),
+        "isYourHouseFurnished": MessageLookupByLibrary.simpleMessage(
+            "Is it a furnished residence??"),
         "yes": MessageLookupByLibrary.simpleMessage("Yes"),
         "no": MessageLookupByLibrary.simpleMessage("No"),
         "isThereAnythingElse": MessageLookupByLibrary.simpleMessage(
             "Is there anything else you would like us know?"),
         "enterYourNote":
             MessageLookupByLibrary.simpleMessage("Enter your note here"),
-        "dateAndHour": MessageLookupByLibrary.simpleMessage("Date and hour"),
+        "dateAndHour":
+            MessageLookupByLibrary.simpleMessage("Choose the date and time"),
         "whenDoYouWantTheExecution": MessageLookupByLibrary.simpleMessage(
             "How often do you want the execution of the service?"),
         "selectDate": MessageLookupByLibrary.simpleMessage("Select a date"),
@@ -113,7 +114,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("Signup"),
         "numTel": MessageLookupByLibrary.simpleMessage("Phone number"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
-        "selectMatiere": MessageLookupByLibrary.simpleMessage("selectMatiere"),
+        "selectMatiere":
+            MessageLookupByLibrary.simpleMessage("Select the material"),
         "numberPlace": MessageLookupByLibrary.simpleMessage("Number of seats"),
         "steamCleaning": MessageLookupByLibrary.simpleMessage("Steam cleaning"),
         "chooseTypeHouse":
@@ -173,5 +175,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "oneTimeWeek": MessageLookupByLibrary.simpleMessage("1 time per week"),
         "selectDay":
             MessageLookupByLibrary.simpleMessage("Select the day of the week"),
+        "roomSurface":
+            MessageLookupByLibrary.simpleMessage("Surface of the room"),
+        "chooseSection":
+            MessageLookupByLibrary.simpleMessage("Choose a section"),
+        "carpetSize": MessageLookupByLibrary.simpleMessage(
+            "What is the size of your carpet?"),
+        "location": MessageLookupByLibrary.simpleMessage("Location"),
+        "useLocation": MessageLookupByLibrary.simpleMessage("Use location"),
       };
 }

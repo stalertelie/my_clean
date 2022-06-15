@@ -193,215 +193,198 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                 height: MediaQuery.of(context).size.height,
               ),
               Container(
-                margin: EdgeInsets.only(top: showMap ? 480 : 0),
-                width: double.maxFinite,
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Container(
-                            padding: EdgeInsets.all(5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SvgPicture.asset(
+                                'images/icons/map-marker.svg',
+                                width: 40,
+                              ),
+                              Expanded(
+                                  child: GestureDetector(
+                                      child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          height: 40,
+                                          child: Text(searchCtrl.text)),
+                                      onTap: () => showSearhPage(context))),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      height: 20,
+                                      width: 2,
+                                      color: Colors.black,
+                                    ),
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            //showMap = !showMap;
+                                            UtilsFonction
+                                                .NavigateToRouteAndWait(
+                                                    context,
+                                                    MapViewScreen(
+                                                      initialPosition:
+                                                          _markerPosition,
+                                                    )).then((value) {
+                                              if (value != null) {
+                                                _markerPosition = value[0];
+                                                setState(() {
+                                                  if (value[1] == null) {
+                                                    searchCtrl.text =
+                                                        "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                  } else {
+                                                    searchCtrl.text = value[1];
+                                                  }
+                                                });
+                                              }
+                                            });
+                                          });
+                                        },
+                                        child:
+                                            Text(AppLocalizations.current.map))
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /*SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "Réservez le service de nettoyage de matelas",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          )
+                          Text(
+                            "Sélectionnez votre type de matelas",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18),
+                          ),,*/
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SvgPicture.asset(
-                                  'images/icons/map-marker.svg',
-                                  width: 40,
+                                Text(
+                                  AppLocalizations.current.numberPlace,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
                                 ),
-                                Expanded(
-                                    child: GestureDetector(
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            height: 40,
-                                            child: Text(searchCtrl.text)),
-                                        onTap: () => showSearhPage(context))),
-                                Container(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        height: 20,
-                                        width: 2,
-                                        color: Colors.black,
-                                      ),
-                                      TextButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              //showMap = !showMap;
-                                              UtilsFonction
-                                                  .NavigateToRouteAndWait(
-                                                      context,
-                                                      MapViewScreen(
-                                                        initialPosition:
-                                                            _markerPosition,
-                                                      )).then((value) {
-                                                if (value != null) {
-                                                  _markerPosition = value;
-                                                  setState(() {
-                                                    searchCtrl.text =
-                                                        "${_markerPosition.latitude} / ${_markerPosition.longitude}";
-                                                  });
-                                                }
-                                              });
-                                            });
-                                          },
-                                          child: Text(
-                                              AppLocalizations.current.map))
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            /*SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              "Réservez le service de nettoyage de matelas",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            )
-                            Text(
-                              "Sélectionnez votre type de matelas",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18),
-                            ),,*/
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    AppLocalizations.current.numberPlace,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  Text(
-                                    AppLocalizations.current.steamCleaning,
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16),
-                                  ),
-                                  StreamBuilder<List<Price>>(
-                                    stream: _bloc.simpleTarificationStream,
-                                    builder: (context, snapshot) {
-                                      return (snapshot.hasData &&
-                                              snapshot.data != null
-                                          ? Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: snapshot.data!
-                                                  .mapIndexed<Widget>(
-                                                      (e, idx) => Padding(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        8,
-                                                                    vertical:
-                                                                        20),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                idx <= 2
-                                                                    ? Text(
-                                                                        e.initialNumber.toString() +
-                                                                            " " +
-                                                                            e.label!
-                                                                                .toCapitalized()
-                                                                                .toString() +
-                                                                            (e.initialNumber != 1
-                                                                                ? "s"
-                                                                                : ''),
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            fontFamily:
-                                                                                "SFPro",
-                                                                            color:
-                                                                                Color(0XFF01A6DC)),
-                                                                      )
-                                                                    : Text(
-                                                                        e.label!
-                                                                            .toCapitalized()
-                                                                            .toString(),
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            fontFamily:
-                                                                                "SFPro",
-                                                                            color:
-                                                                                Color(0XFF01A6DC)),
-                                                                      ),
-                                                                const SizedBox(
-                                                                  width: 20,
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    e.quantity!
-                                                                        .text
-                                                                        .size(
-                                                                            18)
-                                                                        .bold
-                                                                        .fontFamily(
-                                                                            "SFPro")
-                                                                        .color(const Color(
-                                                                            0XFF01A6DC))
-                                                                        .make(),
-                                                                    const SizedBox(
-                                                                      width: 50,
+                                Text(
+                                  AppLocalizations.current.steamCleaning,
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16),
+                                ),
+                                StreamBuilder<List<Price>>(
+                                  stream: _bloc.simpleTarificationStream,
+                                  builder: (context, snapshot) {
+                                    return (snapshot.hasData &&
+                                            snapshot.data != null
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: snapshot.data!
+                                                .mapIndexed<Widget>(
+                                                    (e, idx) => Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 20),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              idx <= 2
+                                                                  ? Text(
+                                                                      e.initialNumber
+                                                                              .toString() +
+                                                                          " " +
+                                                                          e.label!
+                                                                              .toCapitalized()
+                                                                              .toString() +
+                                                                          (e.initialNumber != 1
+                                                                              ? "s"
+                                                                              : ''),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              18,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily:
+                                                                              "SFPro",
+                                                                          color:
+                                                                              Color(0XFF01A6DC)),
+                                                                    )
+                                                                  : Text(
+                                                                      e.label!
+                                                                          .toCapitalized()
+                                                                          .toString(),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              18,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily:
+                                                                              "SFPro",
+                                                                          color:
+                                                                              Color(0XFF01A6DC)),
                                                                     ),
-                                                                    InkWell(
-                                                                        onTap: () => _bloc.addSofaTarification(
-                                                                            e,
-                                                                            -1,
-                                                                            idx),
-                                                                        child:
-                                                                            Container(
-                                                                          height:
-                                                                              40,
-                                                                          width:
-                                                                              40,
-                                                                          child:
-                                                                              Center(child: Icon(Icons.remove)),
-                                                                          decoration:
-                                                                              BoxDecoration(border: Border.all(color: e.quantity! > 0 ? Colors.grey : Colors.grey.shade300)),
-                                                                        )),
-                                                                    InkWell(
+                                                              const SizedBox(
+                                                                width: 20,
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  e.quantity!
+                                                                      .text
+                                                                      .size(18)
+                                                                      .bold
+                                                                      .fontFamily(
+                                                                          "SFPro")
+                                                                      .color(const Color(
+                                                                          0XFF01A6DC))
+                                                                      .make(),
+                                                                  const SizedBox(
+                                                                    width: 50,
+                                                                  ),
+                                                                  InkWell(
                                                                       onTap: () =>
                                                                           _bloc.addSofaTarification(
                                                                               e,
-                                                                              1,
+                                                                              -1,
                                                                               idx),
                                                                       child:
                                                                           Container(
@@ -410,175 +393,166 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                                                         width:
                                                                             40,
                                                                         child: Center(
-                                                                            child: Icon(
-                                                                          Icons
-                                                                              .add,
-                                                                          size:
-                                                                              27,
-                                                                        )),
+                                                                            child:
+                                                                                Icon(Icons.remove)),
                                                                         decoration:
-                                                                            BoxDecoration(border: Border.all(color: Colors.grey)),
-                                                                      ),
+                                                                            BoxDecoration(border: Border.all(color: e.quantity! > 0 ? Colors.grey : Colors.grey.shade300)),
+                                                                      )),
+                                                                  InkWell(
+                                                                    onTap: () =>
+                                                                        _bloc.addSofaTarification(
+                                                                            e,
+                                                                            1,
+                                                                            idx),
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          40,
+                                                                      width: 40,
+                                                                      child: Center(
+                                                                          child: Icon(
+                                                                        Icons
+                                                                            .add,
+                                                                        size:
+                                                                            27,
+                                                                      )),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                              border: Border.all(color: Colors.grey)),
                                                                     ),
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ))
-                                                  .toList(),
-                                            )
-                                          : Container());
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            AppLocalizations.current.dateAndHour.text
-                                .size(18)
-                                .fontFamily("SFPro")
-                                .bold
-                                .make(),
-                            AppLocalizations
-                                .current.whenDoYouWantTheExecution.text
-                                .size(10)
-                                .fontFamily("SFPro")
-                                .bold
-                                .gray500
-                                .make(),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            /*Container(
-                              padding: EdgeInsets.all(10),
-                              width: 150,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border:
-                                      Border.all(color: Color(colorBlueGray)),
-                                  color: Colors.grey.shade500),
-                              child: Center(
-                                child: Text("Service ponctuel",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    )),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),*/
-                            TextButton(
-                                onPressed: () {
-                                  DatePicker.showDateTimePicker(context,
-                                      showTitleActions: true,
-                                      minTime: DateTime.now(),
-                                      theme: DatePickerTheme(
-                                          itemStyle: TextStyle(
-                                              color:
-                                                  const Color(colorPrimary))),
-                                      onChanged: (date) {
-                                    print('change $date');
-                                  }, onConfirm: (date) {
-                                    if (date.hour > 17 || date.hour < 8) {
-                                      UtilsFonction.showErrorDialog(
-                                          context,
-                                          AppLocalizations
-                                              .current.erroTimeFrame);
-                                    } else {
-                                      _bloc.setDateBooking(date);
-                                    }
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ))
+                                                .toList(),
+                                          )
+                                        : Container());
                                   },
-                                      currentTime: DateTime.now(),
-                                      locale:
-                                          GetIt.I<AppServices>().lang == 'fr'
-                                              ? LocaleType.fr
-                                              : LocaleType.en);
-                                },
-                                child: Text(
-                                  AppLocalizations.current.selectDate,
-                                  style: TextStyle(
-                                      color: Colors.blue, fontSize: 15),
-                                )),
-                            const SizedBox(
-                              height: 10,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
                       ),
-                      StreamBuilder<DateTime>(
-                          stream: _bloc.bookingDateStream,
-                          builder: (context, snapshot) {
-                            return snapshot.hasData && snapshot.data != null
-                                ? Center(
-                                    child:
-                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
-                                            .text
-                                            .bold
-                                            .size(18)
-                                            .color(Color(0XFF01A6DC))
-                                            .make())
-                                : Container();
-                          }),
-                      const SizedBox(
-                        height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          AppLocalizations.current.dateAndHour.text
+                              .size(18)
+                              .fontFamily("SFPro")
+                              .bold
+                              .make(),
+
+                          /*Container(
+                            padding: EdgeInsets.all(10),
+                            width: 150,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border:
+                                    Border.all(color: Color(colorBlueGray)),
+                                color: Colors.grey.shade500),
+                            child: Center(
+                              child: Text("Service ponctuel",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  )),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),*/
+                          TextButton(
+                              onPressed: () {
+                                DatePicker.showDateTimePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime.now(),
+                                    theme: DatePickerTheme(
+                                        itemStyle: TextStyle(
+                                            color: const Color(colorPrimary))),
+                                    onChanged: (date) {
+                                  print('change $date');
+                                }, onConfirm: (date) {
+                                  if (date.hour > 17 || date.hour < 8) {
+                                    UtilsFonction.showErrorDialog(context,
+                                        AppLocalizations.current.erroTimeFrame);
+                                  } else {
+                                    _bloc.setDateBooking(date);
+                                  }
+                                },
+                                    currentTime: DateTime.now(),
+                                    locale: GetIt.I<AppServices>().lang == 'fr'
+                                        ? LocaleType.fr
+                                        : LocaleType.en);
+                              },
+                              child: Text(
+                                AppLocalizations.current.selectDate,
+                                style:
+                                    TextStyle(color: Colors.blue, fontSize: 15),
+                              )),
+                        ],
                       ),
-                      CustomButton(
-                          contextProp: context,
-                          onPressedProp: () {
-                            if (_appProvider.login == null) {
-                              UtilsFonction.NavigateToRoute(
-                                  context,
-                                  LoginScreen(
-                                    toPop: true,
-                                  ));
-                            } else {
-                              if (!_bloc.totalSubject.hasValue) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.matressTypeError));
-                                return;
-                              }
-                              if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.dateError));
-                                return;
-                              }
-                              if (searchCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.adressError));
-                                return;
-                              }
-                              showRecapSheet();
-                            }
-                          },
-                          textProp:
-                              AppLocalizations.current.order.toUpperCase()),
-                    ],
-                  ),
+                    ),
+                    StreamBuilder<DateTime>(
+                        stream: _bloc.bookingDateStream,
+                        builder: (context, snapshot) {
+                          return snapshot.hasData && snapshot.data != null
+                              ? Center(
+                                  child:
+                                      "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
+                                          .text
+                                          .bold
+                                          .size(18)
+                                          .color(Color(0XFF01A6DC))
+                                          .make())
+                              : Container();
+                        }),
+                  ],
                 ),
               ),
             ],
           ),
         ),
+        bottomNavigationBar: CustomButton(
+            contextProp: context,
+            onPressedProp: () {
+              if (_appProvider.login == null) {
+                UtilsFonction.NavigateToRoute(
+                    context,
+                    LoginScreen(
+                      toPop: true,
+                    ));
+              } else {
+                if (!_bloc.totalSubject.hasValue) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.matressTypeError));
+                  return;
+                }
+                if (!_bloc.bookingDateSubject.hasValue) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.dateError));
+                  return;
+                }
+                if (searchCtrl.text.isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.adressError));
+                  return;
+                }
+                showRecapSheet();
+              }
+            },
+            textProp: AppLocalizations.current.order.toUpperCase()),
       );
     });
   }
@@ -644,17 +618,23 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
   }
 
   void showSearhPage(BuildContext ctx) {
-    _scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
-          callBack: (GoogleResult feature) {
-            Navigator.of(context).pop();
-            _currentFeature = feature;
-            searchCtrl.text = feature.name!;
-            _markerPosition = LatLng(feature.geometry!.location!.lat!,
-                feature.geometry!.location!.lng!);
-            _animatedMapMove(_markerPosition, 15);
-            setState(() {});
-          },
-        ));
+    UtilsFonction.NavigateToRouteAndWait(
+        context,
+        MapViewScreen(
+          initialPosition: _markerPosition,
+        )).then((value) {
+      if (value != null) {
+        _markerPosition = value[0];
+        setState(() {
+          if (value[1] == null) {
+            searchCtrl.text =
+                "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+          } else {
+            searchCtrl.text = value[1];
+          }
+        });
+      }
+    });
   }
 
   void showRecapSheet() {

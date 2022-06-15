@@ -141,7 +141,7 @@ class CommandListState extends State<CommandList> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               height: 40,
               width: double.maxFinite,
               decoration: BoxDecoration(
@@ -209,7 +209,7 @@ class CommandListState extends State<CommandList> {
         },
         child: Container(
             width: double.maxFinite,
-            padding: EdgeInsets.symmetric(horizontal: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 2),
             decoration: BoxDecoration(
               color: index == currentFiltreIndex
                   ? Colors.white
@@ -233,7 +233,7 @@ class CommandListState extends State<CommandList> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 booking.code!.text.bold.size(15).make(),
-                "${booking.prices![0].tarification.service?.title!.toUpperCase()}"
+                "${booking.prices![0].tarification.service?.categorieService?.title} ${booking.prices![0].tarification.service?.title!.toUpperCase()}"
                     .text
                     .make()
               ],

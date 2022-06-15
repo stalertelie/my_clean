@@ -20,6 +20,7 @@ import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/img_urls.dart';
 import 'package:my_clean/constants/message_constant.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/frequence.dart';
 import 'package:my_clean/models/loading.dart';
@@ -262,10 +263,15 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                                             _markerPosition,
                                                       )).then((value) {
                                                 if (value != null) {
-                                                  _markerPosition = value;
+                                                  _markerPosition = value[0];
                                                   setState(() {
-                                                    searchCtrl.text =
-                                                        "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    if (value[1] == null) {
+                                                      searchCtrl.text =
+                                                          "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    } else {
+                                                      searchCtrl.text =
+                                                          value[1];
+                                                    }
                                                   });
                                                 }
                                               });
@@ -285,7 +291,8 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "CHOISISSEZ UNE SECTION",
+                              AppLocalizations.current.chooseSection
+                                  .toUpperCase(),
                               style: TextStyle(
                                   color: Color(colorPrimary),
                                   fontSize: 20,
@@ -329,13 +336,13 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                                                     Widget>[
                                                                   Text(
                                                                     e.label!
-                                                                        .toUpperCase(),
+                                                                        .toCapitalized(),
                                                                     style: TextStyle(
                                                                         fontWeight:
                                                                             FontWeight
                                                                                 .bold,
                                                                         fontSize:
-                                                                            20),
+                                                                            16),
                                                                   ),
                                                                   Radio<String>(
                                                                     activeColor:
@@ -423,10 +430,6 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                           ],
                         ),
                       ),
-                      Divider(
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
@@ -437,14 +440,14 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            AppLocalizations
+                            /*AppLocalizations
                                 .current.whenDoYouWantTheExecution.text
                                 .size(10)
                                 .fontFamily("SFPro")
                                 .bold
                                 .gray500
                                 .make(),
-                            /*const SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Container(
@@ -504,17 +507,13 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                           ],
                         ),
                       ),
-                      const Divider(
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
                       StreamBuilder<DateTime>(
                           stream: _bloc.bookingDateStream,
                           builder: (context, snapshot) {
                             return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
-                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
+                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
                                             .text
                                             .bold
                                             .size(18)
@@ -522,56 +521,6 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                             .make())
                                 : Container();
                           }),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      CustomButton(
-                          contextProp: context,
-                          onPressedProp: () {
-                            if (_appProvider.login == null) {
-                              UtilsFonction.NavigateToRoute(
-                                  context,
-                                  LoginScreen(
-                                    toPop: true,
-                                  ));
-                            } else {
-                              if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.dateError));
-                                return;
-                              }
-                              if (searchCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.adressError));
-                                return;
-                              }
-                              if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.dateError));
-                                return;
-                              }
-                              if (_bloc.totalSubject.value == 0) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.serviceError));
-                                return;
-                              }
-                              showRecapSheet();
-                            }
-                          },
-                          textProp:
-                              AppLocalizations.current.order.toUpperCase()),
                     ],
                   ),
                 ),
@@ -579,6 +528,44 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
             ],
           ),
         ),
+        bottomNavigationBar: CustomButton(
+            contextProp: context,
+            onPressedProp: () {
+              if (_appProvider.login == null) {
+                UtilsFonction.NavigateToRoute(
+                    context,
+                    LoginScreen(
+                      toPop: true,
+                    ));
+              } else {
+                if (!_bloc.bookingDateSubject.hasValue) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.dateError));
+                  return;
+                }
+                if (searchCtrl.text.isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.adressError));
+                  return;
+                }
+                if (!_bloc.bookingDateSubject.hasValue) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.dateError));
+                  return;
+                }
+                if (_bloc.totalSubject.value == 0) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.serviceError));
+                  return;
+                }
+                showRecapSheet();
+              }
+            },
+            textProp: AppLocalizations.current.order.toUpperCase()),
       );
     });
   }
@@ -697,17 +684,23 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
   }
 
   void showSearhPage(BuildContext ctx) {
-    _scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
-          callBack: (GoogleResult feature) {
-            Navigator.of(context).pop();
-            _currentFeature = feature;
-            searchCtrl.text = feature.name!;
-            _markerPosition = LatLng(feature.geometry!.location!.lat!,
-                feature.geometry!.location!.lng!);
-            _animatedMapMove(_markerPosition, 15);
-            setState(() {});
-          },
-        ));
+    UtilsFonction.NavigateToRouteAndWait(
+        context,
+        MapViewScreen(
+          initialPosition: _markerPosition,
+        )).then((value) {
+      if (value != null) {
+        _markerPosition = value[0];
+        setState(() {
+          if (value[1] == null) {
+            searchCtrl.text =
+                "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+          } else {
+            searchCtrl.text = value[1];
+          }
+        });
+      }
+    });
   }
 
   void showRecapSheet() {

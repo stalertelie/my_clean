@@ -6,7 +6,7 @@ import 'package:my_clean/models/base_bloc.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SearchBloc extends BaseBloc{
+class SearchBloc extends BaseBloc {
   Stream<GoogleSearchResult> get featuresStream => _featuresSubject.stream;
   final _featuresSubject = BehaviorSubject<GoogleSearchResult>();
 
@@ -22,18 +22,18 @@ class SearchBloc extends BaseBloc{
     try {
       loadingSubject.add(Loading(loading: false));
       if (response.statusCode == 200) {
-        GoogleSearchResult features = GoogleSearchResult.fromJson(jsonDecode(response.body.toString()));
-        if(features.status == "OK"){
+        GoogleSearchResult features =
+            GoogleSearchResult.fromJson(jsonDecode(response.body.toString()));
+        if (features.status == "OK") {
+          print(features.results!.length);
+          print('====OK===');
           _featuresSubject.add(features);
-        } else {
-
-        }
-
+          print('====OK END===');
+        } else {}
       }
-    } catch(ex){
+    } catch (ex) {
       loadingSubject.add(Loading(loading: false));
     }
-
   }
 }
 

@@ -7,6 +7,7 @@ Widget CustomButton(
     required String textProp,
     bool disabledProp = false,
     double? padding = 5,
+    double fontSize = 20,
     BorderRadiusGeometry borderRadius =
         const BorderRadius.all(Radius.circular(5))}) {
   return Container(
@@ -26,10 +27,10 @@ Widget CustomButton(
                   decoration: BoxDecoration(
                       color: const Color(authBlue), borderRadius: borderRadius),
                   child: Text(textProp,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: "SFPro",
-                        fontSize: 20,
+                        fontSize: fontSize,
                         color: Colors.white,
                       ))),
             ),

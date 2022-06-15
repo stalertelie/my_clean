@@ -250,10 +250,15 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                                             _markerPosition,
                                                       )).then((value) {
                                                 if (value != null) {
-                                                  _markerPosition = value;
+                                                  _markerPosition = value[0];
                                                   setState(() {
-                                                    searchCtrl.text =
-                                                        "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    if (value[1] == null) {
+                                                      searchCtrl.text =
+                                                          "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    } else {
+                                                      searchCtrl.text =
+                                                          value[1];
+                                                    }
                                                   });
                                                 }
                                               });
@@ -273,7 +278,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Quelle est la taille de votre tapis ?",
+                              AppLocalizations.current.carpetSize,
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.black,
@@ -282,7 +287,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Container(
+                                SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.2,
                                   child: TextField(
@@ -406,16 +411,14 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            AppLocalizations
+                            /*AppLocalizations
                                 .current.whenDoYouWantTheExecution.text
                                 .size(10)
                                 .fontFamily("SFPro")
                                 .bold
                                 .gray500
-                                .make(),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                                .make(),*/
+
                             /*Container(
                               padding: EdgeInsets.all(10),
                               width: 150,
@@ -479,7 +482,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                             return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
-                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
+                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
                                             .text
                                             .bold
                                             .size(18)
@@ -490,49 +493,6 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                       const SizedBox(
                         height: 15,
                       ),
-                      CustomButton(
-                          contextProp: context,
-                          onPressedProp: () {
-                            if (_appProvider.login == null) {
-                              UtilsFonction.NavigateToRoute(
-                                  context,
-                                  LoginScreen(
-                                    toPop: true,
-                                  ));
-                            } else {
-                              if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.dateError));
-                                return;
-                              }
-                              if (searchCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.adressError));
-                                return;
-                              }
-
-                              if (sizeCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.meterError));
-                                return;
-                              }
-                              _bloc.addCarpetTarification(tarification,
-                                  int.parse(sizeCtrl.text), tarificationId);
-
-                              showRecapSheet();
-                            }
-                          },
-                          textProp:
-                              AppLocalizations.current.order.toUpperCase()),
                     ],
                   ),
                 ),
@@ -540,6 +500,42 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
             ],
           ),
         ),
+        bottomNavigationBar: CustomButton(
+            contextProp: context,
+            onPressedProp: () {
+              if (_appProvider.login == null) {
+                UtilsFonction.NavigateToRoute(
+                    context,
+                    LoginScreen(
+                      toPop: true,
+                    ));
+              } else {
+                if (!_bloc.bookingDateSubject.hasValue) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.dateError));
+                  return;
+                }
+                if (searchCtrl.text.isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.adressError));
+                  return;
+                }
+
+                if (sizeCtrl.text.isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.meterError));
+                  return;
+                }
+                _bloc.addCarpetTarification(
+                    tarification, int.parse(sizeCtrl.text), tarificationId);
+
+                showRecapSheet();
+              }
+            },
+            textProp: AppLocalizations.current.order.toUpperCase()),
       );
     });
   }
@@ -605,7 +601,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
   }
 
   void showSearhPage(BuildContext ctx) {
-    _scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
+    /*_scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
           callBack: (GoogleResult feature) {
             Navigator.of(context).pop();
             _currentFeature = feature;
@@ -615,7 +611,24 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
             _animatedMapMove(_markerPosition, 15);
             setState(() {});
           },
-        ));
+        ));*/
+    UtilsFonction.NavigateToRouteAndWait(
+        context,
+        MapViewScreen(
+          initialPosition: _markerPosition,
+        )).then((value) {
+      if (value != null) {
+        _markerPosition = value[0];
+        setState(() {
+          if (value[1] == null) {
+            searchCtrl.text =
+                "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+          } else {
+            searchCtrl.text = value[1];
+          }
+        });
+      }
+    });
   }
 
   void showRecapSheet() {

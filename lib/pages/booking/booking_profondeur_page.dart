@@ -220,10 +220,15 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                                             _markerPosition,
                                                       )).then((value) {
                                                 if (value != null) {
-                                                  _markerPosition = value;
+                                                  _markerPosition = value[0];
                                                   setState(() {
-                                                    searchCtrl.text =
-                                                        "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    if (value[1] == null) {
+                                                      searchCtrl.text =
+                                                          "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    } else {
+                                                      searchCtrl.text =
+                                                          value[1];
+                                                    }
                                                   });
                                                 }
                                               });
@@ -378,13 +383,13 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    AppLocalizations.current.numberRoom.text
+                                    /*AppLocalizations.current.numberRoom.text
                                         .size(20)
                                         .bold
                                         .make(),
                                     AppLocalizations.current.allArea.text
                                         .size(15)
-                                        .make(),
+                                        .make(),*/
                                     tarificationITem("PIECES")
                                   ],
                                 )),
@@ -404,16 +409,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            AppLocalizations
-                                .current.whenDoYouWantTheExecution.text
-                                .size(10)
-                                .fontFamily("SFPro")
-                                .bold
-                                .gray500
-                                .make(),
-                            const SizedBox(
-                              height: 10,
-                            ),
+
                             /*Row(
                               children: [
                                 InkWell(
@@ -549,7 +545,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
                                                   .text
                                                   .bold
                                                   .size(18)
@@ -559,79 +555,6 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   : Container();
                             }),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: MaterialButton(
-                            color: const Color(0XFF02ABDE),
-                            onPressed: () {
-                              if (_appProvider.login == null) {
-                                UtilsFonction.NavigateToRoute(
-                                    context,
-                                    LoginScreen(
-                                      toPop: true,
-                                    ));
-                              } else {
-                                if (_bloc.tarificationRootSubject.value
-                                    .where((element) =>
-                                        element.list!.indexWhere(
-                                            (item) => item.quantity! > 0) ==
-                                        -1)
-                                    .isEmpty) {
-                                  GetIt.I<AppServices>().showSnackbarWithState(
-                                      Loading(
-                                          hasError: true,
-                                          message: AppLocalizations.current
-                                              .pleaseChooseAtLeastOneOption));
-                                  return;
-                                }
-                                if (searchCtrl.text.isEmpty) {
-                                  GetIt.I<AppServices>().showSnackbarWithState(
-                                      Loading(
-                                          hasError: true,
-                                          message: AppLocalizations
-                                              .current.adressError));
-                                  return;
-                                }
-                                if (!_bloc.bookingDateSubject.hasValue) {
-                                  GetIt.I<AppServices>().showSnackbarWithState(
-                                      Loading(
-                                          hasError: true,
-                                          message: AppLocalizations
-                                              .current.dateError));
-                                  return;
-                                }
-                                if (_bloc.totalSubject.value == 0) {
-                                  GetIt.I<AppServices>().showSnackbarWithState(
-                                      Loading(
-                                          hasError: true,
-                                          message: AppLocalizations
-                                              .current.serviceError));
-                                  return;
-                                }
-                                showRecapSheet();
-                              }
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  AppLocalizations.current.book.text
-                                      .fontFamily("SFPro")
-                                      .size(20)
-                                      .bold
-                                      .white
-                                      .make(),
-                                ],
-                              ),
-                            ),
-                          )),
-                      SizedBox(height: 20)
                     ],
                   ),
                 ),
@@ -639,6 +562,68 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
             ],
           ),
         ),
+        bottomNavigationBar: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: MaterialButton(
+              color: const Color(0XFF02ABDE),
+              onPressed: () {
+                if (_appProvider.login == null) {
+                  UtilsFonction.NavigateToRoute(
+                      context,
+                      LoginScreen(
+                        toPop: true,
+                      ));
+                } else {
+                  if (_bloc.tarificationRootSubject.value
+                      .where((element) =>
+                          element.list!
+                              .indexWhere((item) => item.quantity! > 0) ==
+                          -1)
+                      .isEmpty) {
+                    GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                        hasError: true,
+                        message: AppLocalizations
+                            .current.pleaseChooseAtLeastOneOption));
+                    return;
+                  }
+                  if (searchCtrl.text.isEmpty) {
+                    GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                        hasError: true,
+                        message: AppLocalizations.current.adressError));
+                    return;
+                  }
+                  if (!_bloc.bookingDateSubject.hasValue) {
+                    GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                        hasError: true,
+                        message: AppLocalizations.current.dateError));
+                    return;
+                  }
+                  if (_bloc.totalSubject.value == 0) {
+                    GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                        hasError: true,
+                        message: AppLocalizations.current.serviceError));
+                    return;
+                  }
+                  showRecapSheet();
+                }
+              },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppLocalizations.current.book.text
+                        .fontFamily("SFPro")
+                        .size(20)
+                        .bold
+                        .white
+                        .make(),
+                  ],
+                ),
+              ),
+            )),
       );
     });
   }
@@ -680,12 +665,12 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
           const SizedBox(
             width: 20,
           ),
-          StreamBuilder<TarificationObjectRoot?>(
-              stream: _bloc.selectedServiceStream,
+          StreamBuilder<int?>(
+              stream: _bloc.totalItemSubject,
               builder: (context, snapshot) {
                 return Row(
                   children: [
-                    "${snapshot.data != null ? snapshot.data!.total : 0}"
+                    "${snapshot.data ?? 0}"
                         .text
                         .size(18)
                         .bold
@@ -697,11 +682,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                     ),
                     InkWell(
                         onTap: () {
-                          if (snapshot.data!.total > 1) {
-                            _bloc.addTarification(
-                              snapshot.data!,
-                              -1,
-                            );
+                          if (snapshot.data! > 1) {
+                            _bloc.addTarification(-1);
                           }
                         },
                         child: Container(
@@ -711,13 +693,12 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: snapshot.data != null &&
-                                          snapshot.data!.total > 0
+                                          snapshot.data! > 0
                                       ? Colors.grey
                                       : Colors.grey.shade300)),
                         )),
                     InkWell(
                       onTap: () => _bloc.addTarification(
-                        snapshot.data!,
                         1,
                       ),
                       child: Container(
@@ -832,20 +813,23 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
   }
 
   void showSearhPage(BuildContext ctx) {
-    _scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
-          callBack: (GoogleResult feature) {
-            print("yyyy");
-            print(feature.geometry!.location!.lat!);
-            print(feature.geometry!.location!.lng!);
-            Navigator.of(context).pop();
-            _currentFeature = feature;
-            searchCtrl.text = feature.name!;
-            _markerPosition = LatLng(feature.geometry!.location!.lat!,
-                feature.geometry!.location!.lng!);
-            _animatedMapMove(_markerPosition, 15);
-            setState(() {});
-          },
-        ));
+    UtilsFonction.NavigateToRouteAndWait(
+        context,
+        MapViewScreen(
+          initialPosition: _markerPosition,
+        )).then((value) {
+      if (value != null) {
+        _markerPosition = value[0];
+        setState(() {
+          if (value[1] == null) {
+            searchCtrl.text =
+                "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+          } else {
+            searchCtrl.text = value[1];
+          }
+        });
+      }
+    });
   }
 
   void showRecapSheet() {

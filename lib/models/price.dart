@@ -1,3 +1,5 @@
+import 'package:my_clean/models/tarification_intervalle.dart';
+
 class Price {
   Price(
       {this.id,
@@ -10,6 +12,9 @@ class Price {
       this.priceOperator,
       this.operatorValue,
       this.quantity,
+      this.min,
+      this.max,
+      this.tarificationIntervalles,
       this.service});
 
   String? id;
@@ -23,6 +28,9 @@ class Price {
   int? operatorValue;
   int? quantity;
   String? service; //HERE
+  int? min;
+  int? max;
+  List<TarificationIntervalle>? tarificationIntervalles;
 
   factory Price.fromJson(Map<String, dynamic> json) => Price(
         id: json["@id"],
@@ -34,6 +42,12 @@ class Price {
         priceAbonment: json["priceAbonment"],
         priceOperator: json["operator"],
         operatorValue: json["operatorValue"],
+        min: json["min"],
+        max: json["max"],
+        tarificationIntervalles: json["tarificationIntervalles"] == null
+            ? null
+            : List<TarificationIntervalle>.from(json["tarificationIntervalles"]
+                .map((x) => TarificationIntervalle.fromJson(x))),
         quantity: json["quantity"] == null ? null : json["-"],
       );
 
@@ -47,6 +61,12 @@ class Price {
         "priceAbonment": priceAbonment == null ? null : priceAbonment,
         "operator": priceOperator,
         "operatorValue": operatorValue,
+        "min": min,
+        "max": max,
         "quantity": quantity == null ? null : quantity,
+        "tarificationIntervalles": tarificationIntervalles == null
+            ? null
+            : List<dynamic>.from(
+                tarificationIntervalles!.map((x) => x.toJson())),
       };
 }

@@ -216,10 +216,15 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                                             _markerPosition,
                                                       )).then((value) {
                                                 if (value != null) {
-                                                  _markerPosition = value;
+                                                  _markerPosition = value[0];
                                                   setState(() {
-                                                    searchCtrl.text =
-                                                        "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    if (value[1] == null) {
+                                                      searchCtrl.text =
+                                                          "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+                                                    } else {
+                                                      searchCtrl.text =
+                                                          value[1];
+                                                    }
                                                   });
                                                 }
                                               });
@@ -315,47 +320,143 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                             SizedBox(
                                               height: 20,
                                             ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.white),
-                                              padding: EdgeInsets.all(16),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  AppLocalizations.current
-                                                      .numberRoom.text.bold
-                                                      .size(20)
-                                                      .make(),
-                                                  AppLocalizations
-                                                      .current.allArea.text
-                                                      .size(15)
-                                                      .make(),
-                                                  Column(
-                                                      children: snapshot.data!
-                                                          .mapIndexed(
-                                                              (e, index) =>
-                                                                  Container(
-                                                                    child:
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Column(
-                                                                          children: e.list != null
-                                                                              ? e.list!.map((e) => index == activeHomeTypeIndex ? tarificationITem(e, index) : Container()).toList()
-                                                                              : [],
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ))
-                                                          .toList())
-                                                ],
+                                            Visibility(
+                                              visible: activeHomeTypeIndex != 2,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: Colors.white),
+                                                padding: EdgeInsets.all(16),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    AppLocalizations.current
+                                                        .numberRoom.text.bold
+                                                        .size(20)
+                                                        .make(),
+                                                    AppLocalizations
+                                                        .current.allArea.text
+                                                        .size(15)
+                                                        .make(),
+                                                    Column(
+                                                        children: activeHomeTypeIndex !=
+                                                                2
+                                                            ? snapshot.data!
+                                                                .take(2)
+                                                                .mapIndexed((e,
+                                                                        index) =>
+                                                                    Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Column(
+                                                                            children: e.list != null
+                                                                                ? e.list!.map((e) => index == activeHomeTypeIndex ? tarificationITem(e, index) : Container()).toList()
+                                                                                : [],
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ))
+                                                                .toList()
+                                                            : [])
+                                                  ],
+                                                ),
                                               ),
-                                            )
+                                            ),
+                                            Visibility(
+                                              visible: activeHomeTypeIndex == 2,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: Colors.white),
+                                                padding: EdgeInsets.all(16),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    AppLocalizations.current
+                                                        .roomSurface.text.bold
+                                                        .size(20)
+                                                        .make(),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.2,
+                                                          child: TextField(
+                                                            autofocus: false,
+                                                            onChanged: (value) {
+                                                              if (value
+                                                                  .isNotBlank) {
+                                                                _bloc.add3dCustomTarification(
+                                                                    int.parse(
+                                                                        value));
+                                                              }
+                                                            },
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              enabledBorder:
+                                                                  UnderlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                        color:
+                                                                            colorBlueLight,
+                                                                        width:
+                                                                            2),
+                                                              ),
+                                                              focusedBorder:
+                                                                  UnderlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                        color:
+                                                                            colorBlueLight,
+                                                                        width:
+                                                                            2),
+                                                              ),
+                                                              border:
+                                                                  UnderlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                        color:
+                                                                            colorBlueLight,
+                                                                        width:
+                                                                            2),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "M²",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  colorBlueLight,
+                                                              fontSize: 18),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         )
                                       : Container();
@@ -376,13 +477,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                 .fontFamily("SFPro")
                                 .bold
                                 .make(),
-                            AppLocalizations
-                                .current.whenDoYouWantTheExecution.text
-                                .size(10)
-                                .fontFamily("SFPro")
-                                .bold
-                                .gray500
-                                .make(),
+
                             /*onst SizedBox(
                               height: 10,
                             ),
@@ -519,7 +614,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
                                                   .text
                                                   .bold
                                                   .size(18)
@@ -529,37 +624,6 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                   : Container();
                             }),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      CustomButton(
-                          contextProp: context,
-                          onPressedProp: () {
-                            if (_appProvider.login == null) {
-                              UtilsFonction.NavigateToRoute(
-                                  context,
-                                  LoginScreen(
-                                    toPop: true,
-                                  ));
-                            } else {
-                              if (_bloc.tarificationRootSubject.value
-                                  .where((element) =>
-                                      element.list!.indexWhere(
-                                          (item) => item.quantity! > 0) ==
-                                      -1)
-                                  .isEmpty) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations.current
-                                            .pleaseChooseAtLeastOneOption));
-                                return;
-                              }
-                              showRecapSheet();
-                            }
-                          },
-                          textProp:
-                              AppLocalizations.current.order.toUpperCase()),
                     ],
                   ),
                 ),
@@ -567,6 +631,45 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
             ],
           ),
         ),
+        bottomNavigationBar: CustomButton(
+            contextProp: context,
+            onPressedProp: () {
+              if (_appProvider.login == null) {
+                UtilsFonction.NavigateToRoute(
+                    context,
+                    LoginScreen(
+                      toPop: true,
+                    ));
+              } else {
+                if (_bloc.tarificationRootSubject.value
+                    .where((element) =>
+                        element.list!
+                            .indexWhere((item) => item.quantity! > 0) ==
+                        -1)
+                    .isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations
+                          .current.pleaseChooseAtLeastOneOption));
+                  return;
+                }
+                if (!_bloc.bookingDateSubject.hasValue &&
+                    _bloc.isPonctualSubject.value == true) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.dateError));
+                  return;
+                }
+                if (searchCtrl.text.isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.adressError));
+                  return;
+                }
+                showRecapSheet();
+              }
+            },
+            textProp: AppLocalizations.current.order.toUpperCase()),
       );
     });
   }
@@ -753,18 +856,23 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
   }
 
   void showSearhPage(BuildContext ctx) {
-    _scaffoldKey.currentState!.showBottomSheet((context) => SearchPage(
-          callBack: (GoogleResult feature) {
-            print("yyyy");
-            Navigator.of(context).pop();
-            _currentFeature = feature;
-            searchCtrl.text = feature.name!;
-            _markerPosition = LatLng(feature.geometry!.location!.lat!,
-                feature.geometry!.location!.lng!);
-            _animatedMapMove(_markerPosition, 15);
-            setState(() {});
-          },
-        ));
+    UtilsFonction.NavigateToRouteAndWait(
+        context,
+        MapViewScreen(
+          initialPosition: _markerPosition,
+        )).then((value) {
+      if (value != null) {
+        _markerPosition = value[0];
+        setState(() {
+          if (value[1] == null) {
+            searchCtrl.text =
+                "${_markerPosition.latitude} / ${_markerPosition.longitude}";
+          } else {
+            searchCtrl.text = value[1];
+          }
+        });
+      }
+    });
   }
 
   void showRecapSheet() {

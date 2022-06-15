@@ -468,6 +468,27 @@ class AppLocalizations {
   String get selectDay {
     return Intl.message('selectDay', name: 'selectDay', locale: localeName);
   }
+
+  String get roomSurface {
+    return Intl.message('roomSurface', name: 'roomSurface', locale: localeName);
+  }
+
+  String get chooseSection {
+    return Intl.message('chooseSection',
+        name: 'chooseSection', locale: localeName);
+  }
+
+  String get carpetSize {
+    return Intl.message('carpetSize', name: 'carpetSize', locale: localeName);
+  }
+
+  String get location {
+    return Intl.message('location', name: 'location', locale: localeName);
+  }
+
+  String get useLocation {
+    return Intl.message('useLocation', name: 'useLocation', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
