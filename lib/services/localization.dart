@@ -489,6 +489,28 @@ class AppLocalizations {
   String get useLocation {
     return Intl.message('useLocation', name: 'useLocation', locale: localeName);
   }
+
+  String get pieces {
+    return Intl.message('pieces', name: 'pieces', locale: localeName);
+  }
+
+  String get abonnement {
+    return Intl.message('abonnement', name: 'abonnement', locale: localeName);
+  }
+
+  String get ponctualService {
+    return Intl.message('ponctualService',
+        name: 'ponctualService', locale: localeName);
+  }
+
+  String get number {
+    return Intl.message('number', name: 'number', locale: localeName);
+  }
+
+  String get noNotification {
+    return Intl.message('noNotification',
+        name: 'noNotification', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

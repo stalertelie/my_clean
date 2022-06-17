@@ -174,5 +174,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "What is the size of your carpet?"),
         "location": MessageLookupByLibrary.simpleMessage("Location"),
         "useLocation": MessageLookupByLibrary.simpleMessage("Use location"),
+        "pieces": MessageLookupByLibrary.simpleMessage("ROOMS"),
+        "abonnement": MessageLookupByLibrary.simpleMessage("SUBSCRIPTION"),
+        "ponctualService":
+            MessageLookupByLibrary.simpleMessage("PONCTUAL SERVICE"),
+        "number": MessageLookupByLibrary.simpleMessage("Number"),
+        "noNotification":
+            MessageLookupByLibrary.simpleMessage("No notification yet!"),
       };
 }

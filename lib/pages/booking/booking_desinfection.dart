@@ -730,7 +730,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                 width: 50,
               ),
               InkWell(
-                  onTap: () => _bloc.addTarification(
+                  onTap: () => _bloc.addTarification3d(
                       tarificationObject.tarifications!, -1,
                       rootId: rootId, isOperatorValueNull: true),
                   child: Container(
@@ -744,7 +744,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                 : Colors.grey.shade300)),
                   )),
               InkWell(
-                onTap: () => _bloc.addTarification(
+                onTap: () => _bloc.addTarification3d(
                     tarificationObject.tarifications!, 1,
                     rootId: rootId, isOperatorValueNull: true),
                 child: Container(

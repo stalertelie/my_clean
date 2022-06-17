@@ -199,7 +199,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                             height: 40,
                                             child: Text(searchCtrl.text)),
                                         onTap: () => showSearhPage(context))),
-                                Container(
+                                SizedBox(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -243,7 +243,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                             ),
                           )),
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -390,7 +390,8 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                     AppLocalizations.current.allArea.text
                                         .size(15)
                                         .make(),*/
-                                    tarificationITem("PIECES")
+                                    tarificationITem(
+                                        AppLocalizations.current.pieces)
                                   ],
                                 )),
                             const SizedBox(

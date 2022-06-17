@@ -292,7 +292,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                           children: [
                             Text(
                               AppLocalizations.current.chooseSection
-                                  .toUpperCase(),
+                                  .toCapitalized(),
                               style: TextStyle(
                                   color: Color(colorPrimary),
                                   fontSize: 20,
@@ -576,7 +576,13 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          'Nombre'.toUpperCase().text.size(18).bold.fontFamily("SFPro").make(),
+          AppLocalizations.current.number
+              .toUpperCase()
+              .text
+              .size(18)
+              .bold
+              .fontFamily("SFPro")
+              .make(),
           const SizedBox(
             width: 20,
           ),

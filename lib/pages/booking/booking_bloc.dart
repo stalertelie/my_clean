@@ -194,6 +194,35 @@ class BookingBloc extends BaseBloc {
     }
   }
 
+  addTarification3d(Price tarification, int quantity,
+      {required int rootId, bool? isOperatorValueNull = false}) {
+    print(tarification.price);
+
+    int index = _tarificationRootSubject.value
+        .elementAt(rootId)
+        .list!
+        .indexWhere((element) => element.tarifications!.id == tarification.id);
+
+    if (index != -1) {
+      TarificationObject tarificationObject =
+          _tarificationRootSubject.value.elementAt(rootId).list![index];
+      if (tarificationObject.quantity == 0 && quantity == -1) {
+        return;
+      }
+      if (tarificationObject.quantity == tarification.max && quantity == 1) {
+        return;
+      }
+      tarificationObject.quantity =
+          (tarificationObject.quantity ?? 0) + quantity;
+      _tarificationRootSubject.add(_tarificationRootSubject.value);
+      if (isOperatorValueNull == true) {
+        calculateDetailOperatorValueIsNull(quantity);
+        return;
+      }
+      calculateDetail(quantity);
+    }
+  }
+
   add3dCustomTarification(int quantity) {
     TarificationObjectRoot tarificationRootObject =
         _tarificationRootSubject.value.elementAt(2);
@@ -217,6 +246,9 @@ class BookingBloc extends BaseBloc {
     int index = _simpleTarificationSubject.value
         .indexWhere((element) => element.id == tarification.id);
     print(index);
+    if (tarification.quantity == 0 && quantity == -1) {
+      return;
+    }
     if (index != -1) {
       Price p = _simpleTarificationSubject.value.elementAt(index);
       p.quantity = (p.quantity ?? 0) + quantity;

@@ -38,7 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseYourCountry":
             MessageLookupByLibrary.simpleMessage("Choisis ton pays"),
         "chooseYourLanguage":
-            MessageLookupByLibrary.simpleMessage("Choisis ton language"),
+            MessageLookupByLibrary.simpleMessage("Choisis ta language"),
         "continue": MessageLookupByLibrary.simpleMessage("Continuer"),
         "profileDetailsLabel":
             MessageLookupByLibrary.simpleMessage("Détails du profil"),
@@ -189,5 +189,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "location": MessageLookupByLibrary.simpleMessage("Localisation"),
         "useLocation":
             MessageLookupByLibrary.simpleMessage("Utiliser l'emplacement"),
+        "pieces": MessageLookupByLibrary.simpleMessage("PIECES"),
+        "abonnement": MessageLookupByLibrary.simpleMessage("ABONNEMENT"),
+        "ponctualService":
+            MessageLookupByLibrary.simpleMessage("SERVICE PONCTUEL"),
+        "number": MessageLookupByLibrary.simpleMessage("Nombre"),
+        "noNotification": MessageLookupByLibrary.simpleMessage(
+            "Aucune notification pour l'instant !"),
       };
 }

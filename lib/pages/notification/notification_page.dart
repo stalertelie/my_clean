@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:my_clean/components/tab_app_bar.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/services/localization.dart';
@@ -15,22 +16,37 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TabAppBar(
-          titleProp: 'Mes notifications',
-          titleFontSize: 20,
-          backgroundColor: Colors.transparent,
-          context: context,
-          centerTitle: true,
-          fontWeight: FontWeight.bold,
-          showBackButton: false),
-      body: Padding(
+        appBar: TabAppBar(
+            titleProp: 'Mes notifications',
+            titleFontSize: 20,
+            backgroundColor: Colors.transparent,
+            context: context,
+            centerTitle: true,
+            fontWeight: FontWeight.bold,
+            showBackButton: false),
+        body: /*Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
           itemBuilder: (BuildContext context, int index) => _notificationItem(),
           itemCount: 30,
         ),
-      ),
-    );
+      ),*/
+            Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                "images/icons/open_box.svg",
+                width: 100,
+                color: const Color(colorPrimary),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              AppLocalizations.current.noNotification.text.make()
+            ],
+          ),
+        ));
   }
 
   Widget _notificationItem() => Padding(

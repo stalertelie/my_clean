@@ -650,7 +650,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           tarificationObject.tarifications!.label!
-              .toUpperCase()
+              .toCapitalized()
               .text
               .size(18)
               .bold

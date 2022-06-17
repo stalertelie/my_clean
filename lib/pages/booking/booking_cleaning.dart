@@ -618,8 +618,8 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                                   : const Color(colorPrimary)),
                                           child: Center(
                                             child: Text(
-                                                AppConstant
-                                                    .FREQUENCE_BOOKING_PONCTUAL,
+                                                AppLocalizations
+                                                    .current.ponctualService,
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                 )),
@@ -645,8 +645,8 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                                   : const Color(colorPrimary)),
                                           child: Center(
                                             child: Text(
-                                                AppConstant
-                                                    .FREQUENCE_BOOKING_RECURENT,
+                                                AppLocalizations
+                                                    .current.abonnement,
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                 )),
