@@ -52,7 +52,11 @@ class RequestExtension<T> {
       if (jsonDecode(response.body)['hydra:description'] != null) {
         message = jsonDecode(response.body)['hydra:description'];
       } else {
-        message = response.reasonPhrase!;
+        if (jsonDecode(response.body)['message'] != null) {
+          message = jsonDecode(response.body)['message'];
+        } else {
+          message = response.reasonPhrase!;
+        }
       }
       print(response.reasonPhrase);
       print(response.body);

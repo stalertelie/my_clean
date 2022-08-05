@@ -7,6 +7,7 @@ part of 'prices.dart';
 // **************************************************************************
 
 Prices _$PricesFromJson(Map<String, dynamic> json) => Prices(
+      quantity: json['quantity'],
       tarification:
           Price.fromJson(json['tarification'] as Map<String, dynamic>),
     );

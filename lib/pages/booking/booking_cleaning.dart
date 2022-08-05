@@ -523,52 +523,57 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                               ? Container(
                                                   height: 100,
                                                   width: double.maxFinite,
-                                                  child: ListView.builder(
-                                                      itemCount:
-                                                          snapshot.data!.length,
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemBuilder:
-                                                          (context, index) =>
-                                                              GestureDetector(
-                                                                onTap: () => _bloc
-                                                                    .addExtra(snapshot
-                                                                            .data![
-                                                                        index]),
-                                                                child:
-                                                                    Container(
-                                                                  margin: EdgeInsets
-                                                                      .symmetric(
-                                                                          horizontal:
-                                                                              10),
-                                                                  child: StreamBuilder<
-                                                                          List<
-                                                                              ExtraService>>(
-                                                                      stream: _bloc
-                                                                          .selectedExtrasStream,
-                                                                      builder:
-                                                                          (context,
-                                                                              snapshotSelect) {
-                                                                        return Column(
-                                                                          children: [
-                                                                            Image.network(
-                                                                              snapshot.data![index].contentUrl!,
-                                                                              width: 40,
-                                                                              color: snapshotSelect.data != null && snapshotSelect.data!.where((element) => element.id == snapshot.data![index].id).isNotEmpty ? Color(colorPrimary) : Colors.grey,
-                                                                            ),
-                                                                            /*UtilsFonction.CachedImage(snapshot.data![index].contentUrl!,
+                                                  child: Center(
+                                                    child: ListView.builder(
+                                                        shrinkWrap: true,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10),
+                                                        itemCount: snapshot
+                                                            .data!.length,
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemBuilder:
+                                                            (context, index) =>
+                                                                GestureDetector(
+                                                                  onTap: () => _bloc
+                                                                      .addExtra(
+                                                                          snapshot
+                                                                              .data![index]),
+                                                                  child:
+                                                                      Container(
+                                                                    margin: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            10),
+                                                                    child: StreamBuilder<
+                                                                            List<
+                                                                                ExtraService>>(
+                                                                        stream: _bloc
+                                                                            .selectedExtrasStream,
+                                                                        builder:
+                                                                            (context,
+                                                                                snapshotSelect) {
+                                                                          return Column(
+                                                                            children: [
+                                                                              Image.network(
+                                                                                snapshot.data![index].contentUrl!,
                                                                                 width: 40,
-                                                                                c: Color(colorPrimary)),*/
-                                                                            //c: snapshotSelect.data != null && snapshotSelect.data!.where((element) => element.id == snapshot.data![index].id).isNotEmpty ? Color(colorPrimary) : Colors.grey),
-                                                                            const SizedBox(
-                                                                              height: 10,
-                                                                            ),
-                                                                            snapshot.data![index].title!.text.textStyle(TextStyle(fontSize: 7)).make()
-                                                                          ],
-                                                                        );
-                                                                      }),
-                                                                ),
-                                                              )),
+                                                                                color: snapshotSelect.data != null && snapshotSelect.data!.where((element) => element.id == snapshot.data![index].id).isNotEmpty ? Color(colorPrimary) : Colors.grey,
+                                                                              ),
+                                                                              /*UtilsFonction.CachedImage(snapshot.data![index].contentUrl!,
+                                                                                  width: 40,
+                                                                                  c: Color(colorPrimary)),*/
+                                                                              //c: snapshotSelect.data != null && snapshotSelect.data!.where((element) => element.id == snapshot.data![index].id).isNotEmpty ? Color(colorPrimary) : Colors.grey),
+                                                                              const SizedBox(
+                                                                                height: 10,
+                                                                              ),
+                                                                              snapshot.data![index].title!.text.textStyle(TextStyle(fontSize: 7)).make()
+                                                                            ],
+                                                                          );
+                                                                        }),
+                                                                  ),
+                                                                )),
+                                                  ),
                                                 )
                                               : Container();
                                         })
@@ -676,7 +681,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                               onChanged: (date) {
                                             print('change $date');
                                           }, onConfirm: (date) {
-                                            if (date.hour > 17 ||
+                                            if (date.hour > 16 ||
                                                 date.hour < 8) {
                                               UtilsFonction.showErrorDialog(
                                                   context,
@@ -941,7 +946,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                             return snapshot.hasData && snapshot.data != null
                                 ? Center(
                                     child:
-                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM H:m")}"
+                                        "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE, dd MMM H:mm")}"
                                             .text
                                             .bold
                                             .size(18)

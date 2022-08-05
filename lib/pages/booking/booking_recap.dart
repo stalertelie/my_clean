@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_clean/components/custom_button.dart';
 import 'package:my_clean/constants/colors_constant.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/frequence.dart';
 import 'package:my_clean/models/services.dart';
 import 'package:my_clean/pages/booking/mode_payment.dart';
@@ -83,21 +84,17 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                 height: 10,
               ),
               Center(
-                child:
-                    "(Prix : ${UtilsFonction.formatMoney(widget.amount)} Fcfa)"
-                        .text
-                        .bold
-                        .size(25)
-                        .make(),
+                child: "Prix : ${UtilsFonction.formatMoney(widget.amount)} Fcfa"
+                    .text
+                    .bold
+                    .size(25)
+                    .make(),
               ),
               const SizedBox(
                 height: 20,
               ),
               'Service : '.text.make(),
-              const SizedBox(
-                height: 10,
-              ),
-              "${widget.services.title}".text.size(18).bold.make(),
+              widget.services.title!.toCapitalized().text.size(18).bold.make(),
               Visibility(
                 visible: widget.isSubscription == true,
                 child: Column(
@@ -124,7 +121,8 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                     AppLocalizations.current.bookingDate.text.make(),
                     UtilsFonction.formatDate(
                             dateTime: widget.bookingDate,
-                            format: 'EEE d MMMM, H:m')
+                            format: 'EEE d MMMM, H:mm')
+                        .toCapitalized()
                         .text
                         .size(18)
                         .bold

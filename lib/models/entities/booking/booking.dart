@@ -13,6 +13,7 @@ class Booking {
   String? code;
   String? localisation;
   DateTime? date;
+  DateTime? createdAt;
   bool? isClosed;
   List<Prices>? prices;
   int? priceTotal;
@@ -26,6 +27,7 @@ class Booking {
       {this.user,
       this.localisation,
       this.date,
+      this.createdAt,
       this.priceTotal,
       this.isMeubler,
       this.frequence,

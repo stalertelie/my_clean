@@ -87,7 +87,7 @@ class ChooseLanguageScreenState extends State<ChooseLanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       _toggleBottomNavigator(false);
     });
 

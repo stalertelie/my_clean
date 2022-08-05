@@ -38,7 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "chooseYourCountry":
             MessageLookupByLibrary.simpleMessage("Choisis ton pays"),
         "chooseYourLanguage":
-            MessageLookupByLibrary.simpleMessage("Choisis ta language"),
+            MessageLookupByLibrary.simpleMessage("Choisis ta langue"),
         "continue": MessageLookupByLibrary.simpleMessage("Continuer"),
         "profileDetailsLabel":
             MessageLookupByLibrary.simpleMessage("Détails du profil"),
@@ -87,7 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dateAndHour":
             MessageLookupByLibrary.simpleMessage("Choisir la date et l’heure"),
         "whenDoYouWantTheExecution": MessageLookupByLibrary.simpleMessage(
-            "A quel fréquence voulez vous l'exécution du service ?"),
+            "A quelle fréquence voulez vous l'exécution du service ?"),
         "selectDate": MessageLookupByLibrary.simpleMessage(
             "Choisir une date et heure (8H-16H)"),
         "selectHour":
@@ -191,8 +191,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Utiliser l'emplacement"),
         "pieces": MessageLookupByLibrary.simpleMessage("PIECES"),
         "abonnement": MessageLookupByLibrary.simpleMessage("ABONNEMENT"),
-        "ponctualService":
-            MessageLookupByLibrary.simpleMessage("SERVICE PONCTUEL"),
+        "ponctualService": MessageLookupByLibrary.simpleMessage("PONCTUEL"),
         "number": MessageLookupByLibrary.simpleMessage("Nombre"),
         "noNotification": MessageLookupByLibrary.simpleMessage(
             "Aucune notification pour l'instant !"),

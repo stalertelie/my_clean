@@ -10,13 +10,16 @@ import 'package:my_clean/components/tab_app_bar.dart';
 import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/img_urls.dart';
+import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/entities/booking/booking.dart';
 import 'package:my_clean/models/responses/get-booking-response/get_booking_response.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/booking/components/command_list_item.dart';
+import 'package:my_clean/pages/widgets/ticket_model.dart';
 import 'package:my_clean/services/booking_api.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
+import 'package:ticket_widget/ticket_widget.dart';
 import 'package:velocity_x/src/extensions/iterable_ext.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -233,7 +236,7 @@ class CommandListState extends State<CommandList> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 booking.code!.text.bold.size(15).make(),
-                "${booking.prices![0].tarification.service?.categorieService?.title} ${booking.prices![0].tarification.service?.title!.toUpperCase()}"
+                "${booking.prices![0].tarification.service?.categorieService != null ? booking.prices![0].tarification.service?.categorieService?.title : booking.prices![0].quantity.toString() + ' ' + (booking.prices![0].tarification.label ?? '')} ${booking.prices![0].tarification.service?.title!.toCapitalized()}"
                     .text
                     .make()
               ],
@@ -255,7 +258,7 @@ class CommandListState extends State<CommandList> {
                 "Total".text.size(18).bold.make(),
                 Text(
                   UtilsFonction.formatMoney(booking.priceTotal!.toInt()) +
-                      ' FCFA',
+                      ' Fcfa',
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 )
@@ -272,7 +275,7 @@ class CommandListState extends State<CommandList> {
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                               const Color(0XFFBFBFBF))),
-                      onPressed: () {},
+                      onPressed: () => showTicket(bookingdata: booking),
                       child: Text(
                         AppLocalizations.current.viewRecept,
                         style: const TextStyle(
@@ -311,4 +314,20 @@ class CommandListState extends State<CommandList> {
           ]),
         ),
       );
+
+  void showTicket({required Booking bookingdata}) {
+    showDialog(
+        context: context,
+        builder: (context) => Dialog(
+              child: TicketWidget(
+                width: 350,
+                height: 400,
+                isCornerRounded: true,
+                padding: const EdgeInsets.all(20),
+                child: TicketModelWidget(
+                  booking: bookingdata,
+                ),
+              ),
+            ));
+  }
 }

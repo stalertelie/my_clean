@@ -520,7 +520,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                         onChanged: (date) {
                                       print('change $date');
                                     }, onConfirm: (date) {
-                                      if (date.hour > 17 || date.hour < 8) {
+                                      if (date.hour > 16 || date.hour < 8) {
                                         UtilsFonction.showErrorDialog(
                                             context,
                                             AppLocalizations
@@ -614,7 +614,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:mm")}"
                                                   .text
                                                   .bold
                                                   .size(18)

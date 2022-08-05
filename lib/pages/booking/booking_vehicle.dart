@@ -605,14 +605,13 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                           minTime: DateTime.now(),
                                           theme: DatePickerTheme(
                                               itemStyle: TextStyle(
-                                                  color: const Color(
-                                                      colorPrimary))),
+                                                  color: const Color(colorPrimary))),
                                           onChanged: (date) {
                                         print('change $date');
                                       }, onConfirm: (date) {
                                         print(GetIt.I<AppServices>().lang ==
                                             "fr");
-                                        if (date.hour > 17 || date.hour < 8) {
+                                        if (date.hour > 16 || date.hour < 8) {
                                           UtilsFonction.showErrorDialog(
                                               context,
                                               AppLocalizations
@@ -621,13 +620,17 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                           _bloc.setDateBooking(date);
                                         }
                                       },
-                                          currentTime:
-                                              _bloc.bookingDateSubject.hasValue && _bloc.bookingDateSubject.value != null ?
-                                                  _bloc.bookingDateSubject.value : DateTime.now(),
-                                          locale: GetIt.I<AppServices>().lang ==
-                                                  'fr'
-                                              ? LocaleType.fr
-                                              : LocaleType.en);
+                                          currentTime: _bloc.bookingDateSubject
+                                                      .hasValue &&
+                                                  _bloc.bookingDateSubject
+                                                          .value !=
+                                                      null
+                                              ? _bloc.bookingDateSubject.value
+                                              : DateTime.now(),
+                                          locale:
+                                              GetIt.I<AppServices>().lang == 'fr'
+                                                  ? LocaleType.fr
+                                                  : LocaleType.en);
                                     },
                                     child: Text(
                                       AppLocalizations.current.selectDate,
@@ -646,7 +649,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                 return snapshot.hasData && snapshot.data != null
                                     ? Center(
                                         child:
-                                            "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
+                                            "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:mm")}"
                                                 .text
                                                 .bold
                                                 .size(18)

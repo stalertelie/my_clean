@@ -11,6 +11,9 @@ Booking _$BookingFromJson(Map<String, dynamic> json) => Booking(
     localisation:
         json['localisation'] != null ? json['localisation'] as String : null,
     date: json['date'] != null ? DateTime.parse(json['date'] as String) : null,
+    createdAt: json['createdAt'] != null
+        ? DateTime.parse(json['createdAt'] as String)
+        : null,
     priceTotal: json['priceTotal'] != null ? json['priceTotal'] as int : null,
     isMeubler: json['isMeubler'] != null ? json['isMeubler'] as bool : null,
     frequence: json['frequence'] != null ? json['frequence'] as String : null,

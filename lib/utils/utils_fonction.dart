@@ -167,7 +167,7 @@ class UtilsFonction extends Object {
 
   static String formatMoney(int money) {
     var formatter = NumberFormat('#,##0');
-    return formatter.format(money);
+    return formatter.format(money).replaceAll(',', '.');
   }
 
   static void NavigateAndRemoveRight(BuildContext context, Widget page) {

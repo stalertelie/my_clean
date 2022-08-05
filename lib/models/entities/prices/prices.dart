@@ -9,8 +9,9 @@ part 'prices.g.dart';
 @JsonSerializable()
 class Prices {
   Price tarification;
+  int? quantity;
 
-  Prices({required this.tarification});
+  Prices({required this.tarification, this.quantity});
 
   factory Prices.fromJson(Map<String, dynamic> json) => _$PricesFromJson(json);
 

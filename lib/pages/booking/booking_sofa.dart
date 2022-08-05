@@ -462,7 +462,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                         onChanged: (date) {
                                       print('change $date');
                                     }, onConfirm: (date) {
-                                      if (date.hour > 17 || date.hour < 8) {
+                                      if (date.hour > 16 || date.hour < 8) {
                                         UtilsFonction.showErrorDialog(
                                             context,
                                             AppLocalizations
@@ -553,7 +553,7 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:mm")}"
                                                   .text
                                                   .bold
                                                   .size(18)
@@ -566,45 +566,6 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
                       const SizedBox(
                         height: 60,
                       ),
-                      CustomButton(
-                          contextProp: context,
-                          onPressedProp: () {
-                            if (_appProvider.login == null) {
-                              UtilsFonction.NavigateToRoute(
-                                  context,
-                                  LoginScreen(
-                                    toPop: true,
-                                  ));
-                            } else {
-                              if (_bloc.totalSubject.value == 0) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations.current
-                                            .pleaseChooseAtLeastOneOption));
-                                return;
-                              }
-                              if (searchCtrl.text.isEmpty) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.adressError));
-                                return;
-                              }
-                              if (!_bloc.bookingDateSubject.hasValue) {
-                                GetIt.I<AppServices>().showSnackbarWithState(
-                                    Loading(
-                                        hasError: true,
-                                        message: AppLocalizations
-                                            .current.dateError));
-                                return;
-                              }
-                              showRecapSheet();
-                            }
-                          },
-                          textProp:
-                              AppLocalizations.current.order.toUpperCase()),
                     ],
                   ),
                 ),
@@ -612,6 +573,39 @@ class _BookingSofaScreenState extends State<BookingSofaScreen>
             ],
           ),
         ),
+        bottomNavigationBar: CustomButton(
+            contextProp: context,
+            onPressedProp: () {
+              if (_appProvider.login == null) {
+                UtilsFonction.NavigateToRoute(
+                    context,
+                    LoginScreen(
+                      toPop: true,
+                    ));
+              } else {
+                if (_bloc.totalSubject.value == 0) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations
+                          .current.pleaseChooseAtLeastOneOption));
+                  return;
+                }
+                if (searchCtrl.text.isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.adressError));
+                  return;
+                }
+                if (!_bloc.bookingDateSubject.hasValue) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.dateError));
+                  return;
+                }
+                showRecapSheet();
+              }
+            },
+            textProp: AppLocalizations.current.order.toUpperCase()),
       );
     });
   }

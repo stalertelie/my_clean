@@ -185,8 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "useLocation": MessageLookupByLibrary.simpleMessage("Use location"),
         "pieces": MessageLookupByLibrary.simpleMessage("ROOMS"),
         "abonnement": MessageLookupByLibrary.simpleMessage("SUBSCRIPTION"),
-        "ponctualService":
-            MessageLookupByLibrary.simpleMessage("PONCTUAL SERVICE"),
+        "ponctualService": MessageLookupByLibrary.simpleMessage("PONCTUAL"),
         "number": MessageLookupByLibrary.simpleMessage("Number"),
         "noNotification":
             MessageLookupByLibrary.simpleMessage("No notification yet!"),

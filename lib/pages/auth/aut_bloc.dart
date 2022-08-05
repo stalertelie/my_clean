@@ -71,6 +71,7 @@ class AuthBloc extends BaseBloc {
       await storage.write(key: 'token', value: user.token!);
     }).catchError((error) {
       print(error);
+      print("xxxxerorloginxxx");
       loadingSubject.add(Loading(
           message: error.toString().removeExeptionWord(),
           hasError: true,

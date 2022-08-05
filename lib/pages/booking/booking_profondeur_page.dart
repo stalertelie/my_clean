@@ -14,6 +14,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_clean/components/custom_button.dart';
 import 'package:my_clean/constants/app_constant.dart';
 
 //import 'package:latlong2/latlong.dart';
@@ -450,7 +451,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                         onChanged: (date) {
                                       print('change $date');
                                     }, onConfirm: (date) {
-                                      if (date.hour > 17 || date.hour < 8) {
+                                      if (date.hour > 16 || date.hour < 8) {
                                         UtilsFonction.showErrorDialog(
                                             context,
                                             AppLocalizations
@@ -546,7 +547,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   ? Container(
                                       child: Center(
                                           child:
-                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:m")}"
+                                              "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:mm")}"
                                                   .text
                                                   .bold
                                                   .size(18)
@@ -563,68 +564,50 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
             ],
           ),
         ),
-        bottomNavigationBar: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: MaterialButton(
-              color: const Color(0XFF02ABDE),
-              onPressed: () {
-                if (_appProvider.login == null) {
-                  UtilsFonction.NavigateToRoute(
-                      context,
-                      LoginScreen(
-                        toPop: true,
-                      ));
-                } else {
-                  if (_bloc.tarificationRootSubject.value
-                      .where((element) =>
-                          element.list!
-                              .indexWhere((item) => item.quantity! > 0) ==
-                          -1)
-                      .isEmpty) {
-                    GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                        hasError: true,
-                        message: AppLocalizations
-                            .current.pleaseChooseAtLeastOneOption));
-                    return;
-                  }
-                  if (searchCtrl.text.isEmpty) {
-                    GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                        hasError: true,
-                        message: AppLocalizations.current.adressError));
-                    return;
-                  }
-                  if (!_bloc.bookingDateSubject.hasValue) {
-                    GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                        hasError: true,
-                        message: AppLocalizations.current.dateError));
-                    return;
-                  }
-                  if (_bloc.totalSubject.value == 0) {
-                    GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                        hasError: true,
-                        message: AppLocalizations.current.serviceError));
-                    return;
-                  }
-                  showRecapSheet();
+        bottomNavigationBar: CustomButton(
+            contextProp: context,
+            onPressedProp: () {
+              if (_appProvider.login == null) {
+                UtilsFonction.NavigateToRoute(
+                    context,
+                    LoginScreen(
+                      toPop: true,
+                    ));
+              } else {
+                if (_bloc.tarificationRootSubject.value
+                    .where((element) =>
+                        element.list!
+                            .indexWhere((item) => item.quantity! > 0) ==
+                        -1)
+                    .isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations
+                          .current.pleaseChooseAtLeastOneOption));
+                  return;
                 }
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AppLocalizations.current.book.text
-                        .fontFamily("SFPro")
-                        .size(20)
-                        .bold
-                        .white
-                        .make(),
-                  ],
-                ),
-              ),
-            )),
+                if (searchCtrl.text.isEmpty) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.adressError));
+                  return;
+                }
+                if (!_bloc.bookingDateSubject.hasValue) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.dateError));
+                  return;
+                }
+                if (_bloc.totalSubject.value == 0) {
+                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                      hasError: true,
+                      message: AppLocalizations.current.serviceError));
+                  return;
+                }
+                showRecapSheet();
+              }
+            },
+            textProp: AppLocalizations.current.order.toUpperCase()),
       );
     });
   }

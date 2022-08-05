@@ -42,7 +42,7 @@ dependencies:
 
   google_fonts: ^2.1.0
 
-  velocity_x: ^3.3.0
+  velocity_x: ^3.5.1
 
   rxdart: ^0.27.2
 
@@ -54,9 +54,9 @@ dependencies:
 
   get_it: ^7.2.0
 
-  cached_network_image: ^3.1.0
+  cached_network_image: ^3.2.1
 
-  flutter_svg: ^0.22.0
+  flutter_svg: ^1.1.2
 
   carousel_slider: ^4.0.0
 
@@ -87,6 +87,16 @@ dependencies:
 
   flutter_rating_stars: ^1.0.3+4
   # build_runner: ^2.1.5
+
+  ticket_widget: ^0.0.1
+
+  barcode_widget: ^2.0.2
+
+  dotted_border: ^2.0.0+2
+
+  image_gallery_saver: ^1.7.1
+
+  screenshot: ^1.2.3
 
 dev_dependencies:
   # json_serializable: ^6.0.1

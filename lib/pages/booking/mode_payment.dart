@@ -49,7 +49,7 @@ class _ModePaymentScreenState extends State<ModePaymentScreen> {
             const SizedBox(
               height: 40,
             ),
-            Center(
+            /*Center(
               child: "Ou".text.bold.size(30).make(),
             ),
             const SizedBox(
@@ -68,7 +68,7 @@ class _ModePaymentScreenState extends State<ModePaymentScreen> {
                 logo: Image.asset(
                   'images/icons/card_type.png',
                   width: 120,
-                ))
+                ))*/
           ],
         ),
       )),

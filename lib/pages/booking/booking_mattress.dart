@@ -507,7 +507,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                           return snapshot.hasData && snapshot.data != null
                               ? Center(
                                   child:
-                                      "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM hh:mm")}"
+                                      "Le  ${UtilsFonction.formatDate(dateTime: snapshot.data!, format: "EEE dd MMM H:mm")}"
                                           .text
                                           .bold
                                           .size(18)

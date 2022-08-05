@@ -44,7 +44,7 @@ class ChooseCountryScreenState extends State<ChooseCountryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       _toggleBottomNavigator(false);
     });
     return Scaffold(
