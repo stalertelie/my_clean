@@ -181,5 +181,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "number": MessageLookupByLibrary.simpleMessage("Number"),
         "noNotification":
             MessageLookupByLibrary.simpleMessage("No notification yet!"),
+        "noteservice": MessageLookupByLibrary.simpleMessage("Rate"),
       };
 }

@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:get_it/get_it.dart';
 import 'package:my_clean/constants/colors_constant.dart';
+import 'package:my_clean/constants/message_constant.dart';
+import 'package:my_clean/models/evaluation.dart';
+import 'package:my_clean/models/loading.dart';
+import 'package:my_clean/pages/evaluation/evaluate_bloc.dart';
 import 'package:my_clean/pages/root/root_page.dart';
+import 'package:my_clean/services/app_service.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:my_clean/models/entities/booking/booking.dart';
+
+import '../../models/entities/services/services.dart';
 
 class BookingEvaluateScreen extends StatefulWidget {
+  final Booking booking;
+
+  const BookingEvaluateScreen({Key? key, required this.booking})
+      : super(key: key);
+
   @override
   State<BookingEvaluateScreen> createState() => _BookingEvaluateScreenState();
 }
@@ -14,13 +28,31 @@ class BookingEvaluateScreen extends StatefulWidget {
 class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
   double evaluationValue = 0;
 
+  final EvaluateBloc _bloc = EvaluateBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc.loadingSubject.listen((value) {
+      if (value.message == MessageConstant.evaluation_ok) {
+        Navigator.of(context).pop();
+        GetIt.I<AppServices>().showSnackbarWithState(Loading(
+            loading: false, hasError: false, message: "Evaluation envoyée"));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(colorDefaultService),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(
+              height: 100,
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -66,7 +98,8 @@ class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
+                  evaluationValue.text.bold.italic.make()
+                  /*Container(
                     width: double.maxFinite,
                     padding: const EdgeInsets.all(15),
                     decoration: BoxDecoration(
@@ -81,7 +114,7 @@ class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
                         const Icon(Icons.keyboard_arrow_right)
                       ],
                     ),
-                  )
+                  )*/
                 ],
               ),
             ),
@@ -106,8 +139,9 @@ class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
               child: Container(),
             ),
             InkWell(
-              onTap: () =>
-                  {UtilsFonction.NavigateAndRemoveRight(context, RootPage())},
+              onTap: () => {
+                if (evaluationValue > 0) {evaluate()}
+              },
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -135,5 +169,14 @@ class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
         ),
       ),
     );
+  }
+
+  void evaluate() {
+    Evaluation evaluation = Evaluation(
+        bookingId: widget.booking.id,
+        note: evaluationValue.toDouble(),
+        service: widget.booking.prices![0].tarification.service!.id);
+
+    _bloc.evaluate(evaluation);
   }
 }

@@ -12,4 +12,5 @@ class MessageConstant {
 
   static String bed_unvailable = "Chambre indisponible";
   static String bed_check_done = "Check done";
+  static String evaluation_ok = "evok";
 }

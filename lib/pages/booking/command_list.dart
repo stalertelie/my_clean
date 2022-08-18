@@ -14,6 +14,7 @@ import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/entities/booking/booking.dart';
 import 'package:my_clean/models/responses/get-booking-response/get_booking_response.dart';
 import 'package:my_clean/models/user.dart';
+import 'package:my_clean/pages/evaluation/booking_evaluate.dart';
 import 'package:my_clean/pages/booking/components/command_list_item.dart';
 import 'package:my_clean/pages/widgets/ticket_model.dart';
 import 'package:my_clean/services/booking_api.dart';
@@ -235,10 +236,44 @@ class CommandListState extends State<CommandList> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                "Code Commande :".text.make(),
                 booking.code!.text.bold.size(15).make(),
-                "${booking.prices![0].tarification.service?.categorieService != null ? booking.prices![0].tarification.service?.categorieService?.title : booking.prices![0].quantity.toString() + ' ' + (booking.prices![0].tarification.label ?? '')} ${booking.prices![0].tarification.service?.title!.toCapitalized()}"
-                    .text
-                    .make()
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                "Service : ".text.make(),
+                Flexible(
+                  child:
+                      "${booking.prices![0].tarification.service?.categorieService != null ? booking.prices![0].tarification.service?.categorieService?.title!.toCapitalized() : '(' + booking.prices![0].quantity.toString() + ')* ' + (booking.prices![0].tarification.label ?? '')} ${booking.prices![0].tarification.service?.title!.toCapitalized()}"
+                          .text
+                          .make(),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                "Date commande : ".text.make(),
+                Text(
+                  AppLocalizations.current.orderDate(UtilsFonction.formatDate(
+                      dateTime: booking.date ?? DateTime.now(),
+                      format: "d-MM-y")),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            /*Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                booking.code!.text.bold.size(15).make(),
+                Expanded(
+                  child:
+                      "${booking.prices![0].tarification.service?.categorieService != null ? booking.prices![0].tarification.service?.categorieService?.title : booking.prices![0].quantity.toString() + ' ' + (booking.prices![0].tarification.label ?? '')} ${booking.prices![0].tarification.service?.title!.toCapitalized()}"
+                          .text
+                          .make(),
+                )
               ],
             ),
             const SizedBox(
@@ -248,7 +283,7 @@ class CommandListState extends State<CommandList> {
               AppLocalizations.current.orderDate(UtilsFonction.formatDate(
                   dateTime: booking.date ?? DateTime.now(), format: "d-MM-y")),
               style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            ),*/
             const SizedBox(
               height: 30,
             ),
@@ -309,6 +344,37 @@ class CommandListState extends State<CommandList> {
                             fontWeight: FontWeight.bold),
                       )),
                 ),
+                Visibility(
+                  visible: booking.hasEvaluation != true,
+                  child: const SizedBox(
+                    width: 5,
+                  ),
+                ),
+                Visibility(
+                  visible: booking.hasEvaluation != true,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white)),
+                      onPressed: () {
+                        UtilsFonction.NavigateToRouteAndWait(context,
+                                BookingEvaluateScreen(booking: booking))
+                            .then((value) {
+                          print('icicici');
+                          setState(() {
+                            loading = true;
+                          });
+                          _getUser();
+                        });
+                      },
+                      child: Text(
+                        AppLocalizations.current.noteservice,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      )),
+                )
               ],
             )
           ]),

@@ -511,6 +511,10 @@ class AppLocalizations {
     return Intl.message('noNotification',
         name: 'noNotification', locale: localeName);
   }
+
+  String get noteservice {
+    return Intl.message('noteservice', name: 'noteservice', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

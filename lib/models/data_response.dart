@@ -1,5 +1,6 @@
 import 'package:my_clean/interfaces/ToJsonInterface.dart';
 import 'package:my_clean/models/booking.dart';
+import 'package:my_clean/models/evaluation.dart';
 import 'package:my_clean/models/extra_service.dart';
 import 'package:my_clean/models/frequence.dart';
 import 'package:my_clean/models/services.dart';
@@ -37,6 +38,8 @@ class DataResponse<T> {
                   return Booking.fromJson(i) as T;
                 case ExtraService:
                   return ExtraService.fromJson(i) as T;
+                case Evaluation:
+                  return Evaluation.fromJson(i) as T;
                 default:
                   return null as T;
               }

@@ -21,6 +21,8 @@ class TicketModelWidget extends StatefulWidget {
 class _TicketModelWidgetState extends State<TicketModelWidget> {
   ScreenshotController screenshotController = ScreenshotController();
 
+  bool isDownloadButtonVisible = true;
+
   @override
   Widget build(BuildContext context) {
     String details = "";
@@ -63,7 +65,10 @@ class _TicketModelWidgetState extends State<TicketModelWidget> {
                   ),
                 ),
                 InkWell(
-                  onTap: () => {
+                  onTap: () {
+                    setState(() {
+                      isDownloadButtonVisible = false;
+                    });
                     screenshotController
                         .capture()
                         .then((Uint8List? image) async {
@@ -73,33 +78,39 @@ class _TicketModelWidgetState extends State<TicketModelWidget> {
                             quality: 60,
                             name: "Titket" + widget.booking.code!);
                         Fluttertoast.showToast(
-                            msg: "Ticket enrégistré dans votre galeire",
+                            msg: "Ticket enrégistré dans votre galerie",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 1,
                             backgroundColor: Colors.black.withOpacity(0.5),
                             textColor: Colors.white,
                             fontSize: 13.0);
+                        setState(() {
+                          isDownloadButtonVisible = true;
+                        });
                       }
                     }).catchError((onError) {
                       print(onError);
-                    })
+                    });
                   },
-                  child: Row(
-                    children: const [
-                      Text(
-                        'Télécharger',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Icon(
-                          Icons.download,
-                          color: Colors.pink,
+                  child: Visibility(
+                    visible: isDownloadButtonVisible,
+                    child: Row(
+                      children: const [
+                        Text(
+                          'Télécharger',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Icon(
+                            Icons.download,
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -137,8 +148,9 @@ class _TicketModelWidgetState extends State<TicketModelWidget> {
                     style:
                         TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
                 Text(UtilsFonction.formatDate(
-                    dateTime: widget.booking.date!,
-                    format: 'EEE, dd MMM à H:mm')),
+                        dateTime: widget.booking.date!,
+                        format: 'EEE, dd MMM à H:mm') +
+                    "h"),
               ],
             ),
             DottedBorder(

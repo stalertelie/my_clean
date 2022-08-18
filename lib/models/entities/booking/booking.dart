@@ -22,6 +22,7 @@ class Booking {
   String? gps;
   String? note;
   int? id;
+  bool? hasEvaluation;
 
   Booking(
       {this.user,
@@ -36,6 +37,7 @@ class Booking {
       this.note,
       this.isClosed,
       this.code,
+      this.hasEvaluation,
       this.id});
 
   factory Booking.fromJson(Map<String, dynamic> json) =>

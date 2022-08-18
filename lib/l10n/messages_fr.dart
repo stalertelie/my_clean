@@ -171,7 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "bookAgain": MessageLookupByLibrary.simpleMessage("Reserver encore"),
         "bookingDone": MessageLookupByLibrary.simpleMessage("Commande ajoutée"),
         "bookingDoneMessage": MessageLookupByLibrary.simpleMessage(
-            "Nos agens vous contacterons sous peu."),
+            "Nos agents vous contacterons sous peu."),
         "active": MessageLookupByLibrary.simpleMessage("Actives"),
         "history": MessageLookupByLibrary.simpleMessage("Historiques"),
         "cleaning": MessageLookupByLibrary.simpleMessage("Nettoyage"),
@@ -195,5 +195,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "number": MessageLookupByLibrary.simpleMessage("Nombre"),
         "noNotification": MessageLookupByLibrary.simpleMessage(
             "Aucune notification pour l'instant !"),
+        "noteservice": MessageLookupByLibrary.simpleMessage("Noter"),
       };
 }
