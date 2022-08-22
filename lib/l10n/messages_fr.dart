@@ -136,7 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "bookingItems":
             MessageLookupByLibrary.simpleMessage("Article dans votre commande"),
         "erroTimeFrame": MessageLookupByLibrary.simpleMessage(
-            "Nous ne prestons pas dans cet intervalle de temps.Désolé."),
+            "Désolé nous sommes indisponibles"),
         "adressError": MessageLookupByLibrary.simpleMessage(
             "Veuillez entrer votre adresse"),
         "dateError":
