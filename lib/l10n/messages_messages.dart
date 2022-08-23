@@ -182,5 +182,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "noNotification":
             MessageLookupByLibrary.simpleMessage("No notification yet!"),
         "noteservice": MessageLookupByLibrary.simpleMessage("Rate"),
+        "commandDate": MessageLookupByLibrary.simpleMessage("Command date :"),
+        "commandeservice": MessageLookupByLibrary.simpleMessage("Service :"),
+        "commandCode": MessageLookupByLibrary.simpleMessage("Booking code : "),
+        "witchTime": MessageLookupByLibrary.simpleMessage("Which time"),
       };
 }

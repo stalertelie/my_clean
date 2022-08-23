@@ -845,9 +845,8 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                               color: Colors.white,
                                               borderRadius:
                                                   BorderRadius.circular(10)),
-                                          child: "Quelle Heure"
-                                              .text
-                                              .bold
+                                          child: AppLocalizations
+                                              .current.witchTime.text.bold
                                               .size(18)
                                               .make(),
                                         ),

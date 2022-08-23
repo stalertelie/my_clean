@@ -69,13 +69,17 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
         child: Column(children: [
           _buildBodyDivider(),
           _buildOption(
-              text: 'English',
+              text: _currentLocaleCode.toLowerCase() == 'en'
+                  ? 'English'
+                  : 'Anglais',
               isSelected: _currentLocaleCode.toLowerCase() == 'en',
               onTap: () {
                 _setLanguage('en');
               }),
           _buildOption(
-              text: 'Français',
+              text: _currentLocaleCode.toLowerCase() == 'en'
+                  ? 'French'
+                  : 'Français',
               isSelected: _currentLocaleCode.toLowerCase() == 'fr',
               onTap: () {
                 _setLanguage('fr');

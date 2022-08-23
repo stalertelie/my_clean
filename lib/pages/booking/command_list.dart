@@ -236,14 +236,14 @@ class CommandListState extends State<CommandList> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                "Code Commande :".text.make(),
+                AppLocalizations.current.commandCode.text.make(),
                 booking.code!.text.bold.size(15).make(),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                "Service : ".text.make(),
+                AppLocalizations.current.commandeservice.text.make(),
                 Flexible(
                   child:
                       "${booking.prices![0].tarification.service?.categorieService != null ? booking.prices![0].tarification.service?.categorieService?.title!.toCapitalized() : '(' + booking.prices![0].quantity.toString() + ')* ' + (booking.prices![0].tarification.label ?? '')} ${booking.prices![0].tarification.service?.title!.toCapitalized()}"
@@ -255,7 +255,7 @@ class CommandListState extends State<CommandList> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                "Date commande : ".text.make(),
+                AppLocalizations.current.commandDate.text.make(),
                 Text(
                   AppLocalizations.current.orderDate(UtilsFonction.formatDate(
                       dateTime: booking.date ?? DateTime.now(),

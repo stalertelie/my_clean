@@ -515,6 +515,23 @@ class AppLocalizations {
   String get noteservice {
     return Intl.message('noteservice', name: 'noteservice', locale: localeName);
   }
+
+  String get commandDate {
+    return Intl.message('commandDate', name: 'commandDate', locale: localeName);
+  }
+
+  String get commandeservice {
+    return Intl.message('commandeservice',
+        name: 'commandeservice', locale: localeName);
+  }
+
+  String get commandCode {
+    return Intl.message('commandCode', name: 'commandCode', locale: localeName);
+  }
+
+  String get witchTime {
+    return Intl.message('witchTime', name: 'witchTime', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
