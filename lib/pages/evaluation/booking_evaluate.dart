@@ -10,6 +10,7 @@ import 'package:my_clean/pages/root/root_page.dart';
 import 'package:my_clean/services/app_service.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:my_clean/models/entities/booking/booking.dart';
 
@@ -30,15 +31,31 @@ class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
 
   final EvaluateBloc _bloc = EvaluateBloc();
 
+  String _currentLocaleCode = '';
+
   @override
   void initState() {
     super.initState();
+    _getLocale();
     _bloc.loadingSubject.listen((value) {
       if (value.message == MessageConstant.evaluation_ok) {
         Navigator.of(context).pop();
         GetIt.I<AppServices>().showSnackbarWithState(Loading(
-            loading: false, hasError: false, message: "Evaluation envoyée"));
+            loading: false,
+            hasError: false,
+            message: _currentLocaleCode.toLowerCase() == 'en'
+                ? "Rating send"
+                : "Evaluation envoyée"));
       }
+    });
+  }
+
+  void _getLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final currentLocaleCode = prefs.getString('locale');
+
+    setState(() {
+      _currentLocaleCode = currentLocaleCode!.toLowerCase();
     });
   }
 
