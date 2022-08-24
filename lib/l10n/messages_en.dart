@@ -194,5 +194,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commandeservice": MessageLookupByLibrary.simpleMessage("Service :"),
         "commandCode": MessageLookupByLibrary.simpleMessage("Booking code : "),
         "witchTime": MessageLookupByLibrary.simpleMessage("Which time"),
+        "myNotification":
+            MessageLookupByLibrary.simpleMessage("My notifications"),
       };
 }

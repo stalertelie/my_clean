@@ -24,6 +24,7 @@ class AppConstant {
   static const FREQUENCE_BOOKING_RECURENT = "ABONNEMENT";
 
   static const dayList = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+  static const dayListEn = ["Mon", "Tue", "Wer", "Thu", "Fri", "Sun", "Sat"];
   static const hourList = [
     "08H00",
     "09H00",

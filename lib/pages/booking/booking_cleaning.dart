@@ -84,6 +84,8 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
   final ImagePicker _imagePicker = ImagePicker();
   dynamic _pickedImage;
 
+  String _currentLocaleCode = '';
+
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -96,6 +98,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
   void initState() {
     super.initState();
     getLatLong();
+    _getLocale();
     _bloc.getExtratFormServices(widget.service.id!);
     if (widget.service != null) {
       _bloc.setSimpleTarification(widget.service.tarifications!
@@ -123,6 +126,15 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
           UtilsFonction.NavigateAndRemoveRight(context, BookingResultScreen());
         });
       }
+    });
+  }
+
+  void _getLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final currentLocaleCode = prefs.getString('locale');
+
+    setState(() {
+      _currentLocaleCode = currentLocaleCode!.toLowerCase();
     });
   }
 
@@ -810,19 +822,27 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                                               child: Column(
                                                                 children: [
                                                                   Checkbox(
-                                                                      value: snapshot
-                                                                          .data!
-                                                                          .contains(AppConstant.dayList[
+                                                                      value: snapshot.data!.contains(_currentLocaleCode ==
+                                                                              'en'
+                                                                          ? AppConstant.dayListEn[
+                                                                              index]
+                                                                          : AppConstant.dayList[
                                                                               index]),
-                                                                      onChanged:
-                                                                          (value) =>
-                                                                              _bloc.addDays(AppConstant.dayList[index])),
+                                                                      onChanged: (value) => _bloc.addDays(_currentLocaleCode ==
+                                                                              'en'
+                                                                          ? AppConstant.dayListEn[
+                                                                              index]
+                                                                          : AppConstant
+                                                                              .dayList[index])),
                                                                   SizedBox(
                                                                     height: 5,
                                                                   ),
-                                                                  AppConstant
-                                                                      .dayList[
-                                                                          index]
+                                                                  (_currentLocaleCode ==
+                                                                              'en'
+                                                                          ? AppConstant.dayListEn[
+                                                                              index]
+                                                                          : AppConstant
+                                                                              .dayList[index])
                                                                       .text
                                                                       .make()
                                                                 ],

@@ -17,7 +17,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: TabAppBar(
-            titleProp: 'Mes notifications',
+            titleProp: AppLocalizations.current.myNotification,
             titleFontSize: 20,
             backgroundColor: Colors.transparent,
             context: context,

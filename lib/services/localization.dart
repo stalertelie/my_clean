@@ -532,6 +532,11 @@ class AppLocalizations {
   String get witchTime {
     return Intl.message('witchTime', name: 'witchTime', locale: localeName);
   }
+
+  String get myNotification {
+    return Intl.message('myNotification',
+        name: 'myNotification', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
