@@ -330,6 +330,9 @@ class BookingBloc extends BaseBloc {
       if (tarificationActive.quantity == 0 && quantity == -1) {
         return;
       }
+      if (tarificationActive.quantity == 5 && quantity != -1) {
+        return;
+      }
       tarificationActive.quantity =
           (tarificationActive.quantity ?? 0) + quantity;
       _simpleTarificationSubject.add(_simpleTarificationSubject.value);

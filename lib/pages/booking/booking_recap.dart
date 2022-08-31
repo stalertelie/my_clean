@@ -73,9 +73,7 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                 ),
               ),
               Center(
-                child: "Récapitulatif"
-                    .text
-                    .bold
+                child: AppLocalizations.current.commandRecap.text.bold
                     .size(30)
                     .color(const Color(colorPrimary))
                     .make(),
@@ -84,11 +82,12 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                 height: 10,
               ),
               Center(
-                child: "Prix : ${UtilsFonction.formatMoney(widget.amount)} Fcfa"
-                    .text
-                    .bold
-                    .size(25)
-                    .make(),
+                child:
+                    "${AppLocalizations.current.prix} : ${UtilsFonction.formatMoney(widget.amount)} Fcfa"
+                        .text
+                        .bold
+                        .size(25)
+                        .make(),
               ),
               const SizedBox(
                 height: 20,
@@ -103,8 +102,10 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    "Passage récurrent".text.make(),
-                    "${widget.frequenceByWeek} fois par semaine".text.make(),
+                    AppLocalizations.current.recurrentPassage.text.make(),
+                    "${widget.frequenceByWeek} ${AppLocalizations.current.bySemain}"
+                        .text
+                        .make(),
                     widget.days.join(",").text.size(18).bold.make(),
                     "à, ${widget.hour}".text.size(18).bold.make(),
                   ],

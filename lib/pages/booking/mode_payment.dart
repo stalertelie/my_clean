@@ -37,7 +37,7 @@ class _ModePaymentScreenState extends State<ModePaymentScreen> {
             GestureDetector(
               onTap: () => Navigator.of(context).pop(),
               child: PaimentOptionWidget(
-                  title: 'Payer cash après la livraison',
+                  title: AppLocalizations.current.payCashAfterService,
                   bgColor: const Color(colorPrimary),
                   titleColor: Colors.white,
                   logo: Image.asset(

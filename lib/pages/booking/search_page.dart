@@ -48,9 +48,9 @@ class _SearchPageState extends State<SearchPage> {
                   'images/icons/map-marker.svg',
                   width: 40,
                 )),
-            onChanged: (String value) {
-              if (value.length >= 2) {
-                _bloc.getProposition(value);
+            onChanged: (String? value) {
+              if (value != null && value.length >= 2) {
+                _bloc.mapsearchSubject.add(value);
               }
             },
           ),

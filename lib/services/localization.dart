@@ -537,6 +537,29 @@ class AppLocalizations {
     return Intl.message('myNotification',
         name: 'myNotification', locale: localeName);
   }
+
+  String get payCashAfterService {
+    return Intl.message('payCashAfterService',
+        name: 'payCashAfterService', locale: localeName);
+  }
+
+  String get commandRecap {
+    return Intl.message('commandRecap',
+        name: 'commandRecap', locale: localeName);
+  }
+
+  String get prix {
+    return Intl.message('prix', name: 'prix', locale: localeName);
+  }
+
+  String get recurrentPassage {
+    return Intl.message('recurrentPassage',
+        name: 'recurrentPassage', locale: localeName);
+  }
+
+  String get bySemain {
+    return Intl.message('bySemain', name: 'bySemain', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

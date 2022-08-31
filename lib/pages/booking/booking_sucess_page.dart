@@ -20,20 +20,13 @@ class _BookingResultScreenState extends State<BookingResultScreen> {
       child: Scaffold(
         backgroundColor: const Color(colorDefaultService),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //crossAxisAlignment: Cro,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Icon(
-                    Icons.done_outline_sharp,
-                    color: Colors.green,
-                    size: 100,
-                  ),
                   AppLocalizations.current.bookingDone
                       .toUpperCase()
                       .text
@@ -49,8 +42,10 @@ class _BookingResultScreenState extends State<BookingResultScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: Container(),
+            const Icon(
+              Icons.done_outline_sharp,
+              color: Colors.green,
+              size: 100,
             ),
             InkWell(
               onTap: () =>

@@ -202,5 +202,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "witchTime": MessageLookupByLibrary.simpleMessage("Quelle Heure"),
         "myNotification":
             MessageLookupByLibrary.simpleMessage("Mes notifications"),
+        "payCashAfterService":
+            MessageLookupByLibrary.simpleMessage("Payer cash après le service"),
+        "commandRecap": MessageLookupByLibrary.simpleMessage("Récapitulatif"),
+        "prix": MessageLookupByLibrary.simpleMessage("Prix"),
+        "bySemain": MessageLookupByLibrary.simpleMessage("fois par semaine"),
+        "recurrentPassage":
+            MessageLookupByLibrary.simpleMessage("Passage récurrent"),
       };
 }

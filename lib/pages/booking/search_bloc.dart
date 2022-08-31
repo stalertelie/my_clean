@@ -12,6 +12,17 @@ class SearchBloc extends BaseBloc {
 
   BehaviorSubject<GoogleSearchResult> get featuresSubject => _featuresSubject;
 
+  SearchBloc() {
+    mapsearchSubject
+        .debounceTime(const Duration(milliseconds: 1000))
+        .distinct()
+        .switchMap((value) => getProposition(value));
+  }
+
+  Stream<String> get mapsearch => _mapsearchSubject.stream;
+  final _mapsearchSubject = BehaviorSubject<String>();
+  BehaviorSubject<String> get mapsearchSubject => _mapsearchSubject;
+
   getProposition(String q) async {
     loadingSubject.add(Loading(loading: true));
     final response = await http.get(

@@ -95,8 +95,9 @@ class _MapViewScreenState extends State<MapViewScreen> {
             myLocationEnabled: true,
             initialCameraPosition: CameraPosition(
               target: LatLng(latitude ?? 0, longitude ?? 0),
-              zoom: 14.4746,
+              zoom: 16,
             ),
+            minMaxZoomPreference: const MinMaxZoomPreference(10, 16),
           ),
         ),
         Positioned(
@@ -216,7 +217,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
           bearing: 270.0,
           target: destLocation,
           tilt: 30.0,
-          zoom: 15.0,
+          zoom: 16.0,
         ),
       ),
     );
