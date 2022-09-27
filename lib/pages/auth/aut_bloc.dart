@@ -80,6 +80,32 @@ class AuthBloc extends BaseBloc {
     });
   }
 
+  deleteAccount(User c) {
+    RequestExtension<User> requestExtension = RequestExtension();
+
+    loadingSubject.add(Loading(loading: true, message: "Suppression en cours"));
+
+    GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
+
+    Future<dynamic> response = requestExtension.put(c.id!, jsonEncode(c));
+
+    response.then((value) async {
+      GetIt.I<AppServices>().showSnackbarWithState(Loading());
+      loadingSubject.add(Loading(
+          message: MessageConstant.deletionok,
+          hasError: false,
+          loading: false));
+    }).catchError((error) {
+      print(error);
+      print("xxxxerorloginxxx");
+      loadingSubject.add(Loading(
+          message: error.toString().removeExeptionWord(),
+          hasError: true,
+          loading: false));
+      GetIt.I<AppServices>().showSnackbarWithState(loadingSubject.value);
+    });
+  }
+
   getUserByToken(String token) {
     RequestExtension<User> requestExtension = RequestExtension();
 

@@ -9,6 +9,7 @@ class User {
       this.id,
       this.userId,
       this.type,
+      this.isDeleted,
       this.email});
 
   String? phone;
@@ -21,19 +22,20 @@ class User {
   String? type;
   int? userId;
   String? email;
+  bool? isDeleted;
 
-  User.withValues({
-    this.id,
-    this.nom,
-    this.prenoms,
-    this.commune,
-    this.phone,
-    this.password,
-    this.token,
-    this.type,
-    this.userId,
-    this.email,
-  });
+  User.withValues(
+      {this.id,
+      this.nom,
+      this.prenoms,
+      this.commune,
+      this.phone,
+      this.password,
+      this.token,
+      this.type,
+      this.userId,
+      this.email,
+      this.isDeleted});
   User.empty();
 
   User clone(
@@ -46,6 +48,7 @@ class User {
       token,
       type,
       userId,
+      isDeleted,
       email}) {
     return User.withValues(
         id: id ?? this.id,
@@ -57,6 +60,7 @@ class User {
         token: token ?? this.token,
         type: type ?? this.type,
         userId: userId ?? this.userId,
+        isDeleted: isDeleted ?? this.isDeleted,
         email: email ?? this.email);
   }
 
@@ -71,6 +75,7 @@ class User {
         commune: json["commune"] == null ? null : json["commune"],
         token: json["token"] == null ? null : json["token"],
         email: json["email"] == null ? null : json["email"],
+        isDeleted: json["isDeleted"] == null ? null : json["isDeleted"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -83,5 +88,6 @@ class User {
         "prenoms": prenoms == null ? null : prenoms,
         "commune": commune == null ? null : commune,
         "email": email == null ? null : email,
-      };
+        "isDeleted": isDeleted == null ? null : isDeleted,
+      }..removeWhere((String key, dynamic value) => value == null);
 }

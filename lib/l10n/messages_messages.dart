@@ -57,6 +57,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "youAreNotLogged":
             MessageLookupByLibrary.simpleMessage("youAreNotLogged"),
         "disconnected": MessageLookupByLibrary.simpleMessage("disconnected"),
+        "deleteAccount": MessageLookupByLibrary.simpleMessage("Delete account"),
+        "deleteAccountConfirm": MessageLookupByLibrary.simpleMessage(
+            "Do you really want to delete your account?"),
         "conditionsOfUse":
             MessageLookupByLibrary.simpleMessage("conditionsOfUse"),
         "firstNameFieldLabel":

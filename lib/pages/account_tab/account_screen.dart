@@ -5,18 +5,23 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:ioc/ioc.dart';
 import 'package:my_clean/components/custom_dialog.dart';
 import 'package:my_clean/components/loader.dart';
 import 'package:my_clean/components/tab_app_bar.dart';
 import 'package:my_clean/constants/app_constant.dart';
 import 'package:my_clean/constants/colors_constant.dart';
+import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/account_tab/change_language_screen.dart';
 import 'package:my_clean/pages/account_tab/profile_details_screen.dart';
 import 'package:my_clean/pages/account_tab/profile_view_fragment.dart';
+import 'package:my_clean/pages/auth/aut_bloc.dart';
 import 'package:my_clean/pages/root/root_bloc.dart';
 import 'package:my_clean/pages/root/root_page.dart';
+import 'package:my_clean/services/app_service.dart';
 import 'package:my_clean/services/booking_api.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/services/safe_secure_storage.dart';
@@ -35,6 +40,8 @@ class AccountScreenState extends State<AccountScreen> {
   String APP_VERSION = "0.0.0";
   RootBLoc _bLoc = RootBLoc();
 
+  AuthBloc _authBloc = AuthBloc();
+
   final String downloadLink =
       "https://play.google.com/store/apps/details?id=com.novate.my_clean";
 
@@ -48,6 +55,11 @@ class AccountScreenState extends State<AccountScreen> {
     _getAppVersion();
     _getUserInfos();
     super.initState();
+    _authBloc.loadingSubject.listen((value) {
+      if (value.message == MessageConstant.deletionok) {
+        _logout();
+      }
+    });
   }
 
   _getAppVersion() async {
@@ -98,7 +110,7 @@ class AccountScreenState extends State<AccountScreen> {
   _logout() async {
     final prefs = await SharedPreferences.getInstance();
     final SafeSecureStorage storage = Ioc().use('secureStorage');
-
+    GetIt.I<AppServices>().clear();
     await storage.deleteAll();
     await prefs.clear();
     _bLoc.switchToPage(5);
@@ -245,6 +257,20 @@ class AccountScreenState extends State<AccountScreen> {
                     ? null
                     : AppLocalizations.current.disconnected),
           ),
+          Visibility(
+            visible: _currentUserInfos != null,
+            child: _buildOption(
+              icon: const Icon(FontAwesomeIcons.trash,
+                  size: 24, color: Colors.red),
+              text: AppLocalizations.current.deleteAccount,
+              titleColor: Colors.red,
+              onTap: () {
+                if (_currentUserInfos != null) {
+                  deleteAccount();
+                }
+              },
+            ),
+          ),
           /*Container(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -257,10 +283,23 @@ class AccountScreenState extends State<AccountScreen> {
     );
   }
 
+  void deleteAccount() {
+    UtilsFonction.showConfirmDialog(
+            context, AppLocalizations.current.deleteAccountConfirm)
+        .then((value) {
+      if (value == true) {
+        User user =
+            User(id: GetIt.I<AppServices>().userData!.id, isDeleted: true);
+        _authBloc.deleteAccount(user);
+      }
+    });
+  }
+
   Widget _buildOption(
       {required Widget icon,
       required String text,
       String? status,
+      Color titleColor = Colors.black,
       Function? onTap}) {
     return Material(
       color: Colors.transparent,
@@ -280,8 +319,11 @@ class AccountScreenState extends State<AccountScreen> {
             ),
             const SizedBox(width: 20),
             Text(text,
-                style: const TextStyle(
-                    fontFamily: 'Roboto', fontSize: 13, letterSpacing: 0.5)),
+                style: TextStyle(
+                    fontFamily: 'Roboto',
+                    color: titleColor,
+                    fontSize: 13,
+                    letterSpacing: 0.5)),
             if (status != null && status.isNotEmpty) ...[
               const Spacer(),
               Container(

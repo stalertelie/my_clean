@@ -1,5 +1,6 @@
 class MessageConstant {
   static String loginok = "login ok";
+  static String deletionok = "delete ok";
   static String signupok = "Inscription terminée";
   static String updateok = "Compte mis à jour";
   static String pass_change_ok = "Mot de passe changé";

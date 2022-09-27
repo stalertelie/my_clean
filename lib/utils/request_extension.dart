@@ -32,7 +32,7 @@ class RequestExtension<T> {
         },
         body: data);
     print("=====URL OF CALL ===== ${_urlEndpoint + url}");
-    print(response.body);
+    //print(response.body);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // If the call to the server was successful, parse the JSON
@@ -49,18 +49,22 @@ class RequestExtension<T> {
     } else {
       // If that call was not successful, throw an error.
       String message = "";
-      if (jsonDecode(response.body)['hydra:description'] != null) {
-        message = jsonDecode(response.body)['hydra:description'];
-      } else {
-        if (jsonDecode(response.body)['message'] != null) {
-          message = jsonDecode(response.body)['message'];
+      try {
+        if (jsonDecode(response.body)['hydra:description'] != null) {
+          message = jsonDecode(response.body)['hydra:description'];
+        } else if (jsonDecode(response.body)['detail'] != null) {
+          message = jsonDecode(response.body)['detail'];
         } else {
-          message = response.reasonPhrase!;
+          if (jsonDecode(response.body)['message'] != null) {
+            message = jsonDecode(response.body)['message'];
+          } else {
+            message = "Une erreur s'est produite";
+          }
         }
+      } catch (error) {
+        message = "Une erreur s'est produite";
       }
-      print(response.reasonPhrase);
-      print(response.body);
-      print(message);
+
       throw Exception(message);
     }
   }
@@ -79,6 +83,8 @@ class RequestExtension<T> {
       // If the call to the server was successful, parse the JSON
       debugPrint(response.body.toString());
       switch (T) {
+        case User:
+          return User.fromJson(json.decode(response.body.toString()));
         default:
           return DataResponse<T>.fromJson(
               json.decode(response.body.toString()));
@@ -88,12 +94,11 @@ class RequestExtension<T> {
       String message = "";
       if (jsonDecode(response.body)['hydra:description'] != null) {
         message = jsonDecode(response.body)['hydra:description'];
+      } else if (jsonDecode(response.body)['detail'] != null) {
+        message = jsonDecode(response.body)['detail'];
       } else {
         message = response.reasonPhrase!;
       }
-      print(response.reasonPhrase);
-      print(response.body);
-      print(message);
       throw Exception(message);
     }
   }

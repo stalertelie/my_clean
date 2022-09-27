@@ -267,7 +267,49 @@ class UtilsFonction extends Object {
               actions: <Widget>[
                 ZoomIn(
                   child: TextButton(
-                    child: Text(
+                    child: const Text(
+                      "Annuler",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                ),
+                ZoomIn(
+                  child: TextButton(
+                    child: const Text(
+                      "Oui",
+                      style: TextStyle(color: Colors.green),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                  ),
+                ),
+              ],
+            ));
+  }
+
+  static Future<bool?> showConfirmDialog(BuildContext context, String msg) {
+    return showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              content: SizedBox(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(msg),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                ZoomIn(
+                  child: TextButton(
+                    child: const Text(
                       "Annuler",
                       style: TextStyle(color: Colors.red),
                     ),

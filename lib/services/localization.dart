@@ -560,6 +560,16 @@ class AppLocalizations {
   String get bySemain {
     return Intl.message('bySemain', name: 'bySemain', locale: localeName);
   }
+
+  String get deleteAccount {
+    return Intl.message('deleteAccount',
+        name: 'deleteAccount', locale: localeName);
+  }
+
+  String get deleteAccountConfirm {
+    return Intl.message('deleteAccountConfirm',
+        name: 'deleteAccountConfirm', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

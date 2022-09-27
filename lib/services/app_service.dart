@@ -28,6 +28,10 @@ class AppServices {
     userData = user;
   }
 
+  clear() {
+    userData = null;
+  }
+
   void setLang(String lang) {
     this.lang = lang;
   }
