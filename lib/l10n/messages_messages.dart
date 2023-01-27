@@ -198,5 +198,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "recurrentPassage":
             MessageLookupByLibrary.simpleMessage("Recurrent passage"),
         "bySemain": MessageLookupByLibrary.simpleMessage("once a week"),
+        "receipt": MessageLookupByLibrary.simpleMessage("Receipt MyClean"),
       };
 }

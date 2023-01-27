@@ -16,9 +16,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: const Color(0XFFF3F3F8),
         appBar: TabAppBar(
             titleProp: AppLocalizations.current.myNotification,
-            titleFontSize: 20,
+            titleFontSize: 20.0,
             backgroundColor: Colors.transparent,
             context: context,
             centerTitle: true,

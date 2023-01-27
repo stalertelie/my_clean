@@ -266,7 +266,9 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                                           value[0];
                                                       setState(() {
                                                         if (value[1] == null) {
-                                                          searchCtrl.text =
+                                                          searchCtrl
+                                                              .text = value[
+                                                                  2] ??
                                                               "${_markerPosition.latitude} / ${_markerPosition.longitude}";
                                                         } else {
                                                           searchCtrl.text =
@@ -658,8 +660,51 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
                                     : Container();
                               }),
                           const SizedBox(
-                            height: 15,
+                            height: 35,
                           ),
+                          CustomButton(
+                              contextProp: context,
+                              onPressedProp: () {
+                                if (_appProvider.login == null) {
+                                  UtilsFonction.NavigateToRoute(
+                                      context,
+                                      LoginScreen(
+                                        toPop: true,
+                                      ));
+                                } else {
+                                  // if (_bloc.tarificationRootSubject.value
+                                  //     .where((element) =>
+                                  //         element.list!
+                                  //             .indexWhere((item) => item.quantity! > 0) ==
+                                  //         -1)
+                                  //     .isEmpty) {
+                                  //   GetIt.I<AppServices>().showSnackbarWithState(Loading(
+                                  //       hasError: true,
+                                  //       message: AppLocalizations
+                                  //           .current.pleaseChooseAtLeastOneOption));
+                                  //   return;
+                                  // }
+                                  if (searchCtrl.text.isEmpty) {
+                                    GetIt.I<AppServices>()
+                                        .showSnackbarWithState(Loading(
+                                            hasError: true,
+                                            message: AppLocalizations
+                                                .current.adressError));
+                                    return;
+                                  }
+                                  if (!_bloc.bookingDateSubject.hasValue) {
+                                    GetIt.I<AppServices>()
+                                        .showSnackbarWithState(Loading(
+                                            hasError: true,
+                                            message: AppLocalizations
+                                                .current.dateError));
+                                    return;
+                                  }
+                                  showRecapSheet();
+                                }
+                              },
+                              textProp:
+                                  AppLocalizations.current.order.toUpperCase())
                         ],
                       ),
                     ),
@@ -703,44 +748,7 @@ class BookingVehicleScreenState extends State<BookingVehicleScreen>
             )*/
           ],
         ),
-        bottomNavigationBar: CustomButton(
-            contextProp: context,
-            onPressedProp: () {
-              if (_appProvider.login == null) {
-                UtilsFonction.NavigateToRoute(
-                    context,
-                    LoginScreen(
-                      toPop: true,
-                    ));
-              } else {
-                if (_bloc.tarificationRootSubject.value
-                    .where((element) =>
-                        element.list!
-                            .indexWhere((item) => item.quantity! > 0) ==
-                        -1)
-                    .isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations
-                          .current.pleaseChooseAtLeastOneOption));
-                  return;
-                }
-                if (searchCtrl.text.isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.adressError));
-                  return;
-                }
-                if (!_bloc.bookingDateSubject.hasValue) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.dateError));
-                  return;
-                }
-                showRecapSheet();
-              }
-            },
-            textProp: AppLocalizations.current.order.toUpperCase()),
+        // bottomNavigationBar: ,
       );
     });
   }

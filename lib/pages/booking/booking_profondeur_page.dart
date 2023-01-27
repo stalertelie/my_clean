@@ -224,7 +224,9 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                                   _markerPosition = value[0];
                                                   setState(() {
                                                     if (value[1] == null) {
-                                                      searchCtrl.text =
+                                                      searchCtrl.text = searchCtrl
+                                                          .text = value[
+                                                              2] ??
                                                           "${_markerPosition.latitude} / ${_markerPosition.longitude}";
                                                     } else {
                                                       searchCtrl.text =
@@ -557,6 +559,61 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
                                   : Container();
                             }),
                       ),
+                      const SizedBox(
+                        height: 30.0,
+                      ),
+                      CustomButton(
+                          contextProp: context,
+                          onPressedProp: () {
+                            if (_appProvider.login == null) {
+                              UtilsFonction.NavigateToRoute(
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
+                            } else {
+                              if (_bloc.tarificationRootSubject.value
+                                  .where((element) =>
+                                      element.list!.indexWhere(
+                                          (item) => item.quantity! > 0) ==
+                                      -1)
+                                  .isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations.current
+                                            .pleaseChooseAtLeastOneOption));
+                                return;
+                              }
+                              if (searchCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.adressError));
+                                return;
+                              }
+                              if (!_bloc.bookingDateSubject.hasValue) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.dateError));
+                                return;
+                              }
+                              if (_bloc.totalSubject.value == 0) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.serviceError));
+                                return;
+                              }
+                              showRecapSheet();
+                            }
+                          },
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase())
                     ],
                   ),
                 ),
@@ -564,50 +621,7 @@ class _BookingProfondeurScreenState extends State<BookingProfondeurScreen>
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-            contextProp: context,
-            onPressedProp: () {
-              if (_appProvider.login == null) {
-                UtilsFonction.NavigateToRoute(
-                    context,
-                    LoginScreen(
-                      toPop: true,
-                    ));
-              } else {
-                if (_bloc.tarificationRootSubject.value
-                    .where((element) =>
-                        element.list!
-                            .indexWhere((item) => item.quantity! > 0) ==
-                        -1)
-                    .isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations
-                          .current.pleaseChooseAtLeastOneOption));
-                  return;
-                }
-                if (searchCtrl.text.isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.adressError));
-                  return;
-                }
-                if (!_bloc.bookingDateSubject.hasValue) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.dateError));
-                  return;
-                }
-                if (_bloc.totalSubject.value == 0) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.serviceError));
-                  return;
-                }
-                showRecapSheet();
-              }
-            },
-            textProp: AppLocalizations.current.order.toUpperCase()),
+        // bottomNavigationBar: ,
       );
     });
   }

@@ -19,7 +19,8 @@ void main() async {
   var configuredApp = AppConfig(
     appName: 'My Clean',
     flavorName: 'production',
-    apiBaseUrl: 'http://myclean.novate-media.com',
+    apiBaseUrl: 'http://api.myclean.ci',
+    // http://myclean.novate-media.com
     lockInSeconds: 60,
     version: packageInfo.version,
     child: const MyApp(),

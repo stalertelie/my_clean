@@ -55,7 +55,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "myAccount": "PROFIL",
+  "myAccount": "My profile",
   "@myAccount": {
     "type": "text",
     "placeholders": {}
@@ -307,6 +307,9 @@
     "type": "text",
     "placeholders": {}
   },
-
-
+  "payCashAfterService": "Pay in cash",
+  "@payCashAfterService": {
+    "type": "text",
+    "placeholders": {}
+  },
 }

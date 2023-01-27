@@ -1,6 +1,8 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:get_it/get_it.dart';
+import 'package:my_clean/components/tab_app_bar.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/evaluation.dart';
@@ -63,6 +65,10 @@ class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: TabAppBar(
+            titleProp: "",
+            context: context,
+            backgroundColor: const Color(colorDefaultService)),
         backgroundColor: const Color(colorDefaultService),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -81,9 +87,7 @@ class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
                     "images/others/evaluationicon.png",
                     height: 150,
                   ),
-                  AppLocalizations.current.serviceEvaluate
-                      .toUpperCase()
-                      .text
+                  AppLocalizations.current.serviceEvaluate.text
                       .size(25)
                       .bold
                       .make(),
@@ -166,8 +170,9 @@ class _BookingEvaluateScreenState extends State<BookingEvaluateScreen> {
                   child: Container(
                     height: 50,
                     width: double.maxFinite,
-                    decoration: const BoxDecoration(
-                      color: Color(colorPrimary),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: const Color(colorPrimary),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

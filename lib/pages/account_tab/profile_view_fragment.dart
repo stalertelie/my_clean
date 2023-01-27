@@ -56,7 +56,7 @@ class _ProfileViewFragmentState extends State<ProfileViewFragment> {
       } on CurrentUserException catch (exception) {
         _showDialog(exception.message);
       } catch (_) {
-        _showDialog(AppLocalizations.current.somethingIsWrongErrorLabel);
+        _showDialog(_.toString());
       }
     }
 

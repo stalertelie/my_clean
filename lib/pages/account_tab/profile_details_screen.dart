@@ -13,7 +13,6 @@ import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/account_tab/components/outlined_input.dart';
 import 'package:my_clean/pages/account_tab/profile_view_fragment.dart';
 import 'package:my_clean/providers/app_provider.dart';
-import 'package:my_clean/services/booking_api.dart';
 import 'package:my_clean/services/current_user_api.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
@@ -258,13 +257,15 @@ class _Button extends StatelessWidget {
     return SizedBox(
       height: 43.0,
       width: 319.0,
-      child: RaisedButton(
+      child: TextButton(
           onPressed: () {
             onPressed();
           },
-          color: const Color(0xFF41ACEF),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all(const Color(0xFF41ACEF)),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0)))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

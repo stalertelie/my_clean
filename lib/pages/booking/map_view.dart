@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_clean/components/custom_button.dart';
+import 'package:my_clean/components/custom_dialog.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/models/GoogleSearch/google_result.dart';
 import 'package:my_clean/models/GoogleSearch/google_search_result.dart';
 import 'package:my_clean/pages/booking/search_bloc.dart';
 import 'package:my_clean/services/localization.dart';
+import 'package:my_clean/utils/utils_fonction.dart';
 
 class MapViewScreen extends StatefulWidget {
   final LatLng initialPosition;
   const MapViewScreen({
     Key? key,
-    this.initialPosition = const LatLng(51.5, -0.09),
+    this.initialPosition = const LatLng(5.37, -3.99),
   }) : super(key: key);
 
   @override
@@ -21,10 +24,13 @@ class MapViewScreen extends StatefulWidget {
 
 class _MapViewScreenState extends State<MapViewScreen> {
   GoogleMapController? mapcontroller;
-  LatLng _markerPosition = const LatLng(51.5, -0.09);
+  LatLng _markerPosition = const LatLng(5.37, -3.99);
+
   double? latitude;
   double? longitude;
   GoogleResult? googleResult;
+
+  String? fullAddress;
 
   late SearchBloc _bloc;
 
@@ -49,6 +55,18 @@ class _MapViewScreenState extends State<MapViewScreen> {
         });
       }
     });
+  }
+
+  // String locaValue = "";
+  TextEditingController locaValue = TextEditingController();
+
+  onChangedLocaValue(value) {
+    // locaValue.text = value;
+    print(locaValue.text);
+    if (value.length >= 2) {
+      _bloc.getProposition(value);
+    }
+    // locaValue = value;
   }
 
   @override
@@ -106,7 +124,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
               fontSize: 15,
               textProp: AppLocalizations.current.useLocation.toUpperCase(),
               onPressedProp: () => Navigator.of(context)
-                  .pop([_markerPosition, googleResult?.name])),
+                  .pop([_markerPosition, googleResult?.name, fullAddress])),
           left: 50,
           right: 50,
           bottom: 20,
@@ -133,11 +151,8 @@ class _MapViewScreenState extends State<MapViewScreen> {
                         ),
                         Flexible(
                             child: TextField(
-                          onChanged: (String value) {
-                            if (value.length >= 2) {
-                              _bloc.getProposition(value);
-                            }
-                          },
+                          controller: locaValue,
+                          onChanged: onChangedLocaValue,
                           decoration: InputDecoration(
                               hintText: "Tapez votre recherche ici",
                               hintStyle:
@@ -166,6 +181,9 @@ class _MapViewScreenState extends State<MapViewScreen> {
                                                         .geometry!.location !=
                                                     null) {
                                               setState(() {
+                                                locaValue.text = snapshot2.data!
+                                                        .results![index].name ??
+                                                    '';
                                                 googleResult = snapshot2
                                                     .data!.results![index];
                                                 listHeight = 0;
@@ -205,9 +223,38 @@ class _MapViewScreenState extends State<MapViewScreen> {
   void getCurrentLocation() async {
     Position position = await _determinePosition();
     _markerPosition = LatLng(position.latitude, position.longitude);
+
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          position.latitude, position.longitude,
+          localeIdentifier: 'fr');
+      print("placemarks $placemarks");
+      final getPlaceMark =
+          placemarks.firstWhere((element) => element.thoroughfare != null);
+
+      setState(() {
+        fullAddress = getPlaceMark.thoroughfare;
+      });
+
+      print("fullAddress $fullAddress");
+    } catch (e) {
+      _showDialog(e.toString());
+    }
+
+    print("POSITION ${position.latitude} ${position.longitude}");
     Future.delayed(const Duration(milliseconds: 500),
         () => _animatedMapMove(_markerPosition, 14));
     setState(() {});
+  }
+
+  void _showDialog(String message) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CustomDialog(contextProp: context, messageProp: message);
+      },
+    );
   }
 
   void _animatedMapMove(LatLng destLocation, double destZoom) {
@@ -245,6 +292,9 @@ class _MapViewScreenState extends State<MapViewScreen> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    return await Geolocator.getCurrentPosition();
+    print("HERE");
+
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 }

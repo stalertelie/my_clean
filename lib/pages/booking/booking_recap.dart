@@ -5,6 +5,7 @@ import 'package:my_clean/components/custom_button.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/frequence.dart';
+import 'package:my_clean/models/price.dart';
 import 'package:my_clean/models/services.dart';
 import 'package:my_clean/pages/booking/mode_payment.dart';
 import 'package:my_clean/services/localization.dart';
@@ -22,6 +23,7 @@ class BookingRecapScreen extends StatefulWidget {
   final DateTime bookingDate;
   final bool isSubscription;
   final Function({String note}) onValidate;
+  final List<Price>? mattressTarifs;
 
   const BookingRecapScreen(
       {Key? key,
@@ -34,7 +36,8 @@ class BookingRecapScreen extends StatefulWidget {
       this.days = const [],
       this.hour = "",
       this.isSubscription = false,
-      required this.bookingDate})
+      required this.bookingDate,
+      this.mattressTarifs})
       : super(key: key);
 
   @override
@@ -45,6 +48,33 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
   bool showNoteView = false;
 
   TextEditingController noteCtrl = TextEditingController();
+
+  String? modePayement;
+
+  @override
+  void initState() {
+    getMattressOccurence();
+    super.initState();
+  }
+
+  Map map = {};
+
+  void getMattressOccurence() {
+    if (widget.mattressTarifs == null) {
+      return;
+    }
+    for (var element in widget.mattressTarifs!) {
+      if (!map.containsKey(element.initialNumber)) {
+        setState(() {
+          map[element.initialNumber] = 1;
+        });
+      } else {
+        setState(() {
+          map[element.initialNumber] += 1;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +88,7 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
         appBar: AppBar(
           backgroundColor: const Color(colorDefaultService),
           elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: SingleChildScrollView(
             child: Padding(
@@ -94,6 +124,16 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
               ),
               'Service : '.text.make(),
               widget.services.title!.toCapitalized().text.size(18).bold.make(),
+              widget.mattressTarifs != null
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(map[1] != null ? '1 place: ${map[1]}' : ''),
+                        Text(map[2] != null ? '2 places: ${map[2]}' : ''),
+                        Text(map[3] != null ? '3 places: ${map[3]}' : ''),
+                      ],
+                    )
+                  : Container(),
               Visibility(
                 visible: widget.isSubscription == true,
                 child: Column(
@@ -148,7 +188,8 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                     ),
                     Container(
                       child: showNoteView
-                          ? Icon(Icons.cancel, size: 13, color: Colors.red)
+                          ? const Icon(Icons.cancel,
+                              size: 13, color: Colors.red)
                           : SvgPicture.asset(
                               "images/icons/edit.svg",
                               width: 15,
@@ -167,6 +208,9 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                     minLines: 5,
                     maxLength: 160,
                     controller: noteCtrl,
+                    onEditingComplete: () {
+                      print("ok");
+                    },
                     autofocus: false,
                     decoration: InputDecoration(
                         hintText: AppLocalizations.current.enterYourNote,
@@ -181,10 +225,16 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                 height: 20,
               ),
               GestureDetector(
-                onTap: () =>
-                    UtilsFonction.NavigateToRoute(context, ModePaymentScreen()),
+                onTap: () => UtilsFonction.NavigateToRouteAndWait(
+                        context, const ModePaymentScreen())
+                    .then((value) => {
+                          setState(() {
+                            modePayement = value;
+                          })
+                        }),
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.white),
@@ -194,6 +244,7 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
                         AppLocalizations.current.addPaymentMethod.text
                             .color(const Color(colorPrimary))
                             .make(),
+                        Text(modePayement ?? ''),
                         const Icon(Icons.keyboard_arrow_right)
                       ]),
                 ),
@@ -222,23 +273,24 @@ class _BookingRecapScreenState extends State<BookingRecapScreen> {
               const SizedBox(
                 height: 20,
               ),
-            ],
-          ),
-        )),
-        bottomNavigationBar: Material(
-          elevation: 5,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: SizedBox(
-              height: 100,
-              child: CustomButton(
+              CustomButton(
                   contextProp: context,
                   textProp: AppLocalizations.current.order,
                   borderRadius: BorderRadius.circular(10),
-                  onPressedProp: () => widget.onValidate(note: noteCtrl.text)),
-            ),
+                  onPressedProp: () => widget.onValidate(note: noteCtrl.text))
+            ],
           ),
-        ),
+        )),
+        // bottomNavigationBar: Material(
+        //   elevation: 5,
+        //   child: Padding(
+        //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        //     child: SizedBox(
+        //       height: 100,
+        //       child: ,
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }

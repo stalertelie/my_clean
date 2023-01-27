@@ -18,6 +18,7 @@ import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/account_tab/change_language_screen.dart';
 import 'package:my_clean/pages/account_tab/profile_details_screen.dart';
 import 'package:my_clean/pages/account_tab/profile_view_fragment.dart';
+import 'package:my_clean/pages/account_tab/update_password_screen.dart';
 import 'package:my_clean/pages/auth/aut_bloc.dart';
 import 'package:my_clean/pages/root/root_bloc.dart';
 import 'package:my_clean/pages/root/root_page.dart';
@@ -106,6 +107,9 @@ class AccountScreenState extends State<AccountScreen> {
 
   _navigateToChangeLanguageScreen() =>
       _navigateToScreen((context) => const ChangeLanguageScreen());
+
+  _navigateToUpdatePasswordScreen() =>
+      _navigateToScreen((context) => const UpdatePasswordScreen());
 
   _logout() async {
     final prefs = await SharedPreferences.getInstance();
@@ -223,11 +227,17 @@ class AccountScreenState extends State<AccountScreen> {
               icon: const Icon(Icons.language, size: 24, color: Colors.black),
               text: AppLocalizations.current.changeLanguage,
               onTap: _navigateToChangeLanguageScreen),
-          _buildOption(
-              icon: const Icon(Icons.security, size: 24, color: Colors.black),
-              text: AppLocalizations.current.changePassword,
-              onTap: () {},
-              status: AppLocalizations.current.comingSoon),
+          Visibility(
+              visible: _currentUserInfos != null,
+              child: _buildOption(
+                icon: const Icon(Icons.security, size: 24, color: Colors.black),
+                text: AppLocalizations.current.changePassword,
+                onTap: () {
+                  if (_currentUserInfos != null) {
+                    _navigateToUpdatePasswordScreen();
+                  }
+                },
+              )),
           /*_buildOption(
             icon: Icons.share,
             text: AppLocalizations.current.shareApp,

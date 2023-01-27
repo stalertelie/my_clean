@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/models/loading.dart';
 import 'package:my_clean/services/localization.dart';
@@ -47,7 +45,7 @@ class UtilsFonction extends Object {
       barrierDismissible: false,
       barrierLabel: 'Dialog',
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
+        var begin = const Offset(0.0, 1.0);
         var end = Offset.zero;
         var tween = Tween(begin: begin, end: end);
         var offsetAnimation = animation.drive(tween);
@@ -57,7 +55,7 @@ class UtilsFonction extends Object {
           child: child,
         );
       },
-      transitionDuration: Duration(
+      transitionDuration: const Duration(
           milliseconds:
               300), // How long it takes to popup dialog after button click
       pageBuilder: (_, __, ___) {
@@ -185,7 +183,7 @@ class UtilsFonction extends Object {
       PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) {
         return page;
       }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(1.0, 0.0);
+        var begin = const Offset(1.0, 0.0);
         var end = Offset.zero;
         var tween = Tween(begin: begin, end: end);
         return SlideTransition(
@@ -202,7 +200,7 @@ class UtilsFonction extends Object {
         PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) {
           return page;
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          var begin = Offset(0.0, 1.0);
+          var begin = const Offset(0.0, 1.0);
           var end = Offset.zero;
           var tween = Tween(begin: begin, end: end);
           return SlideTransition(
@@ -257,8 +255,8 @@ class UtilsFonction extends Object {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text("Voulez-vous vraiment vous déconnecter ?"),
-                    SizedBox(
+                    const Text("Voulez-vous vraiment vous déconnecter ?"),
+                    const SizedBox(
                       height: 10,
                     ),
                   ],
@@ -383,7 +381,7 @@ class UtilsFonction extends Object {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               elevation: 4,
-              backgroundColor: Color(colorPrimary).withOpacity(0.6),
+              backgroundColor: const Color(colorPrimary).withOpacity(0.6),
               content: SizedBox(
                 height: 100,
                 width: double.maxFinite,
@@ -404,19 +402,20 @@ class UtilsFonction extends Object {
             ));
   }
 
-  static void showSnackbar(Loading loading, GlobalKey<ScaffoldState> key) {
+  static void showSnackbar(
+      Loading loading, GlobalKey<ScaffoldState> key, BuildContext context) {
     if (key.currentState != null) {
-      key.currentState?.removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       if (loading.message != null) {
-        key.currentState?.showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           duration: loading.loading == true
               ? const Duration(minutes: 1)
               : const Duration(seconds: 5),
           content: loading.loading == true
               ? Row(
                   children: <Widget>[
-                    CircularProgressIndicator(),
-                    SizedBox(
+                    const CircularProgressIndicator(),
+                    const SizedBox(
                       width: 50,
                     ),
                     Flexible(child: Text(loading.message ?? ""))
@@ -448,18 +447,19 @@ class UtilsFonction extends Object {
     }
   }
 
-  static void showSnackbarWithState(Loading loading, ScaffoldState state) {
-    state.removeCurrentSnackBar();
+  static void showSnackbarWithState(
+      Loading loading, ScaffoldState state, BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
     if (loading.message != null) {
-      state.showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: loading.loading == true
             ? const Duration(minutes: 1)
             : const Duration(seconds: 5),
         content: loading.loading == true
             ? Row(
                 children: <Widget>[
-                  CircularProgressIndicator(),
-                  SizedBox(
+                  const CircularProgressIndicator(),
+                  const SizedBox(
                     width: 50,
                   ),
                   Flexible(child: Text(loading.message ?? ""))

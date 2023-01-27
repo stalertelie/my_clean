@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:my_clean/components/custom_button.dart';
-import 'package:my_clean/components/select_language_item.dart';
 import 'package:my_clean/components/tab_app_bar.dart';
 import 'package:my_clean/constants/colors_constant.dart';
-import 'package:my_clean/constants/img_urls.dart';
 import 'package:my_clean/main.dart';
-import 'package:my_clean/pages/home/home_page.dart';
 import 'package:my_clean/pages/root/root_bloc.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/pages/root/root_page.dart';

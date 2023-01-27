@@ -55,7 +55,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "myAccount": "PROFIL",
+  "myAccount": "Mon profil",
   "@myAccount": {
     "type": "text",
     "placeholders": {}
@@ -317,5 +317,16 @@
     "type": "text",
     "placeholders": {}
   },
-
+"payCashAfterService": "Payer en espèce",
+  "@payCashAfterService": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "payCashAfterService": "Payer en espèce",
+  "@selectMatiere": {
+    "type": "text",
+    "placeholders": {}
+  },
 }
+
+"receipt": MessageLookupByLibrary.simpleMessage("Receipt MyClean"),

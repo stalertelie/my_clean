@@ -65,7 +65,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
 
   late final Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? mapcontroller;
-  LatLng _markerPosition = LatLng(51.5, -0.09);
+  LatLng _markerPosition = LatLng(5.37, -3.99);
 
   final BookingBloc _bloc = BookingBloc();
 
@@ -258,9 +258,11 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                                     )).then((value) {
                                               if (value != null) {
                                                 _markerPosition = value[0];
+                                                print('Values $value');
                                                 setState(() {
                                                   if (value[1] == null) {
-                                                    searchCtrl.text =
+                                                    searchCtrl.text = value[
+                                                            2] ??
                                                         "${_markerPosition.latitude} / ${_markerPosition.longitude}";
                                                   } else {
                                                     searchCtrl.text = value[1];
@@ -974,8 +976,48 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
                                 : Container();
                           }),
                       const SizedBox(
-                        height: 15,
+                        height: 30,
                       ),
+                      CustomButton(
+                          contextProp: context,
+                          onPressedProp: () {
+                            if (_appProvider.login == null) {
+                              UtilsFonction.NavigateToRoute(
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
+                            } else {
+                              if (!_bloc.totalSubject.hasValue) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations.current
+                                            .pleaseChooseAtLeastOneOption));
+                                return;
+                              }
+                              if (!_bloc.bookingDateSubject.hasValue &&
+                                  _bloc.isPonctualSubject.value == true) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.dateError));
+                                return;
+                              }
+                              if (searchCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.adressError));
+                                return;
+                              }
+                              showRecapSheet();
+                            }
+                          },
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase())
                     ],
                   ),
                 ),
@@ -983,40 +1025,7 @@ class BookingCleaningScreenState extends State<BookingCleaningScreen>
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-            contextProp: context,
-            onPressedProp: () {
-              if (_appProvider.login == null) {
-                UtilsFonction.NavigateToRoute(
-                    context,
-                    LoginScreen(
-                      toPop: true,
-                    ));
-              } else {
-                if (!_bloc.totalSubject.hasValue) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations
-                          .current.pleaseChooseAtLeastOneOption));
-                  return;
-                }
-                if (!_bloc.bookingDateSubject.hasValue &&
-                    _bloc.isPonctualSubject.value == true) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.dateError));
-                  return;
-                }
-                if (searchCtrl.text.isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.adressError));
-                  return;
-                }
-                showRecapSheet();
-              }
-            },
-            textProp: AppLocalizations.current.order.toUpperCase()),
+        // bottomNavigationBar: ,
       );
     });
   }

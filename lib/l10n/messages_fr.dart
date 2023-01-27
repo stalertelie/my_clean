@@ -27,7 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{
-        "myOrders": MessageLookupByLibrary.simpleMessage("Mes Reservations"),
+        "myOrders": MessageLookupByLibrary.simpleMessage("Mes réservations"),
         "noOrders": MessageLookupByLibrary.simpleMessage("Pas de commandes"),
         "whatService": MessageLookupByLibrary.simpleMessage(
             "De quel service avez-vous besoin aujourd'hui ?"),
@@ -43,7 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "profileDetailsLabel":
             MessageLookupByLibrary.simpleMessage("Détails du profil"),
         "logout": MessageLookupByLibrary.simpleMessage("Déconnexion"),
-        "myAccount": MessageLookupByLibrary.simpleMessage("PROFIL"),
+        "myAccount": MessageLookupByLibrary.simpleMessage("Mon profil"),
         "myInvoice": MessageLookupByLibrary.simpleMessage("Mes factures"),
         "helpCenter": MessageLookupByLibrary.simpleMessage("Centre d'aide"),
         "promoCode": MessageLookupByLibrary.simpleMessage("Code promo"),
@@ -207,11 +207,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "myNotification":
             MessageLookupByLibrary.simpleMessage("Mes notifications"),
         "payCashAfterService":
-            MessageLookupByLibrary.simpleMessage("Payer cash après le service"),
+            MessageLookupByLibrary.simpleMessage("Payer en espèce"),
         "commandRecap": MessageLookupByLibrary.simpleMessage("Récapitulatif"),
         "prix": MessageLookupByLibrary.simpleMessage("Prix"),
         "bySemain": MessageLookupByLibrary.simpleMessage("fois par semaine"),
         "recurrentPassage":
             MessageLookupByLibrary.simpleMessage("Passage récurrent"),
+        "receipt":
+            MessageLookupByLibrary.simpleMessage("Reçu MyClean"),
       };
 }

@@ -253,7 +253,8 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                                   _markerPosition = value[0];
                                                   setState(() {
                                                     if (value[1] == null) {
-                                                      searchCtrl.text =
+                                                      searchCtrl.text = value[
+                                                              2] ??
                                                           "${_markerPosition.latitude} / ${_markerPosition.longitude}";
                                                     } else {
                                                       searchCtrl.text =
@@ -293,7 +294,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                   child: TextField(
                                     autofocus: false,
                                     controller: sizeCtrl,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
@@ -384,6 +385,13 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                                                                         tarificationId =
                                                                             idx;
                                                                       });
+                                                                      if (FocusScope.of(context)
+                                                                              .focusedChild !=
+                                                                          null) {
+                                                                        FocusScope.of(context)
+                                                                            .focusedChild!
+                                                                            .unfocus();
+                                                                      }
                                                                     },
                                                                   ),
                                                                 ],
@@ -493,6 +501,52 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
                       const SizedBox(
                         height: 15,
                       ),
+                      CustomButton(
+                          contextProp: context,
+                          onPressedProp: () {
+                            if (FocusScope.of(context).focusedChild != null) {
+                              FocusScope.of(context).focusedChild!.unfocus();
+                            }
+                            if (_appProvider.login == null) {
+                              UtilsFonction.NavigateToRoute(
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
+                            } else {
+                              if (!_bloc.bookingDateSubject.hasValue) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.dateError));
+                                return;
+                              }
+                              if (searchCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.adressError));
+                                return;
+                              }
+
+                              if (sizeCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.meterError));
+                                return;
+                              }
+                              _bloc.addCarpetTarification(tarification,
+                                  int.parse(sizeCtrl.text), tarificationId);
+
+                              showRecapSheet();
+                            }
+                          },
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase())
                     ],
                   ),
                 ),
@@ -500,42 +554,7 @@ class BookingCarpetScreenState extends State<BookingCarpetScreen>
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-            contextProp: context,
-            onPressedProp: () {
-              if (_appProvider.login == null) {
-                UtilsFonction.NavigateToRoute(
-                    context,
-                    LoginScreen(
-                      toPop: true,
-                    ));
-              } else {
-                if (!_bloc.bookingDateSubject.hasValue) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.dateError));
-                  return;
-                }
-                if (searchCtrl.text.isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.adressError));
-                  return;
-                }
-
-                if (sizeCtrl.text.isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.meterError));
-                  return;
-                }
-                _bloc.addCarpetTarification(
-                    tarification, int.parse(sizeCtrl.text), tarificationId);
-
-                showRecapSheet();
-              }
-            },
-            textProp: AppLocalizations.current.order.toUpperCase()),
+        // bottomNavigationBar: ,
       );
     });
   }

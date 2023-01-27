@@ -77,6 +77,8 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
 
   String frequenceType = "SERVICE PONCTUEL";
 
+  List<Price> mattressTarifs = [];
+
   GoogleResult? _currentFeature;
   final ImagePicker _imagePicker = ImagePicker();
   dynamic _pickedImage;
@@ -242,7 +244,8 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                                 _markerPosition = value[0];
                                                 setState(() {
                                                   if (value[1] == null) {
-                                                    searchCtrl.text =
+                                                    searchCtrl.text = value[
+                                                            2] ??
                                                         "${_markerPosition.latitude} / ${_markerPosition.longitude}";
                                                   } else {
                                                     searchCtrl.text = value[1];
@@ -381,11 +384,12 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                                                     width: 50,
                                                                   ),
                                                                   InkWell(
-                                                                      onTap: () =>
-                                                                          _bloc.addSofaTarification(
-                                                                              e,
-                                                                              -1,
-                                                                              idx),
+                                                                      onTap:
+                                                                          () =>
+                                                                              {
+                                                                                mattressTarifs.remove(e),
+                                                                                _bloc.addSofaTarification(e, -1, idx)
+                                                                              },
                                                                       child:
                                                                           Container(
                                                                         height:
@@ -400,10 +404,15 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                                                       )),
                                                                   InkWell(
                                                                     onTap: () =>
-                                                                        _bloc.addSofaTarification(
-                                                                            e,
-                                                                            1,
-                                                                            idx),
+                                                                        {
+                                                                      mattressTarifs
+                                                                          .add(
+                                                                              e),
+                                                                      _bloc.addSofaTarification(
+                                                                          e,
+                                                                          1,
+                                                                          idx)
+                                                                    },
                                                                     child:
                                                                         Container(
                                                                       height:
@@ -481,7 +490,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                     onChanged: (date) {
                                   print('change $date');
                                 }, onConfirm: (date) {
-                                  if (date.hour > 17 || date.hour < 8) {
+                                  if (date.hour > 16 || date.hour < 8) {
                                     UtilsFonction.showErrorDialog(context,
                                         AppLocalizations.current.erroTimeFrame);
                                   } else {
@@ -515,44 +524,54 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
                                           .make())
                               : Container();
                         }),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    CustomButton(
+                        contextProp: context,
+                        onPressedProp: () {
+                          if (_appProvider.login == null) {
+                            UtilsFonction.NavigateToRoute(
+                                context,
+                                LoginScreen(
+                                  toPop: true,
+                                ));
+                          } else {
+                            if (!_bloc.totalSubject.hasValue) {
+                              GetIt.I<AppServices>().showSnackbarWithState(
+                                  Loading(
+                                      hasError: true,
+                                      message: AppLocalizations
+                                          .current.matressTypeError));
+                              return;
+                            }
+                            if (!_bloc.bookingDateSubject.hasValue) {
+                              GetIt.I<AppServices>().showSnackbarWithState(
+                                  Loading(
+                                      hasError: true,
+                                      message:
+                                          AppLocalizations.current.dateError));
+                              return;
+                            }
+                            if (searchCtrl.text.isEmpty) {
+                              GetIt.I<AppServices>().showSnackbarWithState(
+                                  Loading(
+                                      hasError: true,
+                                      message: AppLocalizations
+                                          .current.adressError));
+                              return;
+                            }
+                            showRecapSheet();
+                          }
+                        },
+                        textProp: AppLocalizations.current.order.toUpperCase())
                   ],
                 ),
               ),
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-            contextProp: context,
-            onPressedProp: () {
-              if (_appProvider.login == null) {
-                UtilsFonction.NavigateToRoute(
-                    context,
-                    LoginScreen(
-                      toPop: true,
-                    ));
-              } else {
-                if (!_bloc.totalSubject.hasValue) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.matressTypeError));
-                  return;
-                }
-                if (!_bloc.bookingDateSubject.hasValue) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.dateError));
-                  return;
-                }
-                if (searchCtrl.text.isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.adressError));
-                  return;
-                }
-                showRecapSheet();
-              }
-            },
-            textProp: AppLocalizations.current.order.toUpperCase()),
+        // bottomNavigationBar: ,
       );
     });
   }
@@ -651,6 +670,7 @@ class BookingMattressScreenState extends State<BookingMattressScreen>
               padding: const EdgeInsets.only(top: 60),
               child: BookingRecapScreen(
                 bookingDate: _bloc.bookingDateSubject.value,
+                mattressTarifs: mattressTarifs,
                 frequence: frequence,
                 services: widget.service,
                 lieu: searchCtrl.text,

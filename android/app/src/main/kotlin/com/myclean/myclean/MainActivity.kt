@@ -1,4 +1,4 @@
-package com.novate.my_clean
+package com.myclean.myclean
 
 import io.flutter.embedding.android.FlutterActivity
 

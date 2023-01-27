@@ -219,7 +219,8 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                                   _markerPosition = value[0];
                                                   setState(() {
                                                     if (value[1] == null) {
-                                                      searchCtrl.text =
+                                                      searchCtrl.text = value[
+                                                              2] ??
                                                           "${_markerPosition.latitude} / ${_markerPosition.longitude}";
                                                     } else {
                                                       searchCtrl.text =
@@ -624,6 +625,54 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
                                   : Container();
                             }),
                       ),
+                      const SizedBox(
+                        height: 30.0,
+                      ),
+                      CustomButton(
+                          contextProp: context,
+                          onPressedProp: () {
+                            if (_appProvider.login == null) {
+                              UtilsFonction.NavigateToRoute(
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
+                            } else {
+                              if (_bloc.tarificationRootSubject.value
+                                  .where((element) =>
+                                      element.list!.indexWhere(
+                                          (item) => item.quantity! > 0) ==
+                                      -1)
+                                  .isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations.current
+                                            .pleaseChooseAtLeastOneOption));
+                                return;
+                              }
+                              if (!_bloc.bookingDateSubject.hasValue &&
+                                  _bloc.isPonctualSubject.value == true) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.dateError));
+                                return;
+                              }
+                              if (searchCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.adressError));
+                                return;
+                              }
+                              showRecapSheet();
+                            }
+                          },
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase())
                     ],
                   ),
                 ),
@@ -631,45 +680,7 @@ class _BookingDesinfectionScreenState extends State<BookingDesinfectionScreen>
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-            contextProp: context,
-            onPressedProp: () {
-              if (_appProvider.login == null) {
-                UtilsFonction.NavigateToRoute(
-                    context,
-                    LoginScreen(
-                      toPop: true,
-                    ));
-              } else {
-                if (_bloc.tarificationRootSubject.value
-                    .where((element) =>
-                        element.list!
-                            .indexWhere((item) => item.quantity! > 0) ==
-                        -1)
-                    .isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations
-                          .current.pleaseChooseAtLeastOneOption));
-                  return;
-                }
-                if (!_bloc.bookingDateSubject.hasValue &&
-                    _bloc.isPonctualSubject.value == true) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.dateError));
-                  return;
-                }
-                if (searchCtrl.text.isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.adressError));
-                  return;
-                }
-                showRecapSheet();
-              }
-            },
-            textProp: AppLocalizations.current.order.toUpperCase()),
+        // bottomNavigationBar: ,
       );
     });
   }

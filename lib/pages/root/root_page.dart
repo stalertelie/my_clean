@@ -354,13 +354,19 @@ class RootPageState extends State<RootPage> with WidgetsBindingObserver {
                   },
                   items: [
                     BottomNavigationBarItem(
-                        icon: SvgPicture.asset(
-                          "images/icons/house.svg",
-                          width: 30,
+                        icon: Icon(
+                          FontAwesomeIcons.home,
                           color: snapshot.data == 0
                               ? const Color(colorBottomBarIcon)
                               : Colors.black,
                         ),
+                        //  SvgPicture.asset(
+                        //   "images/icons/house.svg",
+                        //   width: 30,
+                        //   color: snapshot.data == 0
+                        //       ? const Color(colorBottomBarIcon)
+                        //       : Colors.black,
+                        // ),
                         label: AppLocalizations.current.home),
                     BottomNavigationBarItem(
                         icon: const Icon(FontAwesomeIcons.calendarAlt),

@@ -160,7 +160,7 @@ class CommandDetailsState extends State<CommandDetails> {
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                Text("Note utilisateur :"),
+                                const Text("Note utilisateur :"),
                                 const SizedBox(
                                   height: 5,
                                 ),

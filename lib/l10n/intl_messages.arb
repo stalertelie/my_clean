@@ -307,5 +307,10 @@
     "type": "text",
     "placeholders": {}
   },
+  "payCashAfterService": "Pay in cash",
+  "@payCashAfterService": {
+    "type": "text",
+    "placeholders": {}
+  },
   
 }

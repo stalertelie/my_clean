@@ -43,7 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "profileDetailsLabel":
             MessageLookupByLibrary.simpleMessage("Profile details"),
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
-        "myAccount": MessageLookupByLibrary.simpleMessage("PROFIL"),
+        "myAccount": MessageLookupByLibrary.simpleMessage("My profile"),
         "myInvoice": MessageLookupByLibrary.simpleMessage("My invoice"),
         "helpCenter": MessageLookupByLibrary.simpleMessage("Help center"),
         "promoCode": MessageLookupByLibrary.simpleMessage("Promo code"),
@@ -200,11 +200,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "myNotification":
             MessageLookupByLibrary.simpleMessage("My notifications"),
         "payCashAfterService":
-            MessageLookupByLibrary.simpleMessage("Pay cash after the service"),
+            MessageLookupByLibrary.simpleMessage("Pay in cash"),
         "commandRecap": MessageLookupByLibrary.simpleMessage("Summary"),
         "prix": MessageLookupByLibrary.simpleMessage("Amount"),
         "recurrentPassage":
             MessageLookupByLibrary.simpleMessage("Recurrent passage"),
         "bySemain": MessageLookupByLibrary.simpleMessage("once a week"),
+        "receipt": MessageLookupByLibrary.simpleMessage("Receipt MyClean"),
       };
 }

@@ -570,6 +570,11 @@ class AppLocalizations {
     return Intl.message('deleteAccountConfirm',
         name: 'deleteAccountConfirm', locale: localeName);
   }
+
+  String get receipt {
+    return Intl.message('receipt',
+        name: 'receipt', locale: localeName);
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -44,10 +44,13 @@ class WidgetTemplate extends Object {
           double? fontSize}) =>
       SizedBox(
           width: double.maxFinite,
-          child: RaisedButton(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          child: TextButton(
             // ignore: unnecessary_null_comparison
-            color: color,
+
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(color),
+                padding: MaterialStateProperty.all(
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 5))),
             onPressed: callback,
             child: title.text.white.size(fontSize ?? 18).make(),
           ));

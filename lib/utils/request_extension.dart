@@ -18,8 +18,10 @@ class RequestExtension<T> {
   static const String _urlEndpointSimple =
       'http://api.maison-dakoula.novate-media.com';*/
 
-  static const String _urlEndpoint = 'http://myclean.novate-media.com/';
-  static const String _urlEndpointSimple = 'http://myclean.novate-media.com';
+  static const String _urlEndpoint =
+      'http://api.myclean.ci/'; //http://myclean.novate-media.com/
+  static const String _urlEndpointSimple =
+      'http://api.myclean.ci'; //http://myclean.novate-media.com
 
   //static const  String _urlEndpoint = 'http://10.200.1.66:8080/';
 

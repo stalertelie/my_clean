@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:barcode_widget/barcode_widget.dart';
@@ -6,9 +7,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:my_clean/extensions/extensions.dart';
 import 'package:my_clean/models/entities/booking/booking.dart';
+import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/utils/utils_fonction.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class TicketModelWidget extends StatefulWidget {
   final Booking booking;
@@ -57,10 +63,10 @@ class _TicketModelWidgetState extends State<TicketModelWidget> {
                     borderRadius: BorderRadius.circular(30.0),
                     border: Border.all(width: 1.0, color: Colors.green),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      'Ticket MyClean',
-                      style: TextStyle(color: Colors.green),
+                      AppLocalizations.current.receipt,
+                      style: const TextStyle(color: Colors.green),
                     ),
                   ),
                 ),
@@ -73,12 +79,32 @@ class _TicketModelWidgetState extends State<TicketModelWidget> {
                         .capture()
                         .then((Uint8List? image) async {
                       if (image != null) {
+                        final memoryImage = pw.MemoryImage(
+                          image,
+                        );
+                        final pdf = pw.Document();
+
+                        pdf.addPage(pw.Page(build: (pw.Context context) {
+                          return pw.Center(
+                            child: pw.Image(memoryImage),
+                          ); // Center
+                        }));
+
+                        Directory appDocDir =
+                            await getApplicationDocumentsDirectory();
+                        String appDocPath = appDocDir.path;
+
+                        final file = File(
+                            "$appDocPath/ticket${widget.booking.code}.pdf");
+                        await file.writeAsBytes(await pdf.save());
+
                         final result = await ImageGallerySaver.saveImage(
                             Uint8List.fromList(image),
                             quality: 60,
                             name: "Titket" + widget.booking.code!);
+
                         Fluttertoast.showToast(
-                            msg: "Ticket enrégistré dans votre galerie",
+                            msg: "Ticket enregistré avec succès",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 1,

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.novate.my_clean">
+    package="com.myclean.myclean">
 
 
     <uses-permission android:name="android.permission.INTERNET"/>

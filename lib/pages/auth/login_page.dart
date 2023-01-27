@@ -8,6 +8,7 @@ import 'package:my_clean/constants/colors_constant.dart';
 import 'package:my_clean/constants/message_constant.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/pages/auth/aut_bloc.dart';
+import 'package:my_clean/pages/auth/reset_password.dart';
 import 'package:my_clean/pages/auth/singup_page.dart';
 import 'package:my_clean/pages/home/home_header.dart';
 import 'package:my_clean/pages/root/root_page.dart';
@@ -284,6 +285,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       )
                     ],
                   ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () =>
+                  UtilsFonction.NavigateToRoute(context, const ResetPassword()),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    "Mot de passe oublié ?".text.color(Colors.black).make(),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    "Réinitialiser"
+                        .text
+                        .color(const Color(colorPrimary))
+                        .make(),
+                  ],
                 ),
               ),
             ),

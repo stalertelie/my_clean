@@ -21,7 +21,7 @@ class _ModePaymentScreenState extends State<ModePaymentScreen> {
           AppLocalizations.current.paymentMethod,
           style: const TextStyle(color: Colors.black),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: const Color(colorDefaultService),
         elevation: 0,
       ),
@@ -35,7 +35,8 @@ class _ModePaymentScreenState extends State<ModePaymentScreen> {
               height: 20,
             ),
             GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: () => Navigator.of(context)
+                  .pop(AppLocalizations.current.payCashAfterService),
               child: PaimentOptionWidget(
                   title: AppLocalizations.current.payCashAfterService,
                   bgColor: const Color(colorPrimary),

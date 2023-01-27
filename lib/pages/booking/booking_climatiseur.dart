@@ -266,7 +266,8 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                                   _markerPosition = value[0];
                                                   setState(() {
                                                     if (value[1] == null) {
-                                                      searchCtrl.text =
+                                                      searchCtrl.text = value[
+                                                              2] ??
                                                           "${_markerPosition.latitude} / ${_markerPosition.longitude}";
                                                     } else {
                                                       searchCtrl.text =
@@ -521,6 +522,56 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
                                             .make())
                                 : Container();
                           }),
+                      const SizedBox(
+                        height: 30.0,
+                      ),
+                      CustomButton(
+                          contextProp: context,
+                          onPressedProp: () {
+                            if (_appProvider.login == null) {
+                              UtilsFonction.NavigateToRoute(
+                                  context,
+                                  LoginScreen(
+                                    toPop: true,
+                                  ));
+                            } else {
+                              if (!_bloc.bookingDateSubject.hasValue) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.dateError));
+                                return;
+                              }
+                              if (searchCtrl.text.isEmpty) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.adressError));
+                                return;
+                              }
+                              if (!_bloc.bookingDateSubject.hasValue) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.dateError));
+                                return;
+                              }
+                              if (_bloc.totalSubject.value == 0) {
+                                GetIt.I<AppServices>().showSnackbarWithState(
+                                    Loading(
+                                        hasError: true,
+                                        message: AppLocalizations
+                                            .current.serviceError));
+                                return;
+                              }
+                              showRecapSheet();
+                            }
+                          },
+                          textProp:
+                              AppLocalizations.current.order.toUpperCase())
                     ],
                   ),
                 ),
@@ -528,44 +579,7 @@ class BookingClimatiseurScreenState extends State<BookingClimatiseurScreen>
             ],
           ),
         ),
-        bottomNavigationBar: CustomButton(
-            contextProp: context,
-            onPressedProp: () {
-              if (_appProvider.login == null) {
-                UtilsFonction.NavigateToRoute(
-                    context,
-                    LoginScreen(
-                      toPop: true,
-                    ));
-              } else {
-                if (!_bloc.bookingDateSubject.hasValue) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.dateError));
-                  return;
-                }
-                if (searchCtrl.text.isEmpty) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.adressError));
-                  return;
-                }
-                if (!_bloc.bookingDateSubject.hasValue) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.dateError));
-                  return;
-                }
-                if (_bloc.totalSubject.value == 0) {
-                  GetIt.I<AppServices>().showSnackbarWithState(Loading(
-                      hasError: true,
-                      message: AppLocalizations.current.serviceError));
-                  return;
-                }
-                showRecapSheet();
-              }
-            },
-            textProp: AppLocalizations.current.order.toUpperCase()),
+        // bottomNavigationBar: ,
       );
     });
   }

@@ -12,7 +12,7 @@ Widget CustomDialog({
   Icon? iconProp,
 }) {
   return AlertDialog(
-    title: Text(titleProp ?? 'My clean'),
+    title: Text(titleProp ?? 'MyClean'),
     content: Container(
         child: Column(
       mainAxisSize: MainAxisSize.min,

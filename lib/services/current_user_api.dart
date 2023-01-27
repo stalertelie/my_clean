@@ -1,13 +1,12 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:ioc/ioc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:my_clean/app_config.dart';
-import 'package:my_clean/exceptions/booking_exception.dart';
 import 'package:my_clean/exceptions/current-user-exception.dart';
-import 'package:my_clean/models/booking.dart';
-import 'package:my_clean/models/responses/current_user_response.dart';
-import 'package:my_clean/models/responses/get-booking-response/get_booking_response.dart';
 import 'package:my_clean/models/user.dart';
 import 'package:my_clean/services/localization.dart';
 import 'package:my_clean/services/safe_secure_storage.dart';
@@ -32,7 +31,7 @@ class CurrentUserApi {
     Map<String, dynamic> responseMap = jsonDecode(response.body);
 
     final currentUserResponse = User.fromJson(responseMap);
-
+    print("status ${response.statusCode}");
     if (response.statusCode != 200) {
       throw CurrentUserException(
           AppLocalizations.current.somethingIsWrongErrorLabel);
@@ -65,5 +64,85 @@ class CurrentUserApi {
     }
 
     return currentUserResponse;
+  }
+
+  Future<bool> updatePassword(String oldPassword, String newPassword) async {
+    final tokenPref = await storage.read(key: 'token');
+    Map<String, dynamic> payload = Jwt.parseJwt(tokenPref);
+    final id = payload['id'];
+    print("id $id");
+
+    const changePasswordEndpoint = "/change_password/change";
+
+    final url = config.apiBaseUrl + changePasswordEndpoint;
+    final body = jsonEncode({
+      'password': oldPassword,
+      'newpassword': newPassword,
+      'user': "/users/$id",
+    });
+    print(body);
+    final response = await client.post(Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: body);
+
+    print(response.statusCode);
+
+    if (response.statusCode != 200) {
+      throw CurrentUserException(
+          AppLocalizations.current.somethingIsWrongErrorLabel);
+    }
+
+    return true;
+  }
+
+  Future<bool> sendVerificationCode(String phone) async {
+    const sendVerificationEndpoint = "/forgot_password/forgot";
+
+    final url = config.apiBaseUrl + sendVerificationEndpoint;
+    final body = jsonEncode({
+      'phone': phone,
+    });
+
+    final response = await client.post(Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: body);
+    print(response.statusCode);
+    if (response.statusCode != 201) {
+      throw CurrentUserException(
+          AppLocalizations.current.somethingIsWrongErrorLabel);
+    }
+
+    return true;
+  }
+
+  Future<bool> verifyCodeAndUpdatePassword(
+      String phone, String code, String newPassword) async {
+    const sendVerificationEndpoint = "/password_reset/reset";
+
+    final url = config.apiBaseUrl + sendVerificationEndpoint;
+    final body = jsonEncode({
+      'phone': phone,
+      'code': code,
+      'newpassword': newPassword,
+    });
+
+    final response = await client.post(Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: body);
+
+    print(response.statusCode);
+
+    if (response.statusCode != 200) {
+      throw CurrentUserException(
+          AppLocalizations.current.somethingIsWrongErrorLabel);
+    }
+
+    return true;
   }
 }
